@@ -12,6 +12,7 @@ var columns = [
   { name: "ID", type: "text", width: "60px", align:"center"}, //hidden
   { name: "RequestType", type: "text", width:"50px", align:"center"},  //hidden
   { name: "Env", type: "text", width:"30px", align:"center"},      //hidden
+  { name: "SubmissionDate", type: "text", width:"50px", align:"center"}, //hidden
   { name: "Gender", type: "text", width:"30px", align:"center", validate: "required", insertTemplate: setDefaultInsert("F")},
   { name: "BirthDate", type: "text", width:"50px", align:"center", validate: "required", insertTemplate: setDefaultInsert("01/22/1970")},
   { name: "NationalIdType", type: "text", width:"50px", align:"center", validate: "required", insertTemplate: setDefaultInsert("PR")},
@@ -39,6 +40,24 @@ var columns = [
   { name: "NotificationType", type: "text", width:"70px", align:"center", validate: "required", insertTemplate: setDefaultInsert("General")},
   { name: "PensionPlanType", type: "text", width:"70px", align:"center", validate: "required", insertTemplate: setDefaultInsert("80")}
 ];
+
+function getDateNow() {
+  var today = new Date();
+  var dd = today.getDate();
+
+  var mm = today.getMonth()+1;
+  var yyyy = today.getFullYear();
+  if(dd<10)
+  {
+      dd='0'+dd;
+  }
+
+  if(mm<10)
+  {
+      mm='0'+mm;
+  }
+  return mm+'/'+dd+'/'+yyyy;
+}
 
 function setDefaultInsert (value) {
   return function () {
@@ -101,6 +120,7 @@ $(document).ready(function() {
           item.Status = "submitted";
           item.Env = $("#envData", window.parent.document).val();
           item.ClientID = "";
+          item.SubmissionDate = getDateNow();
           item.ID = guid();
           for (var row in currDb) {
             while (currDb[row].ID == item.ID) {
@@ -124,6 +144,7 @@ $(document).ready(function() {
     $("#jsGrid").jsGrid("fieldOption", "Env", "visible", false);
     $("#jsGrid").jsGrid("fieldOption", "ClientID", "visible", false);
     $("#jsGrid").jsGrid("fieldOption", "ID", "visible", false);
+    $("#jsGrid").jsGrid("fieldOption", "SubmissionDate", "visible", false);
   });
 
   $('body').on('click', '.save', function() {
@@ -293,6 +314,7 @@ $(document).ready(function() {
     $("#jsGrid").jsGrid("fieldOption", "Env", "visible", true);
     $("#jsGrid").jsGrid("fieldOption", "ClientID", "visible", true);
     $("#jsGrid").jsGrid("fieldOption", "ID", "visible", true);
+    $("#jsGrid").jsGrid("fieldOption", "SubmissionDate", "visible", true);
 
   });
 
