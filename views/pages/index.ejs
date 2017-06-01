@@ -3,18 +3,20 @@
 <head>
 <meta charset="utf-8">
   <title>Input Screen</title>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
   <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
   <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
   <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
-<input type="hidden" id="envData" value = "<%= data['env'] %>">
 
+<input type="hidden" id="envData" value = "<%= data['env'] %>">
 <input type="text" id="title" value = "Enrollment Data Creation Application" readonly><br>
 <iframe src="/sideframe" id="env" width=2% height=95% seamless> </iframe>
 <iframe src="/table" id="inputTable" width=96% height=95% seamless> </iframe>
 
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+<script type="text/javascript" src="/js/nav.min.js"></script>
 </body>
 <html>
