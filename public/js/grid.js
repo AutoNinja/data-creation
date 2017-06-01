@@ -38,7 +38,9 @@ var columns = [
   { name: "BenefitProgramName", type: "text", width:"70px", align:"center", validate: "required", insertTemplate: setDefaultInsert("OMR")},
   { name: "EnrolmentDate", type: "text", width:"70px", align:"center", validate: "required", insertTemplate: setDefaultInsert("12/14/2014")},
   { name: "NotificationType", type: "text", width:"70px", align:"center", validate: "required", insertTemplate: setDefaultInsert("General")},
-  { name: "PensionPlanType", type: "text", width:"70px", align:"center", validate: "required", insertTemplate: setDefaultInsert("80")}
+  { name: "PensionPlanType", type: "text", width:"70px", align:"center", validate: "required", insertTemplate: setDefaultInsert("80")},
+  { name: "MemberClass", type: "text", width:"70px", align:"center", validate: "required", insertTemplate: setDefaultInsert("NRA65")}
+
 ];
 
 function getDateNow() {
