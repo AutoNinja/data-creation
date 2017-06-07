@@ -5,7 +5,7 @@ var columns = [
     width:"100px",
     editButton: false,
   },
-  { name: "Status", type: "select", items: [{Id: ""},{Id: "submitted"},{Id: "new"},{Id: "used"},{Id:"failed"}], valueField: "Id", textField: "Id", width:"150px", align:"center"}, //hidden
+  { name: "Status", type: "select", items: [{Id: ""},{Id: "submitted"},{Id: "new"},{Id: "used"},{Id:"failed"},{Id:"terminated"}], valueField: "Id", textField: "Id", width:"150px", align:"center"}, //hidden
   { name: "RequestType", type: "text", width:"150px", align:"center"},  //hidden
   { name: "Description", type: "text", width:"150px", align:"center", validate: "required"},
   { name: "UserID", type: "text", width:"150px", align:"center", validate: "required"},

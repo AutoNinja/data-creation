@@ -15,13 +15,14 @@ router.use(function(req,res,next){
 });
 
 router.use('/load', function(req,res,next){
+  console.log("HELLO");
   req.queryString = "SELECT * FROM EnrollmentData WHERE RequestType = 'R';";
   next();
 }, function(req,res,next) {
   dbConnection
     .query(req.queryString)
     .on('done', function(data) {
-      req.queryResult = JSON.stringify(data);
+      req.queryResult = data;
       next('route');
     })
     .on('fail', function(error) {
@@ -45,7 +46,7 @@ router.use('/update', function(req,res,next){
     .execute(req.queryString)
     .on('done', function(data) {
       console.log("Update Success");
-      req.queryResult = JSON.stringify({});
+      req.queryResult = {};
       next('route');
     })
     .on('fail', function(error) {
@@ -69,13 +70,51 @@ router.use('/insert', function(req,res,next){
     executeInsertQuery(req.queryString[i]);
   }
   setTimeout(function(){
-    req.queryResult = JSON.stringify({});
+    req.queryResult = {};
     next('route');
   }, req.queryString.length*1000);
 });
 
+router.use('/execute', function(req,res,next){
+  req.queryString = req.body.data;
+  console.log(req.body);
+  next();
+}, function(req,res,next) {
+  dbConnection
+    .execute(req.queryString)
+    .on('done', function(data) {
+      req.queryStatus = "Success: ";
+      req.queryResult = data;
+      next('route');
+    })
+    .on('fail', function(error) {
+      req.queryStatus = "Error: ";
+      req.queryResult = error;
+      next('route');
+    });
+});
+
+router.use('/query', function(req,res,next){
+  req.queryString = req.body.data;
+  console.log(req.body);
+  next();
+}, function(req,res,next) {
+  dbConnection
+    .query(req.queryString)
+    .on('done', function(data) {
+      req.queryStatus = "Success: ";
+      req.queryResult = data;
+      next('route');
+    })
+    .on('fail', function(error) {
+      req.queryStatus = "Error: ";
+      req.queryResult = error;
+      next('route');
+    });
+});
+
 router.all('*',function(req, res) {
-  res.end(req.queryResult);
+  res.end(JSON.stringify(req.queryResult, null, 2));
 });
 
 function executeInsertQuery (queryString) {
