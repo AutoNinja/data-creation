@@ -6,7 +6,7 @@ var columns = [
     editButton: false,
   },
   { name: "ClientID", type: "text", width:"80px", align:"center"}, //hidden
-  { name: "Status", type: "select", items: [{Id: ""},{Id: "submitted"},{Id: "new"},{Id: "used"},{Id:"failed"}], valueField: "Id", textField: "Id", width:"50px", align:"center"}, //hidden
+  { name: "Status", type: "select", items: [{Id: ""},{Id: "submitted"},{Id: "new"},{Id: "used"},{Id:"failed"},{Id:"terminated"}], valueField: "Id", textField: "Id", width:"50px", align:"center"}, //hidden
   { name: "UserID", type: "text", width:"80px", align:"center", validate: "required"},
   { name: "Description", type: "text", width:"100px", align:"center", validate: "required"},
   { name: "ID", type: "text", width: "60px", align:"center"}, //hidden
@@ -89,6 +89,7 @@ $(document).ready(function() {
   $('body').on('click', '.addrow', function() {
     $.ajax({
         type: "GET",
+        cache: false,
         url: "/db/load",
         dataType: "json"
     }).done(function(result) {
@@ -130,12 +131,10 @@ $(document).ready(function() {
             }
           }
           submitData.push(item);
-          console.log(submitData);
         },
         deleteItem: function (item) {
           var index = submitData.indexOf(item);
           submitData.splice(index,1);
-          console.log(submitData);
         }
       },
 
@@ -182,10 +181,9 @@ $(document).ready(function() {
               $.ajax({
                   type: "GET",
                   url: "/db/load",
-                  dataType: "json"
+                  cache: false,
+                  dataType: "JSON"
               }).done(function(result) {
-                  console.log(result);
-                  console.log(submitData);
                   result = $.grep(result, function(item) {
                       for (var row in submitData) {
                         if (submitData[row].ID == item.ID) {
@@ -208,7 +206,7 @@ $(document).ready(function() {
         $("#jsGrid").jsGrid("fieldOption", "control", "visible", false);
       })
       .fail(function(error) {
-        console.log(error);
+        //console.log(error);
       });
 
   });
@@ -218,7 +216,6 @@ $(document).ready(function() {
     $("input[type='button']").prop("type","hidden");
     $("#msg").prop("type","hidden");
     $('#currEnv').hide();
-
     $("#jsGrid").jsGrid({
         width: "98%",
         shrinkToFit: true,
@@ -267,6 +264,7 @@ $(document).ready(function() {
            $.ajax({
                type: "GET",
                url: "/db/load",
+               cache: false,
                dataType: "json"
            }).done(function(result) {
              $("#home").prop("type","button");
@@ -303,7 +301,6 @@ $(document).ready(function() {
 
           updateItem: function(item) {
               submitData.push(item);
-              console.log(submitData);
           }
         },
 

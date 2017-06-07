@@ -5,12 +5,6 @@ var app = express();
 var path = require('path');
 var bodyParser = require('body-parser');
 
-//routes
-var index = require ('./routes/index');
-var table = require ('./routes/table');
-var sideframe = require('./routes/sideframe');
-var db = require('./routes/db')
-
 var PORT = process.env.port || 3000;
 
 // set the view engine to ejs
@@ -24,10 +18,11 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
 
-app.use('/',index);
-app.use('/table',table);
-app.use('/sideframe',sideframe);
-app.use('/db',db);
+app.use('/',require ('./routes/index'));
+app.use('/table',require ('./routes/table'));
+app.use('/sideframe',require('./routes/sideframe'));
+app.use('/db',require('./routes/db'));
+app.use('/console',require('./routes/console'));
 
 //error handler
 app.use(function(req,res,next) {

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Console</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="css/terminal/jquery.terminal.min.css" rel="stylesheet"/>
+</head>
+<body>
+
+<div id="console"></div>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="js/terminal/jquery.terminal.min.js"></script>
+<script src="js/terminal/jquery.mousewheel-min.js"></script>
+<script type="text/javascript">
+  var uppercase = [
+    'ACCESSIBLE', 'ADD', 'ALL', 'ALTER', 'ANALYZE', 'AND', 'AS', 'ASC',
+    'ASENSITIVE', 'BEFORE', 'BETWEEN', 'BIGINT', 'BINARY', 'BLOB',
+    'BOTH', 'BY', 'CALL', 'CASCADE', 'CASE', 'CHANGE', 'CHAR',
+    'CHARACTER', 'CHECK', 'COLLATE', 'COLUMN', 'CONDITION',
+    'CONSTRAINT', 'CONTINUE', 'CONVERT', 'CREATE', 'CROSS',
+    'CURRENT_DATE', 'CURRENT_TIME', 'CURRENT_TIMESTAMP', 'CURRENT_USER',
+    'CURSOR', 'DATABASE', 'DATABASES', 'DAY_HOUR', 'DAY_MICROSECOND',
+    'DAY_MINUTE', 'DAY_SECOND', 'DEC', 'DECIMAL', 'DECLARE', 'DEFAULT',
+    'DELAYED', 'DELETE', 'DESC', 'DESCRIBE', 'DETERMINISTIC',
+    'DISTINCT', 'DISTINCTROW', 'DIV', 'DOUBLE', 'DROP', 'DUAL', 'EACH',
+    'ELSE', 'ELSEIF', 'ENCLOSED', 'ESCAPED', 'EXISTS', 'EXIT',
+    'EXPLAIN', 'FALSE', 'FETCH', 'FLOAT', 'FLOAT4', 'FLOAT8', 'FOR',
+    'FORCE', 'FOREIGN', 'FROM', 'FULLTEXT', 'GRANT', 'GROUP', 'HAVING',
+    'HIGH_PRIORITY', 'HOUR_MICROSECOND', 'HOUR_MINUTE', 'HOUR_SECOND',
+    'IF', 'IGNORE', 'IN', 'INDEX', 'INFILE', 'INNER', 'INOUT',
+    'INSENSITIVE', 'INSERT', 'INT', 'INT1', 'INT2', 'INT3', 'INT4',
+    'INT8', 'INTEGER', 'INTERVAL', 'INTO', 'IS', 'ITERATE', 'JOIN',
+    'KEY', 'KEYS', 'KILL', 'LEADING', 'LEAVE', 'LEFT', 'LIKE', 'LIMIT',
+    'LINEAR', 'LINES', 'LOAD', 'LOCALTIME', 'LOCALTIMESTAMP', 'LOCK',
+    'LONG', 'LONGBLOB', 'LONGTEXT', 'LOOP', 'LOW_PRIORITY',
+    'MASTER_SSL_VERIFY_SERVER_CERT', 'MATCH', 'MEDIUMBLOB', 'MEDIUMINT',
+    'MEDIUMTEXT', 'MIDDLEINT', 'MINUTE_MICROSECOND', 'MINUTE_SECOND',
+    'MOD', 'MODIFIES', 'NATURAL', 'NOT', 'NO_WRITE_TO_BINLOG', 'NULL',
+    'NUMERIC', 'ON', 'OPTIMIZE', 'OPTION', 'OPTIONALLY', 'OR', 'ORDER',
+    'OUT', 'OUTER', 'OUTFILE', 'PRECISION', 'PRIMARY', 'PROCEDURE',
+    'PURGE', 'RANGE', 'READ', 'READS', 'READ_WRITE', 'REAL',
+    'REFERENCES', 'REGEXP', 'RELEASE', 'RENAME', 'REPEAT', 'REPLACE',
+    'REQUIRE', 'RESTRICT', 'RETURN', 'REVOKE', 'RIGHT', 'RLIKE',
+    'SCHEMA', 'SCHEMAS', 'SECOND_MICROSECOND', 'SELECT', 'SENSITIVE',
+    'SEPARATOR', 'SET', 'SHOW', 'SMALLINT', 'SPATIAL', 'SPECIFIC',
+    'SQL', 'SQLEXCEPTION', 'SQLSTATE', 'SQLWARNING', 'SQL_BIG_RESULT',
+    'SQL_CALC_FOUND_ROWS', 'SQL_SMALL_RESULT', 'SSL', 'STARTING',
+    'STRAIGHT_JOIN', 'TABLE', 'TERMINATED', 'THEN', 'TINYBLOB',
+    'TINYINT', 'TINYTEXT', 'TO', 'TRAILING', 'TRIGGER', 'TRUE', 'UNDO',
+    'UNION', 'UNIQUE', 'UNLOCK', 'UNSIGNED', 'UPDATE', 'USAGE', 'USE',
+    'USING', 'UTC_DATE', 'UTC_TIME', 'UTC_TIMESTAMP', 'VALUES',
+    'VARBINARY', 'VARCHAR', 'VARCHARACTER', 'VARYING', 'WHEN', 'WHERE',
+    'WHILE', 'WITH', 'WRITE', 'XOR', 'YEAR_MONTH', 'ZEROFILL'];
+  var keywords = uppercase.concat(uppercase.map(function(keyword) {
+      return keyword.toLowerCase();
+  }));
+  $.terminal.defaults.formatters.push(function(string) {
+      return string.split(/((?:\s|&nbsp;)+)/).map(function(string) {
+          if (keywords.indexOf(string) != -1) {
+              return '[[b;red;]' + string + ']';
+          } else {
+              return string;
+          }
+      }).join('');
+  });
+
+  $(document).ready(function() {
+    $('body').terminal(function(cmd, term) {
+      if (cmd === "" ) {
+        term.echo("Empty Command!");
+        return;
+      } else if (cmd.split(' ')[0].toUpperCase() !== "INSERT" &&
+                 cmd.split(' ')[0].toUpperCase() !== "UPDATE" &&
+                 cmd.split(' ')[0].toUpperCase() !== "DELETE" &&
+                 cmd.split(' ')[0].toUpperCase() !== "SELECT" &&
+                 cmd.split(' ')[0].toUpperCase() !== "PROCEDURE")
+      {
+        term.echo("Invalid SQL statement; expected 'DELETE', 'INSERT', 'PROCEDURE', 'SELECT', or 'UPDATE'.");
+        return;
+      } else if (cmd.split(' ')[0].toUpperCase() === "SELECT") {
+        return $.post("db/query",{data: cmd}, function (res) {
+          term.echo(res);
+        });
+      } else {
+        return $.post("db/execute",{data: cmd}, function (res) {
+          term.echo(res);
+        });
+      }
+    },{
+      prompt: '> ',
+      greetings: "SQL Syntax Highlight Enabled\n**NOTE: use Ctrl+shift+v to Paste!**\nType your SQL Command Below: ",
+      onBlur: function() {
+          return false;
+      }
+    });
+  });
+</script>
+</body>
+</html>
