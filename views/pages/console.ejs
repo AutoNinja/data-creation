@@ -5,12 +5,19 @@
   <title>Console</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="css/terminal/jquery.terminal.min.css" rel="stylesheet"/>
+  <style>
+  .terminal, .cmd, .terminal .terminal-output div div, .cmd .prompt {
+      font-size: 1.2em;
+      line-height: 20px;
+  }
+  </style>
 </head>
 <body>
 
 <div id="console"></div>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.mousewheel.min.js"></script>
 <script src="js/terminal/jquery.terminal.min.js"></script>
 <script src="js/terminal/jquery.mousewheel-min.js"></script>
 <script type="text/javascript">
@@ -45,11 +52,11 @@
     'REQUIRE', 'RESTRICT', 'RETURN', 'REVOKE', 'RIGHT', 'RLIKE',
     'SCHEMA', 'SCHEMAS', 'SECOND_MICROSECOND', 'SELECT', 'SENSITIVE',
     'SEPARATOR', 'SET', 'SHOW', 'SMALLINT', 'SPATIAL', 'SPECIFIC',
-    'SQL', 'SQLEXCEPTION', 'SQLSTATE', 'SQLWARNING', 'SQL_BIG_RESULT',
+    'SQLEXCEPTION', 'SQLSTATE', 'SQLWARNING', 'SQL_BIG_RESULT',
     'SQL_CALC_FOUND_ROWS', 'SQL_SMALL_RESULT', 'SSL', 'STARTING',
     'STRAIGHT_JOIN', 'TABLE', 'TERMINATED', 'THEN', 'TINYBLOB',
     'TINYINT', 'TINYTEXT', 'TO', 'TRAILING', 'TRIGGER', 'TRUE', 'UNDO',
-    'UNION', 'UNIQUE', 'UNLOCK', 'UNSIGNED', 'UPDATE', 'USAGE', 'USE',
+    'UNION', 'UNIQUE', 'UNLOCK', 'UNSIGNED', 'UPDATE', 'USAGE',
     'USING', 'UTC_DATE', 'UTC_TIME', 'UTC_TIMESTAMP', 'VALUES',
     'VARBINARY', 'VARCHAR', 'VARCHARACTER', 'VARYING', 'WHEN', 'WHERE',
     'WHILE', 'WITH', 'WRITE', 'XOR', 'YEAR_MONTH', 'ZEROFILL'];
@@ -68,6 +75,7 @@
 
   $(document).ready(function() {
     $('body').terminal(function(cmd, term) {
+      console.log(term);
       if (cmd === "" ) {
         term.echo("Empty Command!");
         return;
@@ -96,6 +104,7 @@
       }
     });
   });
+
 </script>
 </body>
 </html>

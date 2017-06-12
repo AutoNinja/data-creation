@@ -4,19 +4,98 @@
 <meta charset="utf-8">
   <title>Input Screen</title>
 
+  <!-- CDN's -->
   <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
   <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+  <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+
+  <!-- custom stylesheets -->
   <link rel="stylesheet" href="/css/index.css">
+  <link rel="stylesheet" href="/css/nav.css">
+
 </head>
 <body>
+<!-- Navigation -->
+<nav class="pushy pushy-left">
+    <div class="pushy-content">
+        <ul>
+            <!-- Submenu -->
+            <li class="pushy-submenu">
+                <button>Change Environment</button>
+                <ul>
+                    <li class="pushy-link"><a class="env">TST</a></li>
+                    <li class="pushy-link"><a class="env">OAT</a></li>
+                    <li class="pushy-link"><a class="env">SIT2</a></li>
+                </ul>
+            </li>
+            <li class="pushy-link"><a href="#">Add New Enrollment</a></li>
+            <li class="pushy-link"><a href="#">Search</a></li>
+            <li class="pushy-link"><a href="#">Automation</a></li>
+            <li class="pushy-link"><a href="console">Console</a></li>
+            <li class="pushy-link"><a href="https://github.com/jsun98/jsGrid_odbc/blob/master/README.md">Help</a></li>
+        </ul>
+    </div>
+</nav>
 
-<input type="hidden" id="envData" value = "<%= data['env'] %>">
-<input type="text" id="title" value = "Enrollment Data Creation Application" readonly><br>
-<iframe src="/sideframe" id="env" width=2% height=95% seamless> </iframe>
-<iframe src="/table" id="inputTable" width=96% height=95% seamless> </iframe>
+<!-- Site Overlay -->
+<div class="site-overlay"></div>
+
+<!-- Your Content -->
+<div id="content">
+  <!-- header bar -->
+  <section class="header">
+
+    <div class="header-container">
+      <div class="row">
+        <div class="col-md-1">
+          <button class="menu-btn">Menu</button>
+        </div>
+        <div class="col-md-3">
+          <h3 class="middle">Enrollment Data Creation</h3>
+        </div>
+        <div class="col-md-4">
+          <img src="img/omers.png">
+        </div>
+        <div class="col-md-4">
+          <p id="envDisplay" class="middle text-center"></p>
+          <input type="hidden" id="envValue" value="TST"></input>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- table -->
+  <section class="table">
+    <input type="hidden" id = "msg" value="New Row(s) Successfully Added" readonly> <br>
+    <div id="jsGrid"></div>
+
+    <input type="button" class="addrow" id="addrow" value="Click to Add Row">
+    <input type="hidden" class="save" id="save" value="Save">
+    <input type="hidden" class="home" id="home" value="Home">
+    <input type="button" class="search" id="search" value="Search">
+    <input type="hidden" class="submitStatus" id="submitStatus" value="Submit New Status">
+  </section>
+</div>
+
+
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
-<script type="text/javascript" src="/js/nav.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+<script type="text/javascript" src='/js/grid.js'></script>
+<script type="text/javascript" src="/js/nav.js"></script>
+<script type="text/javascript">
+  $( document ).ready(function() {
+    $("#envDisplay").text("Environment: "+$("#envValue").val());
+    $(".env").click(function () {
+      $("#envValue").prop("value",$(this).text());
+      $("#envDisplay").text("Environment: "+$("#envValue").val());
+    });
+  });
+</script>
 </body>
 <html>

@@ -1,12 +1,19 @@
+/**
+GLOBAL
+**/
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+}
+
 html, body {
-    width: 220%;
-    height: 100%;
+
 }
 
 #title {
@@ -15,9 +22,69 @@ html, body {
   width: 100%;
 }
 
-.content {
-  padding-left:100px;
-  background: #3F3F3F;
+.middle {
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+}
+
+/**
+HEADER BAR
+**/
+.header {
+  background-color: black;
+  height: 50px;
   width: 100%;
+  margin: 0, auto;
+  position: -webkit-sticky;  // required for Safari
+  position: sticky;
+  top: 0; // required as well.
+}
+
+.header-container, .header-container * {
   height: 100%;
+}
+
+.header h3 {
+  color: white;
+}
+
+.header p {
+  color: white;
+  font-size: 1.2em;
+  justify-content: center;
+}
+
+.header .row {
+  width: 100%;
+}
+
+.header img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: auto;
+  height: auto;
+  padding-top: 12px;
+}
+
+.menu-btn {
+  width: 100%;
+  background: #0078d7;
+  color: #FFF;
+  font-size: 1.5em;
+  text-align: center;
+  cursor: pointer;
+  border: 0px;
+}
+
+.menu-btn:hover {
+  opacity: 0.6;
+}
+
+/**
+TABLE
+**/
+.table {
+  padding-left: 1%;
 }

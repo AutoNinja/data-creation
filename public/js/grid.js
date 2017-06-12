@@ -84,7 +84,6 @@ function guid() {
 }
 
 $(document).ready(function() {
-  $('#currEnv').val("Environment: "+$("#envData", window.parent.document).val());
 
   $('body').on('click', '.addrow', function() {
     $.ajax({
@@ -121,7 +120,7 @@ $(document).ready(function() {
         insertItem: function (item) {
           item.RequestType = "R";
           item.Status = "submitted";
-          item.Env = $("#envData", window.parent.document).val();
+          item.Env = $("#envValue").val()
           item.ClientID = "";
           item.SubmissionDate = getDateNow();
           item.ID = guid();
@@ -150,7 +149,6 @@ $(document).ready(function() {
 
   $('body').on('click', '.save', function() {
 
-    $('#currEnv').hide();
     $("input[type='button']").prop("type","hidden");
 
 
@@ -215,7 +213,6 @@ $(document).ready(function() {
   $('body').on('click', '.search', function() {
     $("input[type='button']").prop("type","hidden");
     $("#msg").prop("type","hidden");
-    $('#currEnv').hide();
     $("#jsGrid").jsGrid({
         width: "98%",
         shrinkToFit: true,
