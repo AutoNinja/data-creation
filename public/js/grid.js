@@ -5,7 +5,7 @@ var columns = [
     width:"30px",
     editButton: false,
   },
-  { name: "ClientID", type: "text", width:"80px", align:"center"}, //hidden
+  { name: "ClientID", type: "text", width:"10vw", align:"center"}, //hidden
   { name: "Status", type: "select", items: [{Id: ""},{Id: "submitted"},{Id: "new"},{Id: "used"},{Id:"failed"},{Id:"terminated"}], valueField: "Id", textField: "Id", width:"50px", align:"center"}, //hidden
   { name: "UserID", type: "text", width:"80px", align:"center", validate: "required"},
   { name: "Description", type: "text", width:"100px", align:"center", validate: "required"},
@@ -101,14 +101,13 @@ $(document).ready(function() {
     $("#home").prop("type","button");
 
     $("#jsGrid").jsGrid({
-      width: "98%",
-      shrinkToFit: true,
+      width: "100%",
       inserting: true,
-      autowidth: false,
       editing: false,
       sorting: false,
       paging: true,
       autoload: true,
+      autowidth: false,
 
       pageSize: 15,
       pageButtonCount: 5,

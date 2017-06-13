@@ -83,12 +83,10 @@ router.use('/execute', function(req,res,next){
   dbConnection
     .execute(req.queryString)
     .on('done', function(data) {
-      req.queryStatus = "Success: ";
-      req.queryResult = data;
+      req.queryResult = "Execution Success";
       next('route');
     })
     .on('fail', function(error) {
-      req.queryStatus = "Error: ";
       req.queryResult = error;
       next('route');
     });
@@ -102,12 +100,10 @@ router.use('/query', function(req,res,next){
   dbConnection
     .query(req.queryString)
     .on('done', function(data) {
-      req.queryStatus = "Success: ";
       req.queryResult = data;
       next('route');
     })
     .on('fail', function(error) {
-      req.queryStatus = "Error: ";
       req.queryResult = error;
       next('route');
     });

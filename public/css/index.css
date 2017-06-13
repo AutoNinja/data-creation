@@ -13,7 +13,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 html, body {
-
+  overflow-x: hidden;
 }
 
 #title {
@@ -22,6 +22,11 @@ html, body {
   width: 100%;
 }
 
+#content {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+}
 .middle {
   vertical-align: middle;
   display: flex;
@@ -46,6 +51,7 @@ HEADER BAR
 }
 
 .header h3 {
+  font-size: 1.2em;
   color: white;
 }
 
@@ -53,6 +59,12 @@ HEADER BAR
   color: white;
   font-size: 1.2em;
   justify-content: center;
+}
+
+.header .container-fluid {
+  padding: 0;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .header .row {
@@ -69,10 +81,10 @@ HEADER BAR
 }
 
 .menu-btn {
-  width: 100%;
-  background: #0078d7;
+  width: 60px;
+  background-color: #0078d7;
   color: #FFF;
-  font-size: 1.5em;
+  font-size: 1.2em;
   text-align: center;
   cursor: pointer;
   border: 0px;
@@ -82,9 +94,26 @@ HEADER BAR
   opacity: 0.6;
 }
 
+.jumbotron2 {
+  background: black;
+  width: 100%;
+  height: 50%;
+  position: absolute;
+  top: 50%;
+}
 /**
 TABLE
 **/
 .table {
-  padding-left: 1%;
+  /**
+  background: linear-gradient(to right, rgb(0, 76, 137), rgb(0, 98, 175), rgb(0, 76, 137));
+  **/
+  padding: 0 20px;
+  margin: 0;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.table .tablebuttonwrap {
+  text-align: center;
 }

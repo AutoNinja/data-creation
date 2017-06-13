@@ -21,6 +21,7 @@
 <script src="js/terminal/jquery.terminal.min.js"></script>
 <script src="js/terminal/jquery.mousewheel-min.js"></script>
 <script type="text/javascript">
+  //SQL Syntax Highlight Settings
   var uppercase = [
     'ACCESSIBLE', 'ADD', 'ALL', 'ALTER', 'ANALYZE', 'AND', 'AS', 'ASC',
     'ASENSITIVE', 'BEFORE', 'BETWEEN', 'BIGINT', 'BINARY', 'BLOB',
@@ -74,25 +75,45 @@
   });
 
   $(document).ready(function() {
+    //terminal input validation and submission
     $('body').terminal(function(cmd, term) {
-      console.log(term);
-      if (cmd === "" ) {
-        term.echo("Empty Command!");
+      var token = getFirstToken(cmd);
+      if (!cmd || cmd.length===0) {
+        term.echo("Error: Empty Command!");
         return;
-      } else if (cmd.split(' ')[0].toUpperCase() !== "INSERT" &&
-                 cmd.split(' ')[0].toUpperCase() !== "UPDATE" &&
-                 cmd.split(' ')[0].toUpperCase() !== "DELETE" &&
-                 cmd.split(' ')[0].toUpperCase() !== "SELECT" &&
-                 cmd.split(' ')[0].toUpperCase() !== "PROCEDURE")
+      } else if (token !== "INSERT" &&
+                 token !== "UPDATE" &&
+                 token !== "DELETE" &&
+                 token !== "SELECT" &&
+                 token !== "PROCEDURE")
       {
-        term.echo("Invalid SQL statement; expected 'DELETE', 'INSERT', 'PROCEDURE', 'SELECT', or 'UPDATE'.");
+        term.echo("Error: Invalid SQL statement; expected 'DELETE', 'INSERT', 'PROCEDURE', 'SELECT', or 'UPDATE'.");
         return;
-      } else if (cmd.split(' ')[0].toUpperCase() === "SELECT") {
+      } else if (token === "SELECT") {
+        //query with return value
         return $.post("db/query",{data: cmd}, function (res) {
           term.echo(res);
         });
+      } else if (token === "DELETE") {
+        term.echo("Confirm Execute Delete? (Y/n):");
+        term.push(function(cmd, term) {
+          if (cmd.toUpperCase() === 'N') {
+            term.echo('Execution Aborted');
+            term.pop();
+          } else {
+            //query without return value
+            return $.post("db/execute",{data: cmd}, function (res) {
+              term.echo(res);
+              term.pop();
+            });
+          }
+        }, {
+          prompt: '> '
+        });
       } else {
+        //query without return value
         return $.post("db/execute",{data: cmd}, function (res) {
+          console.log(res);
           term.echo(res);
         });
       }
@@ -104,6 +125,11 @@
       }
     });
   });
+
+  //terminal helper functions
+  function getFirstToken(line) {
+    return line.split(' ')[0].toUpperCase();
+  }
 
 </script>
 </body>
