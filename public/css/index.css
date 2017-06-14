@@ -46,6 +46,10 @@ HEADER BAR
   top: 0; // required as well.
 }
 
+.header .row {
+  margin: 0;
+}
+
 .header-container, .header-container * {
   height: 100%;
 }
@@ -71,6 +75,8 @@ HEADER BAR
   width: 100%;
 }
 
+
+
 .header img {
   display: block;
   margin-left: auto;
@@ -81,7 +87,7 @@ HEADER BAR
 }
 
 .menu-btn {
-  width: 60px;
+  width: 100%;
   background-color: #0078d7;
   color: #FFF;
   font-size: 1.2em;
@@ -94,6 +100,25 @@ HEADER BAR
   opacity: 0.6;
 }
 
+.menu-btn-wrapper {
+  padding: 0;
+}
+
+.table-btn {
+  width:200px;
+  height: 50px;
+  background-color: #0078d7;
+  color: #FFF;
+  font-size: 1.2em;
+  text-align: center;
+  cursor: pointer;
+  border: 0px;
+}
+
+.table-btn:hover {
+  opacity: 0.6;
+}
+
 .jumbotron2 {
   background: black;
   width: 100%;
@@ -102,9 +127,9 @@ HEADER BAR
   top: 50%;
 }
 /**
-TABLE
+Intro Page Text
 **/
-.table {
+.main-content {
   /**
   background: linear-gradient(to right, rgb(0, 76, 137), rgb(0, 98, 175), rgb(0, 76, 137));
   **/
@@ -114,6 +139,27 @@ TABLE
   overflow-x: hidden;
 }
 
-.table .tablebuttonwrap {
+.main-content .tablebuttonwrap {
   text-align: center;
+}
+
+.main-content-container {
+  padding: 3vh 10vw;
+  width: 100%;
+  height: 70%;
+}
+
+.main-content-container h3 {
+  font-size: 2em;
+  font-weight: bold;
+
+}
+
+.main-content-container h4 {
+  font-size: 4rem;
+  letter-spacing: 7px;
+  padding-top: 2.5vh;
+  padding-bottom: 3vh;
+  font-weight: bolder;
+  color: #cc0000;
 }

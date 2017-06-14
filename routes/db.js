@@ -15,7 +15,6 @@ router.use(function(req,res,next){
 });
 
 router.use('/load', function(req,res,next){
-  console.log("HELLO");
   req.queryString = "SELECT * FROM EnrollmentData WHERE RequestType = 'R';";
   next();
 }, function(req,res,next) {
@@ -23,6 +22,7 @@ router.use('/load', function(req,res,next){
     .query(req.queryString)
     .on('done', function(data) {
       req.queryResult = data;
+      console.log(data);
       next('route');
     })
     .on('fail', function(error) {
