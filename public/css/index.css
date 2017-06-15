@@ -139,8 +139,8 @@ Intro Page Text
   overflow-x: hidden;
 }
 
-.main-content .tablebuttonwrap {
-  text-align: center;
+.table-buttons-wrapper {
+  padding-top: 2vh;
 }
 
 .main-content-container {
@@ -162,4 +162,10 @@ Intro Page Text
   padding-bottom: 3vh;
   font-weight: bolder;
   color: #cc0000;
+}
+/**
+Intro Page Text
+**/
+#term {
+  height: 100%;
 }

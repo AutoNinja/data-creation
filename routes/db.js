@@ -22,7 +22,6 @@ router.use('/load', function(req,res,next){
     .query(req.queryString)
     .on('done', function(data) {
       req.queryResult = data;
-      console.log(data);
       next('route');
     })
     .on('fail', function(error) {
@@ -34,12 +33,14 @@ router.use('/load', function(req,res,next){
 });
 
 router.use('/update', function(req,res,next){
-  var IDArray = [];
-  for (var i = 0 ; i < req.body.length; i++) {
-    IDArray.push(req.body[i]['ID']);
+  req.queryString = "UPDATE EnrollmentData SET ";
+  var headings = Object.keys(req.body);
+  var values = Object.keys(req.body).map(function(key){return "'"+req.body[key]+"'"});
+  for (i in headings) {
+    req.queryString += headings[i] + " = " + values[i];
+    if (i!=headings.length-1) req.queryString += ", ";
   }
-  IDArray = IDArray.join("','");
-  req.queryString = "UPDATE EnrollmentData SET Status = 'used' WHERE ID IN ('"+IDArray+"');";
+  req.queryString += " WHERE ID = '"+req.body.ID+"';";
   next();
 }, function(req,res,next) {
   dbConnection
