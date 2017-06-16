@@ -18,7 +18,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use('/',require ('./routes/index'));
 app.use('/db',require('./routes/db'));
-app.use('/result',require('./routes/console_select'));
+app.use('/console',require('./routes/console'));
+app.use('/search',require('./routes/search'));
+app.use('/newdata',require('./routes/newdata'));
+app.use('/result',require('./routes/result_table'));
 
 //error handler
 app.use(function(req,res,next) {

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Home</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CDN's -->
+  <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- custom stylesheets -->
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/page_index.css">
+
+</head>
+<body>
+
+<%- include partials/nav %>
+
+<!-- Your Content -->
+<div id="content">
+
+  <%- include partials/header %>
+
+  <div class="table-buttons-wrapper">
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-xs-12 text-center">
+        <input type="button" class="table-btn" id="newdata" value="New Data">
+        <input type="button" class="table-btn" id="search" value="Search">
+      </div>
+    </div>
+  </div>
+
+  <!-- info -->
+  <section class="main-content">
+
+    <div class="container-fluid main-content-container">
+      <div class='row'>
+        <div class="col-sm-12 col-md-12 col-xs-12 text-center">
+          <h3>Next Scheduled Enrollment Data Update:</h3>
+          <h4 class="timer">21:00:00 EST</h4>
+        </div>
+      </div>
+      <div class='row'>
+        <div class="col-sm-4 col-md-4 col-xs-4">
+          <h3>Help</h3>
+          <p>1234567890</p>
+        </div>
+        <div class="col-sm-4 col-md-4 col-xs-4">
+          <h3>Statistics</h3>
+          <p>1234567890</p>
+        </div>
+        <div class="col-sm-4 col-md-4 col-xs-4">
+          <h3>Changelog</h3>
+          <p>Version: 1.0.0-Beta</p>
+          <p>1234567890</p>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+  </section>
+</div>
+
+<!-- vendor scripts -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/js/js.cookie.js"></script>
+
+<!-- custom scripts -->
+<script type="text/javascript" src="/js/indexhelper.js"></script>
+<script type="text/javascript" src="/js/nav.js"></script>
+<script type="text/javascript" src="/js/usecookies.js"></script>
+</body>
+<html>

@@ -35,15 +35,15 @@
 					closePushyFallback();
 					opened = false; //set menu state
 				}
-				
+
 				//focus on menu button after menu is closed
 				if(menuBtnFocus){
 					menuBtnFocus.focus();
 				}
-				
+
 			}
 
-		}   
+		}
 	});
 
 	function togglePushy(){
@@ -60,7 +60,7 @@
 				menuLinkFocus.focus();
 			});
 		}
-		
+
 	}
 
 	function closePushy(){

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Search</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CDN's -->
+  <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+
+  <!-- custom stylesheets -->
+  <link type="text/css" rel="stylesheet" href="css/base.css" />
+
+
+</head>
+<body>
+
+<%- include partials/nav %>
+
+<div id="content">
+  <input type="hidden" id="reqTypeValue" value="R"></input>
+
+  <%- include partials/header %>
+
+  <section class="main-content">
+    <div id="jsGrid"></div>
+
+    <div class="table-buttons-wrapper">
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-xs-12 text-center">
+          <input type="button" class="home table-btn" id="home" value="Home">
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+
+<!-- Vendor Javascript -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/js/js.cookie.js"></script>
+
+<!-- custom Javascript -->
+<script type="text/javascript" src="/js/nav.js"></script>
+<script type="text/javascript" src='/js/search-grid.js'></script>
+<script type="text/javascript" src="/js/usecookies.js"></script>
+
+</body>
+</html>

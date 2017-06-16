@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Console</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+  <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    #jsGrid {
+      height: 100%;
+      width: 100%;
+      padding-left: 5vw;
+      padding-right: 5vw;
+    }
+  </style>
+</head>
+<body>
+
+<div id="jsGrid"></div>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+<script type="text/javascript">
+var columns = [
+  {
+    name: "control",
+    type: "control",
+    width:"30px"
+  },
+  { name: "ClientID"},
+  { name: "Status",
+    type: "select",
+    items: [
+      {Id: ""},
+      {Id: "submitted"},
+      {Id: "new"},
+      {Id: "used"},
+      {Id:"failed"},
+      {Id:"terminated"}
+    ],
+    valueField: "Id",
+    textField: "Id"},
+  { name: "UserID"},
+  { name: "Description"},
+  { name: "TypeDepartmentId"},
+  { name: "DepartmentCode"},
+  { name: "ID"},
+  { name: "RequestType"},
+  { name: "Env"},
+  { name: "SubmissionDate"},
+  { name: "Gender"},
+  { name: "BirthDate"},
+  { name: "NationalIdType"},
+  { name: "CountryCode"},
+  { name: "AddressLine1"},
+  { name: "AddressCity"},
+  { name: "AddressState"},
+  { name: "AddressPostalCode"},
+  { name: "Format"},
+  { name: "PhoneType"},
+  { name: "PhoneNumber"},
+  { name: "EmpRecordType"},
+  { name: "FulltimePartTime"},
+  { name: "HireDate"},
+  { name: "JobCode"},
+  { name: "EmpClass"},
+  { name: "UnionCode"},
+  { name: "RateCode"},
+  { name: "BenefitSystem"},
+  { name: "TypeCompRate"},
+  { name: "BenefitProgramName"},
+  { name: "EnrolmentDate"},
+  { name: "NotificationType"},
+  { name: "PensionPlanType"},
+  { name: "MemberClass"}
+];
+
+function initializeDataFields() {
+  columns.forEach(function(item){
+    //set alignment
+    item.align = "center";
+
+    //set validate
+    item.validate = "required";
+
+    //default type text field
+    if (item.type===undefined || item.type==="")
+      item.type="text";
+
+    //set display headings
+    setTitle(item);
+
+    //set width
+    setColumnWidth(item);
+
+
+
+  });
+}
+
+$(document).ready(function() {
+  $("#jsGrid").jsGrid({
+
+    fields: columns,
+
+    //grid configuration
+    width: "100%",
+    height: "auto",
+    shrinkToFit: true,
+    autoload: true,
+    paging: true,
+    filtering: true,
+    sorting: true,
+    pageSize: 15,
+    pageButtonCount: 10,
+    noDataContent: "No Data to be Displayed",
+    loadIndicationDelay: 0,
+
+    controller: {
+      //get data from db
+      loadData: function (filter) {
+        var d = $.Deferred();
+
+        $.ajax({
+          type: "GET",
+          url: "/db/load",
+          cache: false,
+          dataType: "json"
+        })
+        .done(function(result) {
+          $("#home").prop("type","button");
+          result = $.grep(result, function(item) {
+            if (item["Env"] != $("#envValue").val()) {
+              return false;
+            }
+            for (var property in filter) {
+              if (filter[property]!=="" &&
+                  item[property] !== filter[property])
+              {
+                return false;
+              }
+            }
+            return true;
+          });
+          d.resolve(result);
+        });
+
+        return d.promise();
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>

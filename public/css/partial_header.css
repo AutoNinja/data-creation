@@ -1,0 +1,99 @@
+/**
+HEADER BAR
+**/
+.header {
+  background-color: black;
+  height: 50px;
+  width: 100%;
+  margin: 0, auto;
+  position: -webkit-sticky;  // required for Safari
+  position: sticky;
+  top: 0; // required as well.
+}
+
+.header .row {
+  margin: 0;
+}
+
+.header-container, .header-container * {
+  height: 100%;
+}
+
+.header h3 {
+  font-size: 1.2em;
+  color: white;
+}
+
+.header p {
+  color: white;
+  font-size: 1.2em;
+  justify-content: center;
+}
+
+.header .container-fluid {
+  padding: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.header .row {
+  width: 100%;
+}
+
+
+
+.header img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: auto;
+  height: auto;
+  padding-top: 12px;
+}
+
+.menu-btn {
+  width: 100%;
+  background-color: #0078d7;
+  color: #FFF;
+  font-size: 1.2em;
+  text-align: center;
+  cursor: pointer;
+  border: 0px;
+}
+
+.menu-btn:hover {
+  opacity: 0.6;
+}
+
+.menu-btn-wrapper {
+  padding: 0;
+}
+
+.table-btn {
+  width:200px;
+  height: 50px;
+  background-color: #0078d7;
+  color: #FFF;
+  font-size: 1.2em;
+  text-align: center;
+  cursor: pointer;
+  border: 0px;
+}
+
+.table-btn:hover {
+  opacity: 0.6;
+}
+
+.jumbotron2 {
+  background: black;
+  width: 100%;
+  height: 50%;
+  position: absolute;
+  top: 50%;
+}
+
+.middle {
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+}

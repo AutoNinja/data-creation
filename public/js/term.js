@@ -52,7 +52,6 @@ $.terminal.defaults.formatters.push(function(string) {
 });
 
 $(document).ready(function() {
-  $('#term').hide();
   //terminal input validation and submission
   $('#term').terminal(function(cmd, term) {
     var token = getFirstToken(cmd);
