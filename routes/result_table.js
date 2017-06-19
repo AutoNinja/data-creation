@@ -3,7 +3,7 @@ var router = express.Router();
 
 
 router.get("/", function(req, res) {
-    res.render('pages/result_table');
+    res.render('pages/page_result_table');
 });
 
 module.exports = router;
