@@ -3,6 +3,11 @@
 Index page text format
 **/
 
+.highlight {
+  color: red;
+  font-weight: bold;
+}
+
 .main-content-container {
   padding: 3vh 10vw;
   width: 100%;
@@ -22,4 +27,22 @@ Index page text format
   padding-bottom: 3vh;
   font-weight: bolder;
   color: #cc0000;
+}
+
+.main-content-container h5 {
+  font-size: 2rem;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+}
+
+.main-content-container label {
+  font-size: 2rem;
+  font-weight: normal;
+  margin-right: 5px;
+}
+
+.main-content-container input {
+  border: none;
+  font-weight: bold;
+  font-size: 2rem;
 }

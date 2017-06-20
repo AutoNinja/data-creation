@@ -5,10 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- CDN's -->
-  <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-  <!-- custom stylesheets -->
+  <!-- stylesheets -->
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/page_index.css">
 
@@ -44,16 +41,54 @@
       <div class='row'>
         <div class="col-sm-4 col-md-4 col-xs-4">
           <h3>Help</h3>
-          <p>1234567890</p>
+          <h5>Legend for Status: </h5>
+          <p>'Submitted': Not yet processed<br>
+          'New': Available for use<br>
+          'Used': Not Available for use<br>
+          'Failed': Incorrect data<br>
+          'Terminated': Will be deleted later<br>
+          </p>
+      <!--
+          <h5>To Add New Enrollment Data: </h5>
+          <p>
+          1. Click 'Add New Enrollment'<br>
+          2. Click 'New Data' on top-left of table<br>
+          3. Fill in or change fields as needed<br>
+          4. Click 'Add'<br>
+          5. Add additional rows or delete rows<br>
+          6. Click Submit when Finished<br>
+          7. Write down 'ID' for later<br>
+          </p>
+          <h5>To Search/Edit Current Data: </h5>
+          <p>
+          1. Click 'Search'<br>
+          2. Filter using the top row<br>
+          3. Click on any row to edit<br>
+          4. Note: 'used' and 'terminated' are not editable<br>
+          5. After edit, click check mark to submit<br>
+          </p>
+      -->
         </div>
         <div class="col-sm-4 col-md-4 col-xs-4">
           <h3>Statistics</h3>
-          <p>1234567890</p>
+          <h5>Total Enrollments Created: </h5>
+          <label>TST:</label><input type="text" id="TSTcount" value="Loading..." readonly></input><br>
+          <label>OAT:</label><input type="text" id="OATcount" value="Loading..." readonly></input><br>
+          <label>SIT2:</label><input type="text" id="SIT2count" value="Loading..." readonly></input><br>
         </div>
         <div class="col-sm-4 col-md-4 col-xs-4">
-          <h3>Changelog</h3>
-          <p>Version: 1.0.0-Beta</p>
-          <p>1234567890</p>
+          <h3>Announcements</h3>
+          <p>Current Version: 1.0.0-Beta</p>
+          <h5>Cookies: </h5>
+          <p>
+            <span class="highlight">**This Site Uses Cookies**</span><br>
+            You MUST have Coockies enabled on your browser
+          </p>
+          <h5>Bugs: </h5>
+          <p>
+            For bugs and issues please forward to:<br>
+            <a href="mailto:QAutomation@Omers.com?Subject=Issue&#58%20Enrollment%20Data%20Web%20App" target="_top">QAutomation@Omers.com</a>
+          </p>
         </div>
       </div>
     </div>
@@ -69,10 +104,10 @@
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/js/js.cookie.js"></script>
+<script type="text/javascript" src="/js/vendor/js.cookie.js"></script>
 
 <!-- custom scripts -->
-<script type="text/javascript" src="/js/indexhelper.js"></script>
+<script type="text/javascript" src="/js/page_index.js"></script>
 <script type="text/javascript" src="/js/nav.js"></script>
 <script type="text/javascript" src="/js/usecookies.js"></script>
 </body>

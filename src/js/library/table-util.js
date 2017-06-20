@@ -4,15 +4,6 @@ var exports = module.exports;
 Table-util API
 ******************************************************************************/
 
-//filters fields object based on discard array
-exports.filter = function (fields, discard) {
-  var newFields = fields;
-  for (var i = 0; i < discard.length; i++) {
-    delete newFields[discard[i]];
-  }
-  return newFields;
-};
-
 //get today's date (mmddyyyy)
 exports.date = function () {
   var today = new Date();
@@ -33,6 +24,6 @@ exports.date = function () {
 }
 
 //generate random 12 digit id
-exports.guid = () {
+exports.guid = function () {
   return Math.round(Math.random() * (1000000000000 - 100000000000) + 100000000000);
 }

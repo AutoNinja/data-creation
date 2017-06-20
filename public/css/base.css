@@ -1,5 +1,11 @@
+@import url("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css");
+@import url("https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css");
+
 @import 'partial_header.css';
 @import 'partial_nav.css';
+
 
 /**
 GLOBAL

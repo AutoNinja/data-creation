@@ -16,12 +16,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json() );
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.use('/',require ('./routes/index'));
-app.use('/db',require('./routes/db'));
-app.use('/console',require('./routes/console'));
-app.use('/search',require('./routes/search'));
-app.use('/newdata',require('./routes/newdata'));
-app.use('/result',require('./routes/result_table'));
+app.use('/',require ('./routes/route_index'));
+app.use('/db',require('./routes/route_db'));
+app.use('/console',require('./routes/route_console'));
+app.use('/search',require('./routes/route_search'));
+app.use('/newdata',require('./routes/route_newdata'));
+app.use('/result',require('./routes/route_result'));
 
 //error handler
 app.use(function(req,res,next) {
