@@ -398,133 +398,6 @@ var fields =
 ];
 
 },{"./defaults.js":1}],3:[function(require,module,exports){
-
-var exports = module.exports;
-
-/******************************************************************************
-MODAL API
-******************************************************************************/
-
-
-exports.createModal = function (target, fields) {
-  modalId = target;
-  $(modalId).dialog({
-      width: "70%",
-      autoOpen: false,
-      height: $(window).height(),
-      position: {
-        my: "center",
-        at: "top",
-        of: window
-      },
-      modal: true,
-      title: "Create New Data",
-      close: function() {resetModal(fields);}
-  });
-  renderModal(fields);
-  setupValidation(fields);
-};
-
-exports.show = function () {
-    $(modalId).dialog("open");
-};
-
-/******************************************************************************
-MODAL PRIVATE FUNCTIONS
-******************************************************************************/
-
-var modalId;
-
-//takes in fields object and render labels and textboxes on modal
-var renderModal = function (fields) {
-
-  for (var name in fields) {
-
-    var displayText = name;
-
-    if (name != "RequestType")
-     displayText = name.replace("Type","");
-
-    $("#detailsForm")
-      .append("<div class='row r-"+name+"'></div>");
-
-    $(".r-"+name)
-      .append("<div class='col-xs-4 col-sm-4 c-1'></div>");
-
-    $(".r-"+name)
-      .append("<div class='col-xs-8 col-sm-8 c-2'></div>");
-
-    $('<label>', {
-      for: name,
-      text: displayText+":"
-    }).appendTo(".r-"+name+" .c-1");
-
-    $('<input>', {
-      type: "text",
-      name: name,
-      id: name,
-      value: fields[name]
-    }).appendTo(".r-"+name+" .c-2");
-
-    if (name.includes("Date")) {
-      if (name.includes("Enrolment")) {
-        $( "#"+name ).datepicker({ dateFormat: 'dd/mm/yy', yearRange: "-80:+50", changeYear: true, changeMonth: true});
-        $( "#"+name ).tooltip({placement: "top", title:"Format: dd/mm/yy"});
-      } else {
-        $( "#"+name ).datepicker({ dateFormat: 'mm/dd/yy', yearRange: "-80:+50", changeYear: true, changeMonth: true });
-        $( "#"+name ).tooltip({placement: "top", title:"Format: mm/dd/yy"});
-      }
-    }
-  }
-};
-
-//reset fields to default
-//reset error messages
-var resetModal = function (fields) {
-
-  for (var name in fields) {
-    $('#'+name).val(fields[name]);
-  }
-
-  $(modalId+" form").validate().resetForm();
-  $(modalId+" form").find(".error").removeClass("error");
-};
-
-/******************************************************************************
-FORM SUBMISSION VALIDATION
-******************************************************************************/
-//JQuery Validation plug in setup
-function setupValidation(fields) {
-  $(modalId+" form").validate({
-      rules: createRules(fields),
-      submitHandler: function() {
-        formSubmitHandler(fields);
-      }
-  });
-};
-
-//dynamically set rules for all fields
-function createRules(fields) {
-
-  var rules = {};
-
-  for (var name in fields) {rules[name] = {required: true};}
-
-  return rules;
-};
-
-//get user input data from modal
-function formSubmitHandler(fields) {
-  var newData = {};
-
-  for (var name in fields) {newData[name] =  $("#"+name).val();}
-
-  $("#jsGrid").jsGrid("insertItem", newData);
-
-  $(modalId).dialog("close");
-};
-
-},{}],4:[function(require,module,exports){
 /*! Pushy - v1.1.0 - 2017-1-30
 * Pushy is a responsive off-canvas navigation menu using CSS transforms & transitions.
 * https://github.com/christophery/pushy/
@@ -748,7 +621,7 @@ module.exports = function ($) {
 	}
 };
 
-},{}],5:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var exports = module.exports;
 
 /******************************************************************************
@@ -779,7 +652,7 @@ exports.guid = function () {
   return Math.round(Math.random() * (1000000000000 - 100000000000) + 100000000000);
 }
 
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var util = require('./table-util.js');
 
 /******************************************************************************
@@ -1025,10 +898,8 @@ module.exports.setTableColumnVisible = function (cols, visibility) {
 Private functions
 ******************************************************************************/
 
-},{"./table-util.js":5}],7:[function(require,module,exports){
-var modal = require("./library/modal.js");
+},{"./table-util.js":4}],6:[function(require,module,exports){
 var table = require("./library/table.js");
-var defaults = require("./library/defaults.js");
 var fields = require("./library/fields.js");
 var nav = require('./library/nav.js');
 
@@ -1036,43 +907,9 @@ $(document).ready(function() {
 
   nav($);
 
-  $("#detailsDialog").hide();
+  table.createTable("search_automation", fields.getFields("search_automation"));
 
-  table.createTable("newdata", fields.getFields("newdata"));
-  modal.createModal("#detailsDialog", defaults.getDefaults("modal"));
-
-  $('#control-btn').click(function () {modal.show();});
-  $('#home').click(function() {window.location.replace("/");});
-  $('#save').click(handleClickSave);
+  $('#home').click(function() {window.location.replace("/automation");});
 });
 
-
-function handleClickSave() {
-  var items = $("#jsGrid").jsGrid("option", "data");
-
-  $("#save").hide();
-  $("#home").hide();
-  $.ajax({
-    type: "POST",
-    contentType: "application/json; charset=utf-8",
-    url: "/db/insert",
-    data: JSON.stringify(items),
-    dataType: "json"
-  })
-  .done(function(response){
-    alert("New Data Successfully Added");
-    table.setTableColumnVisible([
-      "ClientID",
-      "Status",
-      "Env",
-      "ID",
-      "SubmissionDate",
-    ], true);
-    table.setTableColumnVisible([
-      "Control"
-    ], false);
-    $("#home").show();
-  });
-}
-
-},{"./library/defaults.js":1,"./library/fields.js":2,"./library/modal.js":3,"./library/nav.js":4,"./library/table.js":6}]},{},[7]);
+},{"./library/fields.js":2,"./library/nav.js":3,"./library/table.js":5}]},{},[6]);

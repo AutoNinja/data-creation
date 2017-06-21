@@ -307,13 +307,6 @@ $( document ).ready(function() {
       }
     }
   });
-
-  $.post("db/query",{data: "SELECT TOP 3 UserID, COUNT(*) FROM EnrollmentData GROUP BY UserID ORDER BY COUNT(*) DESC;"}, function (res) {
-    res = JSON.parse(res);
-    $("#champ1").val("1. '"+res[0].UserID+"' made "+res[0].Expr1001+" entries");
-    $("#champ2").val("2. '"+res[1].UserID+"' made "+res[1].Expr1001+" entries");
-    $("#champ3").val("3. '"+res[2].UserID+"' made "+res[2].Expr1001+" entries");
-  });
 });
 
 },{"./library/nav.js":1,"./library/table-util.js":2,"./library/usecookies.js":3}]},{},[4]);

@@ -2,20 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Search</title>
+  <title>New Data</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- stylesheets -->
+  <!-- custom stylesheets -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+
   <link type="text/css" rel="stylesheet" href="css/base.css" />
+  <link type="text/css" rel="stylesheet" href="css/page_newdata.css" />
 
 
 </head>
 <body>
 
-<%- include partials/nav %>
+<%- include partials/nav_auto %>
 
 <div id="content">
   <input type="hidden" id="reqTypeValue" value="R"></input>
@@ -25,10 +28,23 @@
   <section class="main-content">
     <div id="jsGrid"></div>
 
+    <div id="detailsDialog" hidden>
+
+      <div class="dialog-content" id="dialog-textboxes">
+        <form id='detailsForm'>
+          <button class='dialog-btn' type='submit' id='submit'>Add</button>
+          <button class='dialog-btn' type='button' id='cancel' onClick='$("#detailsDialog").dialog("close")'>Cancel</button>
+        </form>
+
+      </div>
+
+    </div>
+
     <div class="table-buttons-wrapper">
       <div class="row">
         <div class="col-sm-12 col-md-12 col-xs-12 text-center">
           <input type="button" class="home table-btn" id="home" value="Home">
+          <input type="button" class="save table-btn" id="save" value="Submit">
         </div>
       </div>
     </div>
@@ -39,12 +55,15 @@
 
 <!-- Vendor Javascript -->
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script type="text/javascript" src="/js/vendor/js.cookie.js"></script>
 
+
 <!-- custom Javascript -->
-<script type="text/javascript" src='/js/page_search.js'></script>
+<script type="text/javascript" src='/js/page_newdata_automation.js'></script>
 
 </body>
 </html>

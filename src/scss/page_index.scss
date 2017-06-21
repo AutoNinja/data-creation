@@ -1,3 +1,4 @@
+@import "./library/base";
 
 /**
 Index page text format
@@ -9,7 +10,7 @@ Index page text format
 }
 
 .main-content-container {
-  padding: 5vh 5vw;
+  padding: 3vh 10vw;
   width: 100%;
   height: 70%;
 }
@@ -31,28 +32,18 @@ Index page text format
 
 .main-content-container h5 {
   font-size: 2rem;
-  font-weight: bold;
   padding-top: 1vh;
   padding-bottom: 1vh;
 }
 
-.main-content-container label, p {
+.main-content-container label {
   font-size: 2rem;
   font-weight: normal;
   margin-right: 5px;
 }
 
-.borderlessshort {
-  width: 50px;
+.main-content-container input {
   border: none;
   font-weight: bold;
   font-size: 2rem;
-}
-
-.borderlesslong {
-  resize: none;
-  width: 100%;
-  height: auto;
-  border: none;
-  font-size: 1.7rem;
 }

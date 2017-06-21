@@ -16,15 +16,19 @@
     "browserify": "^14.3.0",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^4.0.0",
+    "gulp-browserify": "^0.5.1",
     "gulp-jshint": "^2.0.4",
     "gulp-livereload": "^3.8.1",
     "gulp-nodemon": "^2.2.1",
     "gulp-ruby-sass": "^2.1.1",
-    "jshint": "^2.9.4"
+    "jshint": "^2.9.4",
+    "node-sass": "^4.5.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "build-css": "node-sass -w src/scss/ -o production/css/",
+    "build-js": "browserify-directory src/js/ public/js/"
   },
   "author": "Joshua Sun",
   "license": "MIT"

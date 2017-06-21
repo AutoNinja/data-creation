@@ -10,11 +10,11 @@ $(document).ready(function() {
 
   $("#detailsDialog").hide();
 
-  table.createTable("newdata", fields.getFields("newdata"));
-  modal.createModal("#detailsDialog", defaults.getDefaults("modal"));
+  table.createTable("newdata-automation", fields.getFields("newdata-automation"));
+  modal.createModal("#detailsDialog", defaults.getDefaults("newdata-automation-modal"));
 
   $('#control-btn').click(function () {modal.show();});
-  $('#home').click(function() {window.location.replace("/");});
+  $('#home').click(function() {window.location.replace("/automation");});
   $('#save').click(handleClickSave);
 });
 
@@ -33,13 +33,6 @@ function handleClickSave() {
   })
   .done(function(response){
     alert("New Data Successfully Added");
-    table.setTableColumnVisible([
-      "ClientID",
-      "Status",
-      "Env",
-      "ID",
-      "SubmissionDate",
-    ], true);
     table.setTableColumnVisible([
       "Control"
     ], false);

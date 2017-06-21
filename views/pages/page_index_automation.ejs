@@ -13,7 +13,8 @@
 </head>
 <body>
 
-<%- include partials/nav %>
+<%- include partials/nav_auto %>
+
 <!-- Your Content -->
 <div id="content">
 
@@ -22,8 +23,8 @@
   <div class="table-buttons-wrapper">
     <div class="row">
       <div class="col-sm-12 col-md-12 col-xs-12 text-center">
-        <input type="button" class="table-btn" id="newdata" value="New Data" onclick="window.location.replace('/newdata')">
-        <input type="button" class="table-btn" id="search" value="Search" onclick="window.location.replace('/search');">
+        <input type="button" class="table-btn" id="newdata" value="New Data" onclick="window.location.replace('/newdata_automation')">
+        <input type="button" class="table-btn" id="search" value="Search"  onclick="window.location.replace('/search_automation')">
       </div>
     </div>
   </div>
@@ -33,26 +34,20 @@
 
     <div class="container-fluid main-content-container">
       <div class='row'>
-        <div class="col-sm-3 col-md-3 col-xs-3">
+        <div class="col-sm-12 col-md-12 col-xs-12 text-center">
+          <h3>Next Scheduled Enrollment Data Update:</h3>
+          <h4 class="timer">21:00:00 EST</h4>
+        </div>
+      </div>
+      <div class='row'>
+        <div class="col-sm-4 col-md-4 col-xs-4">
           <h3>Help</h3>
-          <p>Current Version: 1.0.0-Beta</p>
-          <h5>Cookies: </h5>
-          <p>
-            <span class="highlight">**This Site Uses Cookies**</span><br>
-            You MUST have Coockies enabled
-          </p>
-
-          <h5>Status Explained: </h5>
+          <h5>Legend for Status: </h5>
           <p>'Submitted': Not yet processed<br>
           'New': Available for use<br>
           'Used': Not Available for use<br>
           'Failed': Incorrect data<br>
           'Terminated': Will be deleted later<br>
-          </p>
-          <h5>Bugs: </h5>
-          <p>
-            For bugs and issues please forward to:<br>
-            <a href="mailto:QAutomation@Omers.com?Subject=Issue&#58%20Enrollment%20Data%20Web%20App" target="_top">QAutomation@Omers.com</a>
           </p>
       <!--
           <h5>To Add New Enrollment Data: </h5>
@@ -75,28 +70,31 @@
           </p>
       -->
         </div>
-
-        <div class="col-sm-6 col-md-6 col-xs-6 text-center">
-          <h3 class="vmiddle">Next Scheduled Enrollment Data Update:</h3>
-          <h4 class="timer">21:00:00 EST</h4>
-        </div>
-
-        <div class="col-sm-3 col-md-3 col-xs-3">
-          <h3 class="">Statistics</h3>
+        <div class="col-sm-4 col-md-4 col-xs-4">
+          <h3>Statistics</h3>
           <h5>Total Enrollments Created: </h5>
-          <label>TST:</label><input type="text" class="borderlessshort" id="TSTcount" value="0" readonly></input><br>
-          <label>OAT:</label><input type="text" class="borderlessshort" id="OATcount" value="0" readonly></input><br>
-          <label>SIT2:</label><input type="text" class="borderlessshort" id="SIT2count" value="0" readonly></input><br>
+          <label>TST:</label><input type="text" id="TSTcount" value="0" readonly></input><br>
+          <label>OAT:</label><input type="text" id="OATcount" value="0" readonly></input><br>
+          <label>SIT2:</label><input type="text" id="SIT2count" value="0" readonly></input><br>
           <h5>Enrollments Created Today: </h5>
-          <label>TST:</label><input type="text" class="borderlessshort" id="TSTcounttoday" value="0" readonly></input><br>
-          <label>OAT:</label><input type="text" class="borderlessshort" id="OATcounttoday" value="0" readonly></input><br>
-          <label>SIT2:</label><input type="text" class="borderlessshort" id="SIT2counttoday" value="0" readonly></input><br>
-          <h5>Data Creation Champions: </h5>
-          <textarea class="borderlesslong" id="champ1" value="loading..." readonly></textarea><br>
-          <textarea type="textarea" class="borderlesslong" id="champ2" value="loading..." readonly></textarea><br>
-          <textarea type="textarea" class="borderlesslong" id="champ3" value="loading..." readonly></textarea><br>
+          <label>TST:</label><input type="text" id="TSTcounttoday" value="0" readonly></input><br>
+          <label>OAT:</label><input type="text" id="OATcounttoday" value="0" readonly></input><br>
+          <label>SIT2:</label><input type="text" id="SIT2counttoday" value="0" readonly></input><br>
         </div>
-
+        <div class="col-sm-4 col-md-4 col-xs-4">
+          <h3>Announcements</h3>
+          <p>Current Version: 1.0.0-Beta</p>
+          <h5>Cookies: </h5>
+          <p>
+            <span class="highlight">**This Site Uses Cookies**</span><br>
+            You MUST have Coockies enabled on your browser
+          </p>
+          <h5>Bugs: </h5>
+          <p>
+            For bugs and issues please forward to:<br>
+            <a href="mailto:QAutomation@Omers.com?Subject=Issue&#58%20Enrollment%20Data%20Web%20App" target="_top">QAutomation@Omers.com</a>
+          </p>
+        </div>
       </div>
     </div>
 
@@ -114,6 +112,6 @@
 <script type="text/javascript" src="/js/vendor/js.cookie.js"></script>
 
 <!-- custom scripts -->
-<script type="text/javascript" src="/js/page_index.js"></script>
+<script type="text/javascript" src="/js/page_index_automation.js"></script>
 </body>
 <html>

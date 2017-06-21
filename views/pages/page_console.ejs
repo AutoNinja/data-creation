@@ -5,15 +5,16 @@
   <title>Console</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- custom stylesheets -->
-  <link href="css/vendor/terminal/jquery.terminal.min.css" rel="stylesheet"/>
-  <link href="css/base.css" rel="stylesheet"/>
-  <link href="css/page_console.css" rel="stylesheet"/>
+  <!-- stylesheets -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/vendor/terminal/jquery.terminal.min.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/page_console.css" />
 
 
 </head>
 <body>
-<%- include partials/nav %>
+<%- include partials/nav_auto %>
 
 <div id="content">
   <%- include partials/header %>
@@ -29,8 +30,7 @@
 <script type="text/javascript" src="/js/vendor/js.cookie.js"></script>
 
 <!-- custom Javascript -->
-<script type="text/javascript" src="/js/nav.js"></script>
-<script type="text/javascript" src="/js/term.js"></script>
+<script type="text/javascript" src="/js/page_term.js"></script>
 
 </body>
 </html>

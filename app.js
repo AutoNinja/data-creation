@@ -22,6 +22,9 @@ app.use('/console',require('./routes/route_console'));
 app.use('/search',require('./routes/route_search'));
 app.use('/newdata',require('./routes/route_newdata'));
 app.use('/result',require('./routes/route_result'));
+app.use('/automation',require ('./routes/route_index_automation'));
+app.use('/newdata_automation',require ('./routes/route_newdata_automation'));
+app.use('/search_automation',require ('./routes/route_search_automation'));
 
 //error handler
 app.use(function(req,res,next) {
