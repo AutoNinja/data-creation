@@ -25,14 +25,21 @@ app.use('/result',require('./routes/route_result'));
 app.use('/automation',require ('./routes/route_index_automation'));
 app.use('/newdata_automation',require ('./routes/route_newdata_automation'));
 app.use('/search_automation',require ('./routes/route_search_automation'));
+app.use('/help',require ('./routes/route_help'));
 
-//error handler
+//unavailable routes
 app.use(function(req,res,next) {
   var err = new Error();
   err.status = 404;
   next(err);
-}, function (err, req, res, next) {
+});
+
+app.use(function (err, req, res, next) {
+  if (err.status != 404)
+    return next(err);
   res.render('pages/404');
+}, function (err, req, res, next) {
+  res.render('pages/500');
 });
 
 app.listen(PORT, function () {

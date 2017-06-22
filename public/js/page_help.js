@@ -223,37 +223,6 @@ module.exports = function ($) {
 };
 
 },{}],2:[function(require,module,exports){
-var exports = module.exports;
-
-/******************************************************************************
-Table-util API
-******************************************************************************/
-
-//get today's date (mmddyyyy)
-exports.date = function () {
-  var today = new Date();
-  var dd = today.getDate();
-
-  var mm = today.getMonth()+1;
-  var yyyy = today.getFullYear();
-  if(dd<10)
-  {
-    dd='0'+dd;
-  }
-
-  if(mm<10)
-  {
-    mm='0'+mm;
-  }
-  return mm+'/'+dd+'/'+yyyy;
-}
-
-//generate random 12 digit id
-exports.guid = function () {
-  return Math.round(Math.random() * (1000000000000 - 100000000000) + 100000000000);
-}
-
-},{}],3:[function(require,module,exports){
 module.exports = function() {
 
 	if (Cookies.get('env')==undefined || Cookies.get('env')==""  || !isValidEnv())
@@ -272,55 +241,15 @@ function isValidEnv() {
 	return valid;
 }
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 var initcookies = require('./library/usecookies.js');
 var nav = require('./library/nav.js');
-var util = require('./library/table-util.js');
 
 $( document ).ready(function() {
   initcookies();
 
   nav($);
-  var today = new Date();
 
-  $("#date").text(today.toLocaleDateString("en-US",{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
-
-  $.post("db/query",{data: "SELECT Env, COUNT(*) FROM EnrollmentData GROUP BY Env;"}, function (res) {
-    res = JSON.parse(res);
-    for (var i = 0; i < res.length; i++) {
-      if (res[i].Env=="TST") {
-        $("#TSTcount").val(res[i].Expr1001);
-      } else if (res[i].Env=="OAT") {
-        $("#OATcount").val(res[i].Expr1001);
-      } else if (res[i].Env=="SIT2"){
-        $("#SIT2count").val(res[i].Expr1001);
-      }
-    }
-  });
-
-  $.post("db/query",{data: "SELECT Env, COUNT(*) FROM EnrollmentData WHERE SubmissionDate='"+util.date()+"'GROUP BY Env;"}, function (res) {
-    res = JSON.parse(res);
-    for (var i = 0; i < res.length; i++) {
-      if (res[i].Env=="TST") {
-        $("#TSTcounttoday").val(res[i].Expr1001);
-      } else if (res[i].Env=="OAT") {
-        $("#OATcounttoday").val(res[i].Expr1001);
-      } else if (res[i].Env=="SIT2"){
-        $("#SIT2counttoday").val(res[i].Expr1001);
-      }
-    }
-  });
-
-  $.post("db/query",{data: "SELECT TOP 3 UserID, COUNT(*) FROM EnrollmentData GROUP BY UserID ORDER BY COUNT(*) DESC;"}, function (res) {
-    if (res=="undefined")
-      $("#champ1").val("Data Retrival Error");
-    else {
-      res = JSON.parse(res);
-      $("#champ1").val("1. '"+res[0].UserID+"' made "+res[0].Expr1001+" entries");
-      $("#champ2").val("2. '"+res[1].UserID+"' made "+res[1].Expr1001+" entries");
-      $("#champ3").val("3. '"+res[2].UserID+"' made "+res[2].Expr1001+" entries");
-    }
-  });
 });
 
-},{"./library/nav.js":1,"./library/table-util.js":2,"./library/usecookies.js":3}]},{},[4]);
+},{"./library/nav.js":1,"./library/usecookies.js":2}]},{},[3]);

@@ -4,6 +4,8 @@ var nav = require('./library/nav.js');
 
 $(document).ready(function() {
 
+  var previousItem;
+
   nav($);
 
   table.createTable("search_automation", fields.getFields("search_automation"));

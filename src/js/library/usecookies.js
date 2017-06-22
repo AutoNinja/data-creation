@@ -1,8 +1,8 @@
 module.exports = function() {
 
-	if (Cookies.get('env')=="" || Cookies.get('env')==undefined || !isValidEnv())
+	if (Cookies.get('env')==undefined || Cookies.get('env')==""  || !isValidEnv())
 		Cookies.set('env', 'TST', { expires: 15 });
-};
+	};
 
 function isValidEnv() {
 	var validEnv = ["TST","OAT","SIT2"];

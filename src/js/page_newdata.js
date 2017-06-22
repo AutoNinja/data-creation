@@ -22,6 +22,10 @@ $(document).ready(function() {
 function handleClickSave() {
   var items = $("#jsGrid").jsGrid("option", "data");
 
+  if (items.length==0) location.replace('/');
+
+  Cookies.set('UserID', items[0].UserID, { expires: 15 });
+
   $("#save").hide();
   $("#home").hide();
   $.ajax({
@@ -44,5 +48,9 @@ function handleClickSave() {
       "Control"
     ], false);
     $("#home").show();
+  })
+  .fail(function() {
+    alert("New Data Successfully Added");
+    location.reload();
   });
 }

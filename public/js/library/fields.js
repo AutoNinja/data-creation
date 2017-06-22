@@ -49,6 +49,7 @@ function filterDefaultFields (discard) {
 var defaults = {
   UserID: '',
   Description: '',
+  Comment: '',
   TypeDepartmentId: '',
   RequestType: '',
   ID: '',
@@ -172,7 +173,7 @@ exports.getFields = function (type) {
       if (hideColumns.indexOf(item.name)>-1)
         item.visible = false;
 
-      if (item.name==="ClientID")
+      if (item.name==="ClientID" || item.name==="Comment")
         item.validate = "";
 
     }
@@ -244,7 +245,7 @@ exports.getFields = function (type) {
       if (hideColumns.indexOf(item.name)>-1)
         item.visible = false;
 
-      if (item.name==="ClientID")
+      if (item.name==="ClientID" || item.name==="Comment")
         item.validate = "";
 
     }
@@ -311,6 +312,7 @@ function setEditTemplate(col) {
       $select.val(value);
       $select.find("option[value='']").remove();
       if (item.Status==="submitted") {
+        $select.find("option[value='data issue']").remove();
         $select.find("option[value='new']").remove();
         $select.find("option[value='used']").remove();
         $select.find("option[value='failed']").remove();
@@ -318,9 +320,14 @@ function setEditTemplate(col) {
         $select.find("option[value='new']").remove();
         $select.find("option[value='used']").remove();
       } else if (item.Status==="new") {
+        $select.find("option[value='data issue']").remove();
         $select.find("option[value='failed']").remove();
         $select.find("option[value='terminated']").remove();
         $select.find("option[value='submitted']").remove();
+      } else if (item.Status==="data issue") {
+        $select.find("option[value='failed']").remove();
+        $select.find("option[value='new']").remove();
+        $select.find("option[value='used']").remove();
       }
       return $select;
     }
@@ -329,7 +336,7 @@ function setEditTemplate(col) {
     col.editTemplate = function (value, item) {
       var $input = this.__proto__.editTemplate.call(this);
       $input.prop("value",value);
-      if (item.Status==="submitted" || item.Status==="failed") {
+      if (item.Status==="submitted" || item.Status==="failed" || item.Status==="data issue") {
         if (col.name === "ClientID" ||
             col.name === "UserID" ||
             col.name === "ID" ||
@@ -359,11 +366,13 @@ var fields =
       {Id: "new"},
       {Id: "used"},
       {Id: "failed"},
-      {Id: "terminated"}],
+      {Id: "terminated"},
+      {Id: "data issue"}],
     valueField: "Id",
     textField: "Id"},
   { name: "UserID"},
   { name: "Description"},
+  { name: "Comment"},
   { name: "ID"},
   { name: "RequestType"},
   { name: "Env"},

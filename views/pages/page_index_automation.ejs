@@ -34,67 +34,53 @@
 
     <div class="container-fluid main-content-container">
       <div class='row'>
-        <div class="col-sm-12 col-md-12 col-xs-12 text-center">
-          <h3>Next Scheduled Enrollment Data Update:</h3>
-          <h4 class="timer">21:00:00 EST</h4>
-        </div>
-      </div>
-      <div class='row'>
-        <div class="col-sm-4 col-md-4 col-xs-4">
-          <h3>Help</h3>
-          <h5>Legend for Status: </h5>
-          <p>'Submitted': Not yet processed<br>
-          'New': Available for use<br>
-          'Used': Not Available for use<br>
-          'Failed': Incorrect data<br>
-          'Terminated': Will be deleted later<br>
-          </p>
-      <!--
-          <h5>To Add New Enrollment Data: </h5>
-          <p>
-          1. Click 'Add New Enrollment'<br>
-          2. Click 'New Data' on top-left of table<br>
-          3. Fill in or change fields as needed<br>
-          4. Click 'Add'<br>
-          5. Add additional rows or delete rows<br>
-          6. Click Submit when Finished<br>
-          7. Write down 'ID' for later<br>
-          </p>
-          <h5>To Search/Edit Current Data: </h5>
-          <p>
-          1. Click 'Search'<br>
-          2. Filter using the top row<br>
-          3. Click on any row to edit<br>
-          4. Note: 'used' and 'terminated' are not editable<br>
-          5. After edit, click check mark to submit<br>
-          </p>
-      -->
-        </div>
-        <div class="col-sm-4 col-md-4 col-xs-4">
-          <h3>Statistics</h3>
-          <h5>Total Enrollments Created: </h5>
-          <label>TST:</label><input type="text" id="TSTcount" value="0" readonly></input><br>
-          <label>OAT:</label><input type="text" id="OATcount" value="0" readonly></input><br>
-          <label>SIT2:</label><input type="text" id="SIT2count" value="0" readonly></input><br>
-          <h5>Enrollments Created Today: </h5>
-          <label>TST:</label><input type="text" id="TSTcounttoday" value="0" readonly></input><br>
-          <label>OAT:</label><input type="text" id="OATcounttoday" value="0" readonly></input><br>
-          <label>SIT2:</label><input type="text" id="SIT2counttoday" value="0" readonly></input><br>
-        </div>
-        <div class="col-sm-4 col-md-4 col-xs-4">
-          <h3>Announcements</h3>
+        <div class="col-sm-3 col-md-3 col-xs-3">
+          <h3><a href="/help">Help</a></h3>
           <p>Current Version: 1.0.0-Beta</p>
           <h5>Cookies: </h5>
           <p>
-            <span class="highlight">**This Site Uses Cookies**</span><br>
-            You MUST have Coockies enabled on your browser
+            <span class="highlight">**This Site Uses Cookies**</span>
           </p>
-          <h5>Bugs: </h5>
+
+          <h5>Statuses Explained: </h5>
+          <p>'Submitted': Not yet processed<br>
+          'New': Available for use<br>
+          'Used': Not Available for use<br>
+          'Failed': Internal error<br>
+          'Terminated': Will be deleted later<br>
+          'Data Issue': Incorrect input data<br>
+          </p>
+          <h5>Bugs and Issues: </h5>
           <p>
-            For bugs and issues please forward to:<br>
+            Forward to:<br>
             <a href="mailto:QAutomation@Omers.com?Subject=Issue&#58%20Enrollment%20Data%20Web%20App" target="_top">QAutomation@Omers.com</a>
           </p>
         </div>
+
+        <div class="col-sm-6 col-md-6 col-xs-6 text-center">
+          <h3 class="vmiddle">Scheduled Enrollment Data Updates:</h3>
+          <h4 style="color: red;">05:00:00</h4>
+          <h4 style="color: red;">12:00:00</h4>
+          <h3 id="date" class="paddingdate"></h4>
+          <h3 class="paddingdate">Eastern Standard Time</h4>
+        </div>
+
+        <div class="col-sm-3 col-md-3 col-xs-3">
+          <h3 class="">Statistics</h3>
+          <h5>Total Enrollments Created: </h5>
+          <label>TST:</label><input type="text" class="borderlessshort" id="TSTcount" value="" readonly></input><br>
+          <label>OAT:</label><input type="text" class="borderlessshort" id="OATcount" value="" readonly></input><br>
+          <label>SIT2:</label><input type="text" class="borderlessshort" id="SIT2count" value="" readonly></input><br>
+          <h5>Enrollments Created Today: </h5>
+          <label>TST:</label><input type="text" class="borderlessshort" id="TSTcounttoday" value="" readonly></input><br>
+          <label>OAT:</label><input type="text" class="borderlessshort" id="OATcounttoday" value="" readonly></input><br>
+          <label>SIT2:</label><input type="text" class="borderlessshort" id="SIT2counttoday" value="" readonly></input><br>
+          <h5>Data Creation Champions: </h5>
+          <textarea class="borderlesslong" id="champ1" value="loading..." readonly></textarea><br>
+          <textarea type="textarea" class="borderlesslong" id="champ2" value="loading..." readonly></textarea><br>
+          <textarea type="textarea" class="borderlesslong" id="champ3" value="loading..." readonly></textarea><br>
+        </div>
+
       </div>
     </div>
 
@@ -112,6 +98,6 @@
 <script type="text/javascript" src="/js/vendor/js.cookie.js"></script>
 
 <!-- custom scripts -->
-<script type="text/javascript" src="/js/page_index_automation.js"></script>
+<script type="text/javascript" src="/js/page_index.js"></script>
 </body>
 <html>

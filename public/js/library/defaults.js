@@ -49,6 +49,7 @@ function filterDefaultFields (discard) {
 var defaults = {
   UserID: '',
   Description: '',
+  Comment: '',
   TypeDepartmentId: '',
   RequestType: '',
   ID: '',

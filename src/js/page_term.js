@@ -95,13 +95,12 @@ $(document).ready(function() {
     } else {
       //query without return value
       return $.post("db/execute",{data: cmd}, function (res) {
-        console.log(res);
         term.echo(res);
       });
     }
   },{
     prompt: '> ',
-    greetings: "SQL Syntax Highlight Enabled\n**NOTE: use Ctrl+shift+v to Paste!**\nType your SQL Command Below: ",
+    greetings: "**NOTE: use Ctrl+shift+v to Paste!**\nType your SQL Command Below: ",
     onBlur: function() {
         return false;
     }

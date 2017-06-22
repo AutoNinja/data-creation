@@ -1,13 +1,4 @@
 
-/**
-Index page text format
-**/
-
-.highlight {
-  color: red;
-  font-weight: bold;
-}
-
 .main-content-container {
   padding: 5vh 5vw;
   width: 100%;
@@ -35,29 +26,8 @@ Index page text format
   padding-bottom: 1vh;
 }
 
-.main-content-container label, p {
+.main-content-container p {
   font-size: 2rem;
   font-weight: normal;
   margin-right: 5px;
-}
-
-.borderlessshort {
-  width: 50px;
-  border: none;
-  font-weight: bold;
-  font-size: 2rem;
-}
-
-.borderlesslong {
-  resize: none;
-  width: 100%;
-  height: auto;
-  border: none;
-  font-size: 1.7rem;
-}
-
-.paddingdate {
-  padding-top: 3vh;
-  padding-bottom: 3vh;
-  font-size: 4rem !important;
 }

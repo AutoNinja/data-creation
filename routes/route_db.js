@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var dbConnection = require ('node-adodb')
       .open('Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../Access/database.mdb;');
+var async = require('async');
 
 //dev variables
 const table = 'EnrollmentData';
@@ -25,10 +26,9 @@ router.use('/load', function(req,res,next){
       next('route');
     })
     .on('fail', function(error) {
-      console.log(error);
-      var err = new Error();
-      err.status = 500;
-      next(err);
+      console.error(error);
+      res.status(500);
+      res.send(error);
     });
 });
 
@@ -51,10 +51,9 @@ router.use('/update', function(req,res,next){
       next('route');
     })
     .on('fail', function(error) {
-      console.log(error);
-      var err = new Error();
-      err.status = 500;
-      next(err);
+      console.error(error);
+      res.status(500);
+      res.send(error);
     });
 });
 
@@ -67,27 +66,42 @@ router.use('/insert', function(req,res,next){
   }
   next();
 }, function(req,res,next) {
-  for (var i = 0; i < req.queryString.length; i++) {
-    executeInsertQuery(req.queryString[i]);
-  }
-  setTimeout(function(){
-    req.queryResult = {};
-    next('route');
-  }, req.queryString.length*500);
+
+  async.each(req.queryString,
+    function (query, done) {
+      dbConnection
+        .execute(query)
+        .on('done', function(data) {
+          done();
+        })
+        .on('fail', function(error) {
+          done(error);
+        });
+    }, function (err) {
+      if (err) {
+        console.error(err);
+        res.status(500).send(err);
+      } else {
+        console.log("Insertion Successful");
+        req.queryResult = {};
+        next('route');
+      }
+    }
+  );
 });
 
 router.use('/execute', function(req,res,next){
   req.queryString = req.body.data;
-  console.log(req.body);
   next();
 }, function(req,res,next) {
   dbConnection
     .execute(req.queryString)
     .on('done', function(data) {
-      req.queryResult = "Execution Success";
+      req.queryResult = "Success";
       next('route');
     })
     .on('fail', function(error) {
+      console.error(error);
       req.queryResult = error;
       next('route');
     });
@@ -95,7 +109,6 @@ router.use('/execute', function(req,res,next){
 
 router.use('/query', function(req,res,next){
   req.queryString = req.body.data;
-  console.log(req.body);
   next();
 }, function(req,res,next) {
   dbConnection
@@ -105,6 +118,7 @@ router.use('/query', function(req,res,next){
       next('route');
     })
     .on('fail', function(error) {
+      console.error(error);
       req.queryResult = error;
       next('route');
     });
@@ -114,17 +128,5 @@ router.all('*',function(req, res) {
   res.end(JSON.stringify(req.queryResult, null, 2));
 });
 
-function executeInsertQuery (queryString) {
-  dbConnection
-    .execute(queryString)
-    .on('done', function(data) {
-      console.log("Row Insert Success");
-    })
-    .on('fail', function(error) {
-      console.log(error);
-      executeInsertQuery(queryString);
-      setTimeout(function(){}, 1000);
-    });
-}
 
 module.exports = router;

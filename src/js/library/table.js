@@ -83,6 +83,11 @@ module.exports.createTable = function (type, fields) {
                 return true;
               });
               d.resolve(result);
+            })
+            .fail(function() {
+              alert("An Unexpected Error Has Occured");
+              location.replace('/');
+              d.resolve();
             });
 
             return d.promise();
@@ -90,7 +95,6 @@ module.exports.createTable = function (type, fields) {
 
           //submit updated data to db
           updateItem: function(item) {
-            console.log(item);
             item.SubmissionDate = util.date();
             var d = $.Deferred();
             $.ajax({
@@ -102,6 +106,10 @@ module.exports.createTable = function (type, fields) {
             }).done(function(result) {
               d.resolve(item);
               alert('Update Success');
+            })
+            .fail(function() {
+              d.resolve(previousItem);
+              alert("Update Failed, Unexpected Error");
             });
             return d.promise();
           }
@@ -112,6 +120,10 @@ module.exports.createTable = function (type, fields) {
           if (args.item.Status === "used" || args.item.Status === "terminated") {
             args.cancel = true;
           }
+        },
+
+        onItemUpdating: function(args) {
+          previousItem = args.previousItem;
         },
 
         fields: fields
@@ -200,6 +212,11 @@ module.exports.createTable = function (type, fields) {
                 return true;
               });
               d.resolve(result);
+            })
+            .fail(function() {
+              alert("An Unexpected Error Has Occured");
+              location.replace('/automation');
+              d.resolve();
             });
 
             return d.promise();
@@ -219,9 +236,17 @@ module.exports.createTable = function (type, fields) {
             }).done(function(result) {
               d.resolve(item);
               alert('Update Success');
+            })
+            .fail(function() {
+              d.resolve(previousItem);
+              alert('Update Failed, An Unexpected Error Has Occured');
             });
             return d.promise();
           }
+        },
+
+        onItemUpdating: function(args) {
+          previousItem = args.previousItem;
         },
 
         fields: fields

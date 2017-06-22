@@ -42,6 +42,11 @@ var renderModal = function (fields) {
 
     var displayText = name;
 
+
+    if (Cookies.get('UserID')!==undefined && Cookies.get('UserID')!=="") {
+  		fields.UserID = Cookies.get("UserID");
+  	}
+
     if (name != "RequestType")
      displayText = name.replace("Type","");
 
@@ -108,7 +113,10 @@ function createRules(fields) {
 
   var rules = {};
 
-  for (var name in fields) {rules[name] = {required: true};}
+  for (var name in fields) {
+    if (name!="ClientID" && name!="Comment")
+      rules[name] = {required: true};
+  }
 
   return rules;
 };
@@ -121,5 +129,7 @@ function formSubmitHandler(fields) {
 
   $("#jsGrid").jsGrid("insertItem", newData);
 
-  $(modalId).dialog("close");
+  resetModal(fields);
+
+  //$(modalId).dialog("close");
 };
