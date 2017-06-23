@@ -11,6 +11,7 @@ GLOBAL
     box-sizing: border-box;
 }
 
+
 html, body {
   height: 100%;
 }
@@ -27,12 +28,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .table-buttons-wrapper {
-  padding-top: 2vh;
+  padding-top: 5vh;
 }
 
 .main-content {
   padding: 0 20px;
   margin: 0;
   height: 100%;
-  overflow-x: hidden;
+  overflow-y: scroll;
 }

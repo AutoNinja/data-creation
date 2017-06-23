@@ -66,7 +66,6 @@ router.use('/insert', function(req,res,next){
   }
   next();
 }, function(req,res,next) {
-
   async.each(req.queryString,
     function (query, done) {
       dbConnection

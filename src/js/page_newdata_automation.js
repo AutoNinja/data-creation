@@ -25,7 +25,7 @@ function handleClickSave() {
   if (items.length===0)
     location.replace('/');
 
-  Cookies.set('UserID', items[0].UserID, { expires: 15 });
+  Cookies.set('UserID', items[0].UserID, { expires: 1 });
 
   $("#save").hide();
   $("#home").hide();
@@ -44,7 +44,7 @@ function handleClickSave() {
     $("#home").show();
   })
   .fail(function() {
-    alert("New Data Successfully Added");
+    alert("Internal Server Error, Please Resubmit Data");
     location.reload();
   });
 }
