@@ -7,7 +7,7 @@ var exports = module.exports;
 
 exports.getDefaults = function (type) {
 
-  if (type == "modal") {
+  if (type == "defaults-manual") {
     return filterDefaultFields([
       "DepartmentCode",
       "RequestType",
@@ -17,7 +17,7 @@ exports.getDefaults = function (type) {
       "ID",
       "SubmissionDate"
     ]);
-  } else if (type == "newdata-automation-modal"){
+  } else if (type == "defaults-automation"){
     return filterDefaultFields([
       "DepartmentCode",
       "Status",
@@ -93,7 +93,6 @@ var defaults = require('./defaults.js').getDefaults();
 
 var exports = module.exports;
 
-//type = ["newdata","search"]
 exports.getFields = function (type) {
 
   var newFields = fields;
@@ -663,6 +662,7 @@ exports.guid = function () {
 
 },{}],5:[function(require,module,exports){
 var util = require('./table-util.js');
+var cols = require("./fields.js");
 
 /******************************************************************************
 Table API
@@ -670,14 +670,13 @@ Table API
 
 
 
-module.exports.createTable = function (type, fields) {
+module.exports.createTable = function (target, type) {
 
-  //base options
-  var options = {};
-
+  var fields = cols.getFields(type);
 
   if (type === "newdata") {
-    options = {
+
+    $(target).jsGrid({
       width: "100%",
       paging: true,
       autoload: true,
@@ -704,10 +703,9 @@ module.exports.createTable = function (type, fields) {
       },
 
       fields: fields
-    }
+    });
   } else if (type === "search") {
-
-    options = {
+    $(target).jsGrid({
         width: "100%",
         height: "auto",
         shrinkToFit: true,
@@ -735,6 +733,9 @@ module.exports.createTable = function (type, fields) {
             .done(function(result) {
               result = $.grep(result, function(item) {
                 if (item["Env"] != Cookies.get("env")) {
+                  return false;
+                }
+                if (item.RequestType !== "R") {
                   return false;
                 }
                 for (var property in filter) {
@@ -791,10 +792,10 @@ module.exports.createTable = function (type, fields) {
         },
 
         fields: fields
-    };
+    });
 
   } else if (type === "result") {
-    options = {
+    $(target).jsGrid({
       width: "100%",
       paging: true,
       autoload: true,
@@ -806,9 +807,9 @@ module.exports.createTable = function (type, fields) {
       loadIndicationDelay: 0,
 
       fields: fields
-    }
+    });
   } else if (type === "newdata-automation") {
-    options = {
+    $(target).jsGrid({
       width: "100%",
       paging: true,
       autoload: true,
@@ -833,10 +834,10 @@ module.exports.createTable = function (type, fields) {
       },
 
       fields: fields
-    }
+    });
   } else if (type === "search_automation") {
 
-    options = {
+    $(target).jsGrid({
         width: "100%",
         height: "auto",
         shrinkToFit: true,
@@ -862,6 +863,7 @@ module.exports.createTable = function (type, fields) {
               dataType: "json"
             })
             .done(function(result) {
+              console.log(result);
               result = $.grep(result, function(item) {
                 if (item["Env"] != Cookies.get("env")) {
                   return false;
@@ -914,12 +916,9 @@ module.exports.createTable = function (type, fields) {
         },
 
         fields: fields
-    };
+    });
 
   }
-
-
-  $("#jsGrid").jsGrid(options);
 }
 
 module.exports.setTableColumnVisible = function (cols, visibility) {
@@ -928,17 +927,33 @@ module.exports.setTableColumnVisible = function (cols, visibility) {
   }
 }
 
-/******************************************************************************
-Private functions
-******************************************************************************/
+},{"./fields.js":2,"./table-util.js":4}],6:[function(require,module,exports){
+module.exports = function() {
 
-},{"./table-util.js":4}],6:[function(require,module,exports){
+	if (Cookies.get('env')==undefined || Cookies.get('env')==""  || !isValidEnv())
+		Cookies.set('env', 'TST', { expires: 15 });
+	};
+
+function isValidEnv() {
+	var validEnv = ["TST","OAT","SIT2"];
+	var valid = false;
+	for (var i = 0; i < validEnv.length; i++) {
+		if (Cookies.get('env') === validEnv[i]) {
+			valid = true;
+			break;
+		}
+	}
+	return valid;
+}
+
+},{}],7:[function(require,module,exports){
 var table = require("./library/table.js");
 var fields = require("./library/fields.js");
 var nav = require('./library/nav.js');
-
+var initcookies = require('./library/usecookies.js');
 
 $(document).ready(function() {
+  initcookies();
   nav($);
 
 
@@ -947,4 +962,4 @@ $(document).ready(function() {
   $('#home').click(function() {window.location.replace("/");});
 });
 
-},{"./library/fields.js":2,"./library/nav.js":3,"./library/table.js":5}]},{},[6]);
+},{"./library/fields.js":2,"./library/nav.js":3,"./library/table.js":5,"./library/usecookies.js":6}]},{},[7]);

@@ -1,4 +1,4 @@
-
+var defaults = require("./defaults.js");
 var exports = module.exports;
 
 /******************************************************************************
@@ -6,8 +6,9 @@ MODAL API
 ******************************************************************************/
 
 
-exports.createModal = function (target, fields) {
+exports.createModal = function (target, type) {
   modalId = target;
+  var fields = defaults.getDefaults(type);
   $(modalId).dialog({
       width: "70%",
       autoOpen: false,
@@ -25,8 +26,8 @@ exports.createModal = function (target, fields) {
   setupValidation(fields);
 };
 
-exports.show = function () {
-    $(modalId).dialog("open");
+exports.show = function (target) {
+    $(target).dialog("open");
 };
 
 /******************************************************************************
@@ -71,8 +72,8 @@ var renderModal = function (fields) {
       value: fields[name]
     }).appendTo(".r-"+name+" .c-2");
 
-    if (name.includes("Date")) {
-      if (name.includes("Enrolment")) {
+    if (name.indexOf("Date") !== -1) {
+      if (name.indexOf("Enrolment") !== -1) {
         $( "#"+name ).datepicker({ dateFormat: 'dd/mm/yy', yearRange: "-80:+50", changeYear: true, changeMonth: true});
         $( "#"+name ).tooltip({placement: "top", title:"Format: dd/mm/yy"});
       } else {

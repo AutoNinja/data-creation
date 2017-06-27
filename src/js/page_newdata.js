@@ -1,20 +1,25 @@
 var modal = require("./library/modal.js");
 var table = require("./library/table.js");
-var defaults = require("./library/defaults.js");
-var fields = require("./library/fields.js");
 var nav = require('./library/nav.js');
+var initcookies = require('./library/usecookies.js');
 
 $(document).ready(function() {
-
+  initcookies();
   nav($);
 
   $("#detailsDialog").hide();
 
-  table.createTable("newdata", fields.getFields("newdata"));
-  modal.createModal("#detailsDialog", defaults.getDefaults("modal"));
+  if (user === "manual") {
+    table.createTable("#jsGrid","newdata");
+    modal.createModal("#detailsDialog","defaults-manual");
+    $('#home').click(function() {window.location.replace("/");});
+  } else {
+    table.createTable("#jsGrid", "newdata-automation");
+    modal.createModal("#detailsDialog","defaults-automation");
+    $('#home').click(function() {window.location.replace("/auto");});
+  }
 
-  $('#control-btn').click(function () {modal.show();});
-  $('#home').click(function() {window.location.replace("/");});
+  $('#control-btn').click(function () {modal.show('#detailsDialog');});
   $('#save').click(handleClickSave);
 });
 
@@ -22,9 +27,11 @@ $(document).ready(function() {
 function handleClickSave() {
   var items = $("#jsGrid").jsGrid("option", "data");
 
-  if (items.length==0) location.replace('/');
+  if (items.length==0) {
+    alert("Nothing to submit!")
+  }
 
-  Cookies.set('UserID', items[0].UserID, { expires: 1 });
+  Cookies.set('UserID', items[0].UserID, { expires: 5 });
 
   $("#save").hide();
   $("#home").hide();

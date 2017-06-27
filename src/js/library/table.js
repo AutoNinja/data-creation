@@ -1,4 +1,5 @@
 var util = require('./table-util.js');
+var cols = require("./fields.js");
 
 /******************************************************************************
 Table API
@@ -6,14 +7,13 @@ Table API
 
 
 
-module.exports.createTable = function (type, fields) {
+module.exports.createTable = function (target, type) {
 
-  //base options
-  var options = {};
-
+  var fields = cols.getFields(type);
 
   if (type === "newdata") {
-    options = {
+
+    $(target).jsGrid({
       width: "100%",
       paging: true,
       autoload: true,
@@ -40,10 +40,9 @@ module.exports.createTable = function (type, fields) {
       },
 
       fields: fields
-    }
+    });
   } else if (type === "search") {
-
-    options = {
+    $(target).jsGrid({
         width: "100%",
         height: "auto",
         shrinkToFit: true,
@@ -71,6 +70,9 @@ module.exports.createTable = function (type, fields) {
             .done(function(result) {
               result = $.grep(result, function(item) {
                 if (item["Env"] != Cookies.get("env")) {
+                  return false;
+                }
+                if (item.RequestType !== "R") {
                   return false;
                 }
                 for (var property in filter) {
@@ -127,10 +129,10 @@ module.exports.createTable = function (type, fields) {
         },
 
         fields: fields
-    };
+    });
 
   } else if (type === "result") {
-    options = {
+    $(target).jsGrid({
       width: "100%",
       paging: true,
       autoload: true,
@@ -142,9 +144,9 @@ module.exports.createTable = function (type, fields) {
       loadIndicationDelay: 0,
 
       fields: fields
-    }
+    });
   } else if (type === "newdata-automation") {
-    options = {
+    $(target).jsGrid({
       width: "100%",
       paging: true,
       autoload: true,
@@ -169,10 +171,10 @@ module.exports.createTable = function (type, fields) {
       },
 
       fields: fields
-    }
+    });
   } else if (type === "search_automation") {
 
-    options = {
+    $(target).jsGrid({
         width: "100%",
         height: "auto",
         shrinkToFit: true,
@@ -198,6 +200,7 @@ module.exports.createTable = function (type, fields) {
               dataType: "json"
             })
             .done(function(result) {
+              console.log(result);
               result = $.grep(result, function(item) {
                 if (item["Env"] != Cookies.get("env")) {
                   return false;
@@ -250,12 +253,9 @@ module.exports.createTable = function (type, fields) {
         },
 
         fields: fields
-    };
+    });
 
   }
-
-
-  $("#jsGrid").jsGrid(options);
 }
 
 module.exports.setTableColumnVisible = function (cols, visibility) {
@@ -263,7 +263,3 @@ module.exports.setTableColumnVisible = function (cols, visibility) {
     $("#jsGrid").jsGrid("fieldOption", cols[item], "visible", visibility);
   }
 }
-
-/******************************************************************************
-Private functions
-******************************************************************************/

@@ -1,23 +1,25 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <title>Enrollment Data Creation</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- base stylesheets -->
+  <%- include ../partials/header %>
 
-  <!-- stylesheets -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/base.css">
+  <!-- custom stylesheets -->
   <link rel="stylesheet" href="/css/page_help.css">
 
 </head>
 <body>
 
-<%- include partials/nav %>
-<!-- Your Content -->
-<div id="content">
+  <% if (user==="manual") { %>
+    <%- include ../partials/nav %>
+    <%- include ../partials/headerbar %>
+  <% } else { %>
+    <%- include ../partials/nav_auto %>
+    <%- include ../partials/headerbar_auto %>
+  <% } %>
 
-  <%- include partials/header %>
+  <!-- Your Content -->
+  <div id="content">
 
   <!-- info -->
   <section class="main-content">
@@ -94,12 +96,9 @@
   </section>
 </div>
 
-<!-- vendor scripts -->
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/js/vendor/js.cookie.js"></script>
-
-<!-- custom scripts -->
-<script type="text/javascript" src="/js/page_help.js"></script>
+  <!-- Vendor Javascript -->
+  <%- include ../partials/scripts %>
+  <!-- custom Javascript -->
+  <script type="text/javascript" src="/js/page_help.js"></script>
 </body>
 <html>

@@ -1,10 +1,6 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Enrollment Data Creation</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <!-- custom stylesheets -->
   <link type="text/css" rel="stylesheet" href="css/base.css" />
 
@@ -12,12 +8,12 @@
 <body>
 
 
-  <%- include partials/nav %>
+  <%- include ../partials/nav %>
 
   <div id="content">
     <input type="hidden" id="reqTypeValue" value="R"></input>
 
-    <%- include partials/header %>
+    <%- include ../partials/headerbar %>
 
     <section class="main-content">
       <div id="jsGrid"></div>
@@ -33,12 +29,9 @@
 
   </div>
 
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/js/vendor/js.cookie.js"></script>
-
-<!-- custom Javascript -->
+  <!-- Vendor Javascript -->
+  <%- include ../partials/scripts %>
+  <!-- custom Javascript -->
 <script type="text/javascript" src="/js/page_result.js"></script>
 </body>
 </html>

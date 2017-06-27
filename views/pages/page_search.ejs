@@ -1,50 +1,49 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Enrollment Data Creation</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- stylesheets -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css">
-  <link type="text/css" rel="stylesheet" href="css/base.css" />
+  <!-- base stylesheets -->
+  <%- include ../partials/header %>
 
 
 </head>
 <body>
 
-<%- include partials/nav %>
+  <% if (user==="manual") { %>
+    <%- include ../partials/nav %>
+    <%- include ../partials/headerbar %>
+  <% } else { %>
+    <%- include ../partials/nav_auto %>
+    <%- include ../partials/headerbar_auto %>
+  <% } %>
 
-<div id="content">
-  <input type="hidden" id="reqTypeValue" value="R"></input>
+  <div id="content">
+    <input type="hidden" id="reqTypeValue" value="R"></input>
 
-  <%- include partials/header %>
 
-  <section class="main-content">
-    <div id="jsGrid"></div>
 
-    <div class="table-buttons-wrapper">
-      <div class="row">
-        <div class="col-sm-12 col-md-12 col-xs-12 text-center">
-          <input type="button" class="home table-btn" id="home" value="Home">
+    <section class="main-content">
+      <div id="jsGrid"></div>
+
+      <div class="table-buttons-wrapper">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-xs-12 text-center">
+            <input type="button" class="home table-btn" id="home" value="Home">
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-</div>
+  </div>
 
+  <script>
+    var user = <%- JSON.stringify(user) %>;
+  </script>
+  <!-- Vendor Javascript -->
+  <%- include ../partials/scripts %>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
 
-<!-- Vendor Javascript -->
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/js/vendor/js.cookie.js"></script>
-
-<!-- custom Javascript -->
-<script type="text/javascript" src='/js/page_search.js'></script>
+  <!-- custom Javascript -->
+  <script type="text/javascript" src='/js/page_search.js'></script>
 
 </body>
 </html>

@@ -7,7 +7,7 @@ var exports = module.exports;
 
 exports.getDefaults = function (type) {
 
-  if (type == "modal") {
+  if (type == "defaults-manual") {
     return filterDefaultFields([
       "DepartmentCode",
       "RequestType",
@@ -17,7 +17,7 @@ exports.getDefaults = function (type) {
       "ID",
       "SubmissionDate"
     ]);
-  } else if (type == "newdata-automation-modal"){
+  } else if (type == "defaults-automation"){
     return filterDefaultFields([
       "DepartmentCode",
       "Status",
@@ -93,7 +93,6 @@ var defaults = require('./defaults.js').getDefaults();
 
 var exports = module.exports;
 
-//type = ["newdata","search"]
 exports.getFields = function (type) {
 
   var newFields = fields;
@@ -407,7 +406,7 @@ var fields =
 ];
 
 },{"./defaults.js":1}],3:[function(require,module,exports){
-
+var defaults = require("./defaults.js");
 var exports = module.exports;
 
 /******************************************************************************
@@ -415,8 +414,9 @@ MODAL API
 ******************************************************************************/
 
 
-exports.createModal = function (target, fields) {
+exports.createModal = function (target, type) {
   modalId = target;
+  var fields = defaults.getDefaults(type);
   $(modalId).dialog({
       width: "70%",
       autoOpen: false,
@@ -434,8 +434,8 @@ exports.createModal = function (target, fields) {
   setupValidation(fields);
 };
 
-exports.show = function () {
-    $(modalId).dialog("open");
+exports.show = function (target) {
+    $(target).dialog("open");
 };
 
 /******************************************************************************
@@ -480,8 +480,8 @@ var renderModal = function (fields) {
       value: fields[name]
     }).appendTo(".r-"+name+" .c-2");
 
-    if (name.includes("Date")) {
-      if (name.includes("Enrolment")) {
+    if (name.indexOf("Date") !== -1) {
+      if (name.indexOf("Enrolment") !== -1) {
         $( "#"+name ).datepicker({ dateFormat: 'dd/mm/yy', yearRange: "-80:+50", changeYear: true, changeMonth: true});
         $( "#"+name ).tooltip({placement: "top", title:"Format: dd/mm/yy"});
       } else {
@@ -543,7 +543,7 @@ function formSubmitHandler(fields) {
   //$(modalId).dialog("close");
 };
 
-},{}],4:[function(require,module,exports){
+},{"./defaults.js":1}],4:[function(require,module,exports){
 /*! Pushy - v1.1.0 - 2017-1-30
 * Pushy is a responsive off-canvas navigation menu using CSS transforms & transitions.
 * https://github.com/christophery/pushy/
@@ -800,6 +800,7 @@ exports.guid = function () {
 
 },{}],6:[function(require,module,exports){
 var util = require('./table-util.js');
+var cols = require("./fields.js");
 
 /******************************************************************************
 Table API
@@ -807,14 +808,13 @@ Table API
 
 
 
-module.exports.createTable = function (type, fields) {
+module.exports.createTable = function (target, type) {
 
-  //base options
-  var options = {};
-
+  var fields = cols.getFields(type);
 
   if (type === "newdata") {
-    options = {
+
+    $(target).jsGrid({
       width: "100%",
       paging: true,
       autoload: true,
@@ -841,10 +841,9 @@ module.exports.createTable = function (type, fields) {
       },
 
       fields: fields
-    }
+    });
   } else if (type === "search") {
-
-    options = {
+    $(target).jsGrid({
         width: "100%",
         height: "auto",
         shrinkToFit: true,
@@ -872,6 +871,9 @@ module.exports.createTable = function (type, fields) {
             .done(function(result) {
               result = $.grep(result, function(item) {
                 if (item["Env"] != Cookies.get("env")) {
+                  return false;
+                }
+                if (item.RequestType !== "R") {
                   return false;
                 }
                 for (var property in filter) {
@@ -928,10 +930,10 @@ module.exports.createTable = function (type, fields) {
         },
 
         fields: fields
-    };
+    });
 
   } else if (type === "result") {
-    options = {
+    $(target).jsGrid({
       width: "100%",
       paging: true,
       autoload: true,
@@ -943,9 +945,9 @@ module.exports.createTable = function (type, fields) {
       loadIndicationDelay: 0,
 
       fields: fields
-    }
+    });
   } else if (type === "newdata-automation") {
-    options = {
+    $(target).jsGrid({
       width: "100%",
       paging: true,
       autoload: true,
@@ -970,10 +972,10 @@ module.exports.createTable = function (type, fields) {
       },
 
       fields: fields
-    }
+    });
   } else if (type === "search_automation") {
 
-    options = {
+    $(target).jsGrid({
         width: "100%",
         height: "auto",
         shrinkToFit: true,
@@ -999,6 +1001,7 @@ module.exports.createTable = function (type, fields) {
               dataType: "json"
             })
             .done(function(result) {
+              console.log(result);
               result = $.grep(result, function(item) {
                 if (item["Env"] != Cookies.get("env")) {
                   return false;
@@ -1051,12 +1054,9 @@ module.exports.createTable = function (type, fields) {
         },
 
         fields: fields
-    };
+    });
 
   }
-
-
-  $("#jsGrid").jsGrid(options);
 }
 
 module.exports.setTableColumnVisible = function (cols, visibility) {
@@ -1065,28 +1065,48 @@ module.exports.setTableColumnVisible = function (cols, visibility) {
   }
 }
 
-/******************************************************************************
-Private functions
-******************************************************************************/
+},{"./fields.js":2,"./table-util.js":5}],7:[function(require,module,exports){
+module.exports = function() {
 
-},{"./table-util.js":5}],7:[function(require,module,exports){
+	if (Cookies.get('env')==undefined || Cookies.get('env')==""  || !isValidEnv())
+		Cookies.set('env', 'TST', { expires: 15 });
+	};
+
+function isValidEnv() {
+	var validEnv = ["TST","OAT","SIT2"];
+	var valid = false;
+	for (var i = 0; i < validEnv.length; i++) {
+		if (Cookies.get('env') === validEnv[i]) {
+			valid = true;
+			break;
+		}
+	}
+	return valid;
+}
+
+},{}],8:[function(require,module,exports){
 var modal = require("./library/modal.js");
 var table = require("./library/table.js");
-var defaults = require("./library/defaults.js");
-var fields = require("./library/fields.js");
 var nav = require('./library/nav.js');
+var initcookies = require('./library/usecookies.js');
 
 $(document).ready(function() {
-
+  initcookies();
   nav($);
 
   $("#detailsDialog").hide();
 
-  table.createTable("newdata", fields.getFields("newdata"));
-  modal.createModal("#detailsDialog", defaults.getDefaults("modal"));
+  if (user === "manual") {
+    table.createTable("#jsGrid","newdata");
+    modal.createModal("#detailsDialog","defaults-manual");
+    $('#home').click(function() {window.location.replace("/");});
+  } else {
+    table.createTable("#jsGrid", "newdata-automation");
+    modal.createModal("#detailsDialog","defaults-automation");
+    $('#home').click(function() {window.location.replace("/auto");});
+  }
 
-  $('#control-btn').click(function () {modal.show();});
-  $('#home').click(function() {window.location.replace("/");});
+  $('#control-btn').click(function () {modal.show('#detailsDialog');});
   $('#save').click(handleClickSave);
 });
 
@@ -1094,9 +1114,11 @@ $(document).ready(function() {
 function handleClickSave() {
   var items = $("#jsGrid").jsGrid("option", "data");
 
-  if (items.length==0) location.replace('/');
+  if (items.length==0) {
+    alert("Nothing to submit!")
+  }
 
-  Cookies.set('UserID', items[0].UserID, { expires: 1 });
+  Cookies.set('UserID', items[0].UserID, { expires: 5 });
 
   $("#save").hide();
   $("#home").hide();
@@ -1127,4 +1149,4 @@ function handleClickSave() {
   });
 }
 
-},{"./library/defaults.js":1,"./library/fields.js":2,"./library/modal.js":3,"./library/nav.js":4,"./library/table.js":6}]},{},[7]);
+},{"./library/modal.js":3,"./library/nav.js":4,"./library/table.js":6,"./library/usecookies.js":7}]},{},[8]);

@@ -7,7 +7,7 @@ var exports = module.exports;
 
 exports.getDefaults = function (type) {
 
-  if (type == "modal") {
+  if (type == "defaults-manual") {
     return filterDefaultFields([
       "DepartmentCode",
       "RequestType",
@@ -17,7 +17,7 @@ exports.getDefaults = function (type) {
       "ID",
       "SubmissionDate"
     ]);
-  } else if (type == "newdata-automation-modal"){
+  } else if (type == "defaults-automation"){
     return filterDefaultFields([
       "DepartmentCode",
       "Status",

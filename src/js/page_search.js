@@ -1,14 +1,19 @@
 var table = require("./library/table.js");
-var fields = require("./library/fields.js");
 var nav = require('./library/nav.js');
+var initcookies = require('./library/usecookies.js');
 
-var previousItem;
 
 $(document).ready(function() {
+  var previousItem;
+  initcookies();
 
   nav($);
 
-  table.createTable("search", fields.getFields("search"));
-
-  $('#home').click(function() {window.location.replace("/");});
+  if (user == "manual") {
+    table.createTable("#jsGrid","search");
+    $('#home').click(function() {window.location.replace("/");});
+  } else {
+    table.createTable("#jsGrid","search_automation");
+    $('#home').click(function() {window.location.replace("/auto");});
+  }
 });

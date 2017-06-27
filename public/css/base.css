@@ -22,9 +22,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #content {
-  height: 100%;
+  height: auto;
   width: 100%;
-  position: fixed;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .table-buttons-wrapper {
@@ -35,5 +36,9 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0 20px;
   margin: 0;
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
+}
+
+.jsgrid-grid-header, .jsgrid-grid-body {
+  overflow-y: auto;
 }

@@ -5,7 +5,6 @@ var defaults = require('./defaults.js').getDefaults();
 
 var exports = module.exports;
 
-//type = ["newdata","search"]
 exports.getFields = function (type) {
 
   var newFields = fields;

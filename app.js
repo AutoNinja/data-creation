@@ -1,45 +1,46 @@
-// server.js
-// load the things we need
 var express = require('express');
 var app = express();
 var path = require('path');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+
 var PORT = process.env.port || 3000;
+var NODE_ENV = process.env.NODE_ENV || 'development';
+
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 app.set('views',path.join(__dirname,'/views'));
 
-//static assets
-app.use(express.static(path.join(__dirname, 'public')));
+
+//middleware setup
+app.use(logger(NODE_ENV==="development" ? 'dev' : "common"));
+app.use(cookieParser());
 app.use(bodyParser.json() );
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/auto',express.static(path.join(__dirname, 'public')));
 
-app.use('/',require ('./routes/route_index'));
-app.use('/db',require('./routes/route_db'));
-app.use('/console',require('./routes/route_console'));
-app.use('/search',require('./routes/route_search'));
-app.use('/newdata',require('./routes/route_newdata'));
-app.use('/result',require('./routes/route_result'));
-app.use('/automation',require ('./routes/route_index_automation'));
-app.use('/newdata_automation',require ('./routes/route_newdata_automation'));
-app.use('/search_automation',require ('./routes/route_search_automation'));
-app.use('/help',require ('./routes/route_help'));
+//routes
+app.use('/', require('./routes/pages'));
+app.use('/auto', require('./routes/autopages'));
+app.use('/db',require('./routes/db'));
 
-//unavailable routes
+//throw error if page not found
 app.use(function(req,res,next) {
   var err = new Error();
   err.status = 404;
   next(err);
 });
 
+//handle errors
 app.use(function (err, req, res, next) {
   if (err.status != 404)
-    return next(err);
-  res.render('pages/404');
-}, function (err, req, res, next) {
-  res.render('pages/500');
+    res.render('pages/500');
+  else
+    res.render('pages/404');
 });
 
 app.listen(PORT, function () {

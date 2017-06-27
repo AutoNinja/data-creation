@@ -6,11 +6,21 @@ $( document ).ready(function() {
   initcookies();
 
   nav($);
+
+  if (user == "manual") {
+    $("#newdata").click(function() {window.location.replace('/newdata')});
+    $("#search").click(function() {window.location.replace('/search')});
+  } else {
+    $("#newdata").click(function() {window.location.replace('/auto/newdata')});
+    $("#search").click(function() {window.location.replace('/auto/search')});
+  }
+
   var today = new Date();
 
   $("#date").text("EST "+today.toLocaleDateString("en-US",{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
 
-  $.post("db/query",{data: "SELECT Env, COUNT(*) FROM EnrollmentData GROUP BY Env;"}, function (res) {
+  $.post("/db/query",{data: "SELECT Env, COUNT(*) FROM EnrollmentData GROUP BY Env;"}, function (res) {
+    console.log(res);
     res = JSON.parse(res);
     if (typeof res == "string") {
       $("#TSTcount").val("Error");
@@ -29,7 +39,7 @@ $( document ).ready(function() {
     }
   });
 
-  $.post("db/query",{data: "SELECT Env, COUNT(*) FROM EnrollmentData WHERE SubmissionDate='"+util.date()+"'GROUP BY Env;"}, function (res) {
+  $.post("/db/query",{data: "SELECT Env, COUNT(*) FROM EnrollmentData WHERE SubmissionDate='"+util.date()+"'GROUP BY Env;"}, function (res) {
     res = JSON.parse(res);
     if (typeof res == "string") {
       $("#TSTcounttoday").val("Error");
@@ -48,7 +58,7 @@ $( document ).ready(function() {
     }
   });
 
-  $.post("db/query",{data: "SELECT TOP 3 UserID, COUNT(*) FROM EnrollmentData GROUP BY UserID ORDER BY COUNT(*) DESC;"}, function (res) {
+  $.post("/db/query",{data: "SELECT TOP 3 UserID, COUNT(*) FROM EnrollmentData GROUP BY UserID ORDER BY COUNT(*) DESC;"}, function (res) {
     res = JSON.parse(res);
     if (res=="string")
       $("#champ1").val("Data Retrival Error");
@@ -60,4 +70,5 @@ $( document ).ready(function() {
       $("#champ3").val("3. '"+res[2].UserID+"' made "+res[2].Expr1001+" entries");
     }
   });
+
 });
