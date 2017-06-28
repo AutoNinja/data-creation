@@ -89,6 +89,8 @@ var defaults = {
 /******************************************************************************
 Fields
 ******************************************************************************/
+//"SELECT * from information_schema.columns WHERE table_name = 'EnrollmentData'"
+
 var defaults = require('./defaults.js').getDefaults();
 
 var exports = module.exports;

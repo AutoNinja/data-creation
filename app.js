@@ -4,6 +4,7 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 
 
 var PORT = process.env.port || 3000;
@@ -21,11 +22,12 @@ app.use(cookieParser());
 app.use(bodyParser.json() );
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/auto',express.static(path.join(__dirname, 'public')));
 
 //routes
-app.use('/', require('./routes/pages'));
-app.use('/auto', require('./routes/autopages'));
+app.use('/', require('./routes/index'));
+app.use('/enrollment', require('./routes/enrollment'));
+app.use('/auto/enrollment', require('./routes/enrollment_auto'));
+app.use('/event', require('./routes/event'));
 app.use('/db',require('./routes/db'));
 
 //throw error if page not found

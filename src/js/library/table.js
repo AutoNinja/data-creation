@@ -1,5 +1,5 @@
 var util = require('./table-util.js');
-var cols = require("./fields.js");
+var cols = require("./formatFields.js");
 
 /******************************************************************************
 Table API
@@ -11,7 +11,7 @@ module.exports.createTable = function (target, type) {
 
   var fields = cols.getFields(type);
 
-  if (type === "newdata") {
+  if (type === "newdata_enrollment_manual") {
 
     $(target).jsGrid({
       width: "100%",
@@ -41,7 +41,7 @@ module.exports.createTable = function (target, type) {
 
       fields: fields
     });
-  } else if (type === "search") {
+  } else if (type === "search_enrollment_manual") {
     $(target).jsGrid({
         width: "100%",
         height: "auto",
@@ -88,7 +88,6 @@ module.exports.createTable = function (target, type) {
             })
             .fail(function() {
               alert("An Unexpected Error Has Occured");
-              location.replace('/');
               d.resolve();
             });
 
@@ -131,21 +130,7 @@ module.exports.createTable = function (target, type) {
         fields: fields
     });
 
-  } else if (type === "result") {
-    $(target).jsGrid({
-      width: "100%",
-      paging: true,
-      autoload: true,
-      autowidth: false,
-
-      pageSize: 15,
-      pageButtonCount: 5,
-      noDataContent: "No Data",
-      loadIndicationDelay: 0,
-
-      fields: fields
-    });
-  } else if (type === "newdata-automation") {
+  } else if (type === "newdata_enrollment_automation") {
     $(target).jsGrid({
       width: "100%",
       paging: true,
@@ -172,7 +157,7 @@ module.exports.createTable = function (target, type) {
 
       fields: fields
     });
-  } else if (type === "search_automation") {
+  } else if (type === "search_enrollment_automation") {
 
     $(target).jsGrid({
         width: "100%",
@@ -218,7 +203,6 @@ module.exports.createTable = function (target, type) {
             })
             .fail(function() {
               alert("An Unexpected Error Has Occured");
-              location.replace('/automation');
               d.resolve();
             });
 

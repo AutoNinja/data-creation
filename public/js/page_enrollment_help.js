@@ -223,37 +223,6 @@ module.exports = function ($) {
 };
 
 },{}],2:[function(require,module,exports){
-var exports = module.exports;
-
-/******************************************************************************
-Table-util API
-******************************************************************************/
-
-//get today's date (mmddyyyy)
-exports.date = function () {
-  var today = new Date();
-  var dd = today.getDate();
-
-  var mm = today.getMonth()+1;
-  var yyyy = today.getFullYear();
-  if(dd<10)
-  {
-    dd='0'+dd;
-  }
-
-  if(mm<10)
-  {
-    mm='0'+mm;
-  }
-  return mm+'/'+dd+'/'+yyyy;
-}
-
-//generate random 12 digit id
-exports.guid = function () {
-  return Math.round(Math.random() * (1000000000000 - 100000000000) + 100000000000);
-}
-
-},{}],3:[function(require,module,exports){
 module.exports = function() {
 
 	if (Cookies.get('env')==undefined || Cookies.get('env')==""  || !isValidEnv())
@@ -272,76 +241,15 @@ function isValidEnv() {
 	return valid;
 }
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 var initcookies = require('./library/usecookies.js');
 var nav = require('./library/nav.js');
-var util = require('./library/table-util.js');
 
 $( document ).ready(function() {
   initcookies();
 
   nav($);
 
-  $("#newdata").click(function() {window.location.replace(window.location.pathname+'newdata')});
-  $("#search").click(function() {window.location.replace(window.location.pathname+'search')});
-
-
-  var today = new Date();
-
-  $("#date").text("EST "+today.toLocaleDateString("en-US",{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
-
-  $.post("/db/query",{data: "SELECT Env, COUNT(*) FROM EnrollmentData GROUP BY Env;"}, function (res) {
-    console.log(res);
-    res = JSON.parse(res);
-    if (typeof res == "string") {
-      $("#TSTcount").val("Error");
-      $("#OATcount").val("Error");
-      $("#SIT2count").val("Error");
-    } else if (res.length>0) {
-      for (var i = 0; i < res.length; i++) {
-        if (res[i].Env=="TST") {
-          $("#TSTcount").val("TST: "+res[i].Expr1001);
-        } else if (res[i].Env=="OAT") {
-          $("#OATcount").val("OAT: "+res[i].Expr1001);
-        } else if (res[i].Env=="SIT2"){
-          $("#SIT2count").val("SIT2: "+res[i].Expr1001);
-        }
-      }
-    }
-  });
-
-  $.post("/db/query",{data: "SELECT Env, COUNT(*) FROM EnrollmentData WHERE SubmissionDate='"+util.date()+"'GROUP BY Env;"}, function (res) {
-    res = JSON.parse(res);
-    if (typeof res == "string") {
-      $("#TSTcounttoday").val("Error");
-      $("#OATcounttoday").val("Error");
-      $("#SIT2counttoday").val("Error");
-    } else if (res.length>0){
-      for (var i = 0; i < res.length; i++) {
-        if (res[i].Env=="TST") {
-          $("#TSTcounttoday").val("TST: "+res[i].Expr1001);
-        } else if (res[i].Env=="OAT") {
-          $("#OATcounttoday").val("OAT: "+res[i].Expr1001);
-        } else if (res[i].Env=="SIT2"){
-          $("#SIT2counttoday").val("SIT2: "+res[i].Expr1001);
-        }
-      }
-    }
-  });
-
-  $.post("/db/query",{data: "SELECT TOP 3 UserID, COUNT(*) FROM EnrollmentData GROUP BY UserID ORDER BY COUNT(*) DESC;"}, function (res) {
-    res = JSON.parse(res);
-    if (res=="string")
-      $("#champ1").val("Data Retrival Error");
-    else if (res.length==0) {
-      $("#champ1").val("No data");
-    } else {
-      $("#champ1").val("1. '"+res[0].UserID+"' made "+res[0].Expr1001+" entries");
-      $("#champ2").val("2. '"+res[1].UserID+"' made "+res[1].Expr1001+" entries");
-      $("#champ3").val("3. '"+res[2].UserID+"' made "+res[2].Expr1001+" entries");
-    }
-  });
-
 });
 
-},{"./library/nav.js":1,"./library/table-util.js":2,"./library/usecookies.js":3}]},{},[4]);
+},{"./library/nav.js":1,"./library/usecookies.js":2}]},{},[3]);

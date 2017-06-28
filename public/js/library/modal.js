@@ -86,7 +86,7 @@ var defaults = {
 };
 
 },{}],2:[function(require,module,exports){
-var defaults = require("./defaults.js");
+var defaults = require("./enrollment_defaults.js");
 var exports = module.exports;
 
 /******************************************************************************
@@ -161,12 +161,13 @@ var renderModal = function (fields) {
     }).appendTo(".r-"+name+" .c-2");
 
     if (name.indexOf("Date") !== -1) {
+      $( "#"+name ).attr('data-toggle','tooltip');
       if (name.indexOf("Enrolment") !== -1) {
         $( "#"+name ).datepicker({ dateFormat: 'dd/mm/yy', yearRange: "-80:+50", changeYear: true, changeMonth: true});
-        $( "#"+name ).tooltip({placement: "top", title:"Format: dd/mm/yy"});
+        $( "#"+name ).attr('title','dd/mm/yy');
       } else {
         $( "#"+name ).datepicker({ dateFormat: 'mm/dd/yy', yearRange: "-80:+50", changeYear: true, changeMonth: true });
-        $( "#"+name ).tooltip({placement: "top", title:"Format: mm/dd/yy"});
+        $( "#"+name ).attr('title','mm/dd/yy');
       }
     }
   }
@@ -223,4 +224,4 @@ function formSubmitHandler(fields) {
   //$(modalId).dialog("close");
 };
 
-},{"./defaults.js":1}]},{},[2]);
+},{"./enrollment_defaults.js":1}]},{},[2]);
