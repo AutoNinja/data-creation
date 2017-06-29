@@ -1,144 +1,162 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <title>Input Screen</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- CDN's -->
-  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
-  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
-  <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!-- base stylesheets -->
+  <%- include ../partials/styles %>
 
   <!-- custom stylesheets -->
   <link rel="stylesheet" href="/css/index.css">
-  <link rel="stylesheet" href="/css/nav.css">
-  <link href="css/terminal/jquery.terminal.min.css" rel="stylesheet"/>
-  <style>
-  .terminal, .cmd, .terminal .terminal-output div div, .cmd .prompt {
-      font-size: 1.2em;
-      line-height: 20px;
-  }
-  </style>
 
 </head>
 <body>
-<!-- Navigation -->
-<nav class="pushy pushy-left">
-    <div class="pushy-content">
-        <ul>
-            <!-- Submenu -->
-            <li class="pushy-link"><a href="/">Home</a></li>
-            <li class="pushy-submenu">
-                <button>Change Environment</button>
-                <ul>
-                    <li class="pushy-link"><a class="env">TST</a></li>
-                    <li class="pushy-link"><a class="env">OAT</a></li>
-                    <li class="pushy-link"><a class="env">SIT2</a></li>
-                </ul>
-            </li>
-            <li class="pushy-link"><a href="/">Add New Enrollment</a></li>
-            <li class="pushy-link"><a href="/">Search</a></li>
-            <li class="pushy-link"><a href="/">Automation</a></li>
-            <li class="pushy-link"><a href="javascript:void(0)" id="console">Console</a></li>
-            <li class="pushy-link"><a href="https://github.com/jsun98/jsGrid_odbc/blob/master/README.md">Help</a></li>
-        </ul>
-    </div>
-</nav>
 
-<!-- Site Overlay -->
-<div class="site-overlay"></div>
+  <%- include('../partials/left_nav', {page: page}); %>
+  <%- include('../partials/top_nav', {page: page}); %>
 
 
+  <!-- Your Content -->
+  <div id="content">
 
-<!-- Your Content -->
-<div id="content">
-
-  <input type="hidden" id="reqTypeValue" value="R"></input>
-
-  <!-- header bar -->
-  <section class="header">
-
-    <div class="container-fluid header-container">
-      <div class="row">
-        <div class="col-xs-4 col-sm-1 menu-btn-wrapper">
-          <button class="menu-btn">Menu</button>
-        </div>
-        <div class="hidden-xs col-sm-4">
-          <h3 class="middle">Enrollment Data Creation</h3>
-        </div>
-        <div class="hidden-xs col-sm-2">
-          <img src="img/omers.png">
-        </div>
-        <div class="col-xs-6 col-sm-5">
-          <span class="pull-right">
-            <p id="envDisplay" class="middle text-center"></p>
-          </span>
-        </div>
-      </div>
-    </div>
-
-  </section>
-
-  <section id="term"></section>
-
-  <!-- table -->
-  <section class="main-content">
-
-    <div id="jsGrid"></div>
-
+    <% if (page!=="main") { %>
     <div class="table-buttons-wrapper">
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-xs-12 text-center">
-          <input type="button" class="addrow table-btn" id="addrow" value="New Data">
-          <input type="hidden" class="save table-btn" id="save" value="Save">
-          <input type="hidden" class="home table-btn" id="home" value="Home">
-          <input type="button" class="search table-btn" id="search" value="Search">
+        <div class="col-sm-12 col-md-9 col-xs-12 text-center">
+          <% if (page==="enrollment") { %>
+            <input type="button" class="table-btn" id="newdata" onclick="document.location.href = './newdata';" value="New Enrollment Data">
+            <input type="button" class="table-btn" id="search" onclick="document.location.href = './search';" value="Search Enrollment">
+          <% } else if (page==="sourcedata") { %>
+            <input type="button" class="table-btn" id="newdata" onclick="document.location.href = './newdata';" value="New Source Data">
+            <input type="button" class="table-btn" id="search" onclick="document.location.href = './search';" value="Search Source Data">
+          <% } else if (page==="reporting") { %>
+            <input type="button" class="table-btn" id="newdata" onclick="document.location.href = './newdata';" value="New Reporting Data">
+            <input type="button" class="table-btn" id="search" onclick="document.location.href = './search';" value="Search Reporting">
+          <% } else if (page==="election") { %>
+            <input type="button" class="table-btn" id="newdata" onclick="document.location.href = './newdata';" value="New Election Data">
+            <input type="button" class="table-btn" id="search" onclick="document.location.href = './search';" value="Search Election">
+          <% } %>
+        </div>
+        <div class="col-sm-0 col-md-3 col-xs-0 text-center">
         </div>
       </div>
     </div>
-
-    <div class="container-fluid main-content-container">
-      <div class='row'>
-        <div class="col-sm-12 col-md-12 col-xs-12 text-center">
-          <h3>Next Scheduled Enrollment Data Update:</h3>
-          <h4 class="timer">21:00:00 EST</h4>
+    <% } else { %>
+      <div class="table-buttons-wrapper">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-xs-12 text-center">
+            <input type="button" class="table-btn" value="New Enrollment Data">
+            <input type="button" class="table-btn" value="New Source Data">
+            <input type="button" class="table-btn" value="New Reporting Data">
+            <input type="button" class="table-btn" value="New Election Data">
+          </div>
         </div>
       </div>
-      <div class='row'>
-        <div class="col-sm-4 col-md-4 col-xs-4">
-          <h3>Help</h3>
-          <p>1234567890</p>
-        </div>
-        <div class="col-sm-4 col-md-4 col-xs-4">
-          <h3>Statistics</h3>
-          <p>1234567890</p>
-        </div>
-        <div class="col-sm-4 col-md-4 col-xs-4">
-          <h3>Changelog</h3>
-          <p>Version: 1.0.0-Beta</p>
-          <p>1234567890</p>
+    <% }  %>
+    <!-- info -->
+    <section class="main-content">
+
+      <div class="container-fluid main-content-container">
+        <div class='row'>
+          <% if (page!=="main") { %>
+          <div class="col-sm-12 col-md-9 col-xs-12 text-center">
+          <% } else { %>
+          <div class="col-sm-12 col-md-12 col-xs-12 text-center">
+          <% } %>
+            <h3>
+              <% if (page==="main") { %>
+                All Submitted Data Are Processed Daily At
+              <% } else { %>
+                Submitted Data Will Be Processed At:
+              <% } %>
+            </h3>
+            <h4>05:00:00 AM</h4>
+            <h4>12:00:00 PM</h4>
+            <h3 id="date" class="paddingdate"></h3>
+            <div class="row">
+              <div class="col-sm-2 col-md-2 col-xs-2 text-center"></div>
+              <div class="col-sm-4 col-md-4 col-xs-4 text-center">
+                <p>
+                  Website Support:<br>
+                  <a href="mailto:QAutomation@Omers.com?Subject=Issue&#58%20Enrollment%20Data%20Web%20App" target="_top">QAutomation@Omers.com</a>
+                </p>
+              </div>
+              <div class="col-sm-4 col-md-4 col-xs-4 text-center">
+                <p>Visit Our <a href="./help">Help Page</a><br>
+                For a Detailed Documentation
+                </p>
+
+              </div>
+              <div class="col-sm-2 col-md-2 col-xs-2 text-center"></div>
+            </div>
+          </div>
+
+          <% if (page!=="main") { %>
+          <div class="hidden-sm col-md-3 hidden-xs text-center">
+
+
+            <h5>Total Enrollments Created: </h5>
+            <input type="text" class="borderlessshort" value="TST: 0" id="TSTcount" readonly></input>
+            <input type="text" class="borderlessshort" value="OAT: 0" id="OATcount" readonly></input>
+            <input type="text" class="borderlessshort" value="SIT2: 0" id="SIT2count" readonly></input>
+            <h5>Enrollments Created Today: </h5>
+            <input type="text" class="borderlessshort" value="TST: 0" id="TSTcounttoday" readonly></input>
+            <input type="text" class="borderlessshort" value="OAT: 0"  id="OATcounttoday" readonly></input>
+            <input type="text" class="borderlessshort" value="SIT2: 0"  id="SIT2counttoday" readonly></input>
+            <br><br>
+            <h5>Data Creation Champions: </h5>
+            <textarea class="borderlesslong text-center" id="champ1" value="loading..." readonly></textarea><br>
+            <textarea type="textarea" class="borderlesslong text-center" id="champ2" value="loading..." readonly></textarea>
+            <textarea type="textarea" class="borderlesslong text-center" id="champ3" value="loading..." readonly></textarea>
+            <br><br>
+
+            <span class="ad">
+            <h5>LEAP Automation Team</h5>
+            <p>
+              <div class="row">
+                <div class="col-md-6 text-center">
+                  Parasar Saha
+                </div>
+                <div class="col-md-6 text-center">
+                  Chirag Kashyap
+                </div>
+                <div class="col-md-6 text-center">
+                  Jannie Zheng
+                </div>
+                <div class="col-md-6 text-center">
+                  Raluca Mihaileanu
+                </div>
+                <div class="col-md-6 text-center">
+                  Josh Sun
+                </div>
+                <div class="col-md-6 text-center">
+                  Boyan Gong
+                </div>
+              </div>
+            </p>
+          </div>
+
+          <div class="hidden-sm col-md-2 hidden-xs">
+
+          </div>
+          <% } %>
         </div>
       </div>
-    </div>
 
 
 
 
 
-  </section>
-</div>
+    </section>
 
-<!-- scripts -->
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/js/js.cookie.js"></script>
-<script type="text/javascript" src="/js/indexhelper.js"></script>
-<script type="text/javascript" src="js/terminal/jquery.terminal.min.js"></script>
-<script type="text/javascript" src="js/terminal/jquery.mousewheel-min.js"></script>
-<script type="text/javascript" src="/js/nav.js"></script>
-<script type="text/javascript" src='/js/grid.js'></script>
-<script type="text/javascript" src="js/term.js"></script>
+  </div>
+
+  <script>
+    var user = <%- JSON.stringify(user) %>;
+  </script>
+
+  <!-- vendor scripts -->
+  <%- include ../partials/scripts %>
+
+  <!-- custom scripts -->
+  <script type="text/javascript" src="/js/index.js"></script>
 </body>
 <html>

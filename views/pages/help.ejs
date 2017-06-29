@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- base stylesheets -->
+  <%- include ../partials/styles %>
+
+  <!-- custom stylesheets -->
+  <link rel="stylesheet" href="/css/help.css">
+
+</head>
+<body>
+
+  <%- include('../partials/left_nav', {page: page}); %>
+  <%- include('../partials/top_nav', {page: page}); %>
+
+  <!-- Your Content -->
+  <div id="content">
+
+  <!-- info -->
+  <section class="main-content">
+
+    <div class="container-fluid main-content-container">
+      <div class='row'>
+        <div class="col-sm-4 col-md-4 col-xs-4">
+
+          <h5>Statuses Explained: </h5>
+          <p><span style="color: blue">'Submitted'</span>: Not yet processed<br>
+          <span style="color: green">'New'</span>: Available for use<br>
+          <span style="color: orange">'Used'</span>: Not Available for use<br>
+          <span style="color: purple">'Failed'</span>: Internal error<br>
+          <span style="color: darkred">'Terminated'</span>: Will be deleted later<br>
+          <span style="color: red">'Data Issue'</span>: Incorrect input data<br>
+          </p>
+          <h5>How To Edit Existing Data: </h5>
+          <p>
+          1. Click <span style="background-color: cyan">'Search'</span> button on the main page<br>
+          2. Only data for the current environment is shown <br>
+          3. Edit any row simply by clicking on it<br>
+          4. Click the <span style="background-color: lightgreen">&#10003</span>
+          </p>
+          <h5>How To Search/View Existing Data: </h5>
+          <p>
+          1. Click <span style="background-color: cyan">'Search'</span> button on the main page<br>
+          2. Only data for the current environment is shown <br>
+          3. Filter data by using the top row<br>
+          </p>
+        </div>
+
+        <div class="col-sm-4 col-md-4 col-xs-4">
+          <h5>Overview</h5>
+          <p>
+          1. You submit new enrollments<br>
+          3. The server will process new enrollments at times shown on the main page<br>
+          4. Check back after the designated times<br>
+          5. You can check the status of your data in the 'Search' page <br>
+          6. If the status is <span style="color: blue">'Submitted'</span>, it has not been processed yet<br>
+          7. If the status is <span style="color: green">'New'</span>, it is ready for use<br>
+          8. If the status is <span style="color: orange">'Used'</span>, it is being used by someone else<br>
+          9. If the status is <span style="color: red">'Data Issue'</span>, you have entered incorrect data<br>
+          10. You can edit your data and its status in the <span style="background-color: cyan">'Search'</span> page<br>
+          </p>
+        </div>
+
+
+        <div class="col-sm-4 col-md-4 col-xs-4">
+          <h5>How to Add New Enrollment</h5>
+          <p>
+          1. Click <span style="background-color: yellow">'New Data'</span> Button on the main page<br>
+          2. Alternatively, click <span style="color: white; background-color: blue">'Menu'</span>, then click <span style="color: white; background-color: black">'Add New Enrollment'</span><br>
+          3. Click <span style="background-color: yellow">'New Data'</span> Button on top-left of table<br>
+          4. Fill in or change fields as needed, all fields except <span style="background-color: lightgreen">'Comment'</span> are mandatory<br>
+          5. <span style="background-color: lightgreen">'UserId'</span> is a custom ID you create to identify the owner of the data<br>
+          6. <span style="background-color: lightgreen">'Description'</span> is the ScenarioID for this enrollment<br>
+          7. <span style="background-color: lightgreen">'Comment'</span> is optional and can be anything
+          8. Click <span style="color: white; background-color: blue">'Add'</span> to temporarily store data<br>
+          9. All new enrollment data you have just created are displayed on the table<br>
+          10. Add additional rows or delete rows as needed<br>
+          11. When finished, click <span style="color: white; background-color: blue">'Submit'</span> to upload to server for processing
+          12. Write down <span style="color: white; background-color: red">'ID'</span> for search later<br>
+          </p>
+
+        </div>
+
+      </div>
+    </div>
+
+
+
+
+
+  </section>
+</div>
+
+  <!-- Vendor Javascript -->
+  <%- include ../partials/scripts %>
+  <!-- custom Javascript -->
+  <script type="text/javascript" src="/js/help.js"></script>
+</body>
+<html>

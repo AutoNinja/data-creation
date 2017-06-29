@@ -1,4 +1,4 @@
-var defaults = require("./enrollment_defaults.js");
+var formatFields = require("./formatModalFields.js");
 var exports = module.exports;
 
 /******************************************************************************
@@ -8,7 +8,8 @@ MODAL API
 
 exports.createModal = function (target, type) {
   modalId = target;
-  var fields = defaults.getDefaults(type);
+  var fields = formatFields.getDefaults(type);
+  if (type.indexOf('sourcedata') > -1) fields = fields[0];
   $(modalId).dialog({
       width: "70%",
       autoOpen: false,
@@ -26,6 +27,55 @@ exports.createModal = function (target, type) {
   setupValidation(fields);
 };
 
+exports.createIDModal = function (target, type) {
+  var fields = formatFields.getDefaults(type);
+  $( target ).dialog({
+    dialogClass: "no-close",
+    autoOpen: true,
+    draggable: false,
+    width: "50%",
+    height: $(window).height()/2,
+    position: {
+      my: "center",
+      at: "center",
+      of: window
+    },
+    modal: true,
+    title: "You Must Provide The Following Information Before Proceeding"
+  });
+
+  $(target).submit(function (e) {
+    $('.lock').show();
+    var ID = $("#enrollmentID").val();
+
+    $.post("/db/query",{data: "SELECT * FROM EnrollmentData WHERE ID = '"+ID+"';"})
+    .done(function (res) {
+      $('.lock').hide();
+      res = JSON.parse(res);
+      if (res.length === 0) {
+        alert('The Enrollment ID You Entered Does Not Exist');
+        return;
+      }
+      if ((type === "modal_sourcedata_manual" && res[0].Progress != '1') ||
+        (type === "modal_reporting_manual" && res[0].Progress != '2')  ||
+        (type === "modal_election_manual" && res[0].Progress != '3'))
+      {
+        alert("The Enrollment ID You Entered Is Not Available For The Current Step");
+        return;
+      }
+      if (type === "modal_sourcedata_manual") {
+        initSourceDataTable (target,fields)
+      }
+      $(target).dialog('close');
+    })
+    .fail(function() {
+      alert("Internal Server Error");
+      window.location.reload();
+    });
+    e.preventDefault();
+  });
+}
+
 exports.show = function (target) {
     $(target).dialog("open");
 };
@@ -36,6 +86,34 @@ MODAL PRIVATE FUNCTIONS
 
 var modalId;
 
+var initSourceDataTable = function (target, fields) {
+  var startYear = $(target + " #masterStartYear").val();
+  var endYear = $(target + " #masterEndYear").val();
+  var numOfRows = endYear - startYear + 1;
+  if (numOfRows > 200) {
+    alert("Error: Maximum Number Of Year Limit Exceeded");
+    return;
+  }
+  if (endYear < startYear) {
+    alert("Error: Invalid Start and End Year");
+    return;
+  }
+  while (startYear <= endYear) {
+    var newData = $.extend({},fields[0]);
+    var startDate = new Date (startYear, 0, 1);
+    var endDate = new Date (startYear, 11, 31);
+    newData.StartDate = moment(startDate).format('MM/DD/YYYY').toString();
+    newData.EndDate = moment(endDate).format('MM/DD/YYYY').toString();
+    $("#jsGrid").jsGrid("insertItem", newData);
+
+    newData = $.extend({},fields[1]);
+    newData.StartDate = moment(startDate).format('MM/DD/YYYY').toString();
+    newData.EndDate = moment(endDate).format('MM/DD/YYYY').toString();
+    $("#jsGrid").jsGrid("insertItem", newData);
+
+    ++startYear;
+  }
+}
 //takes in fields object and render labels and textboxes on modal
 var renderModal = function (fields) {
 

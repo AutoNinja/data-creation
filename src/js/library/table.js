@@ -1,5 +1,5 @@
 var util = require('./table-util.js');
-var cols = require("./formatFields.js");
+var cols = require("./formatTableFields.js");
 
 /******************************************************************************
 Table API
@@ -27,7 +27,7 @@ module.exports.createTable = function (target, type) {
 
       controller: {
         insertItem: function (item) {
-
+          item.Progress = '1';
           item.RequestType = "R";
           item.Status = "submitted";
           item.Env = Cookies.get("env");
@@ -69,10 +69,7 @@ module.exports.createTable = function (target, type) {
             })
             .done(function(result) {
               result = $.grep(result, function(item) {
-                if (item["Env"] != Cookies.get("env")) {
-                  return false;
-                }
-                if (item.RequestType !== "R") {
+                if (item.Env !== Cookies.get("env") || item.Progress !== '1' || item.RequestType !== "R") {
                   return false;
                 }
                 for (var property in filter) {
@@ -239,6 +236,32 @@ module.exports.createTable = function (target, type) {
         fields: fields
     });
 
+  } else if (type === "newdata_sourcedata_manual") {
+    $(target).jsGrid({
+      width: "100%",
+      paging: true,
+      autoload: true,
+      autowidth: false,
+      editing: true,
+      sorting: true,
+
+      pageSize: 15,
+      pageButtonCount: 5,
+      deleteConfirm: "Confirm Delete Data?",
+      noDataContent: "No New Data Added Yet",
+      loadIndicationDelay: 0,
+
+      controller: {
+        insertItem: function (item) {
+          item.ID = $("#enrollmentID").val();
+          item.SDStatus = 'submitted';
+          item.SubmissionDate = util.date();
+        }
+
+      },
+
+      fields: fields
+    });
   }
 }
 

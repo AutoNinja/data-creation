@@ -5,7 +5,6 @@ var dbConnection = require ('node-adodb')
 var async = require('async');
 
 router.use(function(req,res,next){
-  console.log(req.method+" db"+req.url);
   next();
 });
 
@@ -102,6 +101,7 @@ router.use('/execute', function(req,res,next){
 
 router.use('/query', function(req,res,next){
   req.queryString = req.body.data;
+  console.log(req.queryString);
   next();
 }, function(req,res,next) {
   dbConnection

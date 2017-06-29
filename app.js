@@ -25,9 +25,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //routes
 app.use('/', require('./routes/index'));
-app.use('/enrollment', require('./routes/enrollment'));
+app.use(['/enrollment','/sourcedata','/reporting','/election'], require('./routes/page_routes'));
 app.use('/auto/enrollment', require('./routes/enrollment_auto'));
-app.use('/event', require('./routes/event'));
 app.use('/db',require('./routes/db'));
 
 //throw error if page not found
