@@ -153,7 +153,7 @@ exports.getFields = function (type) {
       "SDStatus",
       "ID",
       "SubmissionDate",
-      "UserID"
+      "UserID",
     ];
 
     for (var i = 0; i < newFields.length; i++) {

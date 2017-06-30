@@ -34,6 +34,7 @@ router.use('/update', function(req,res,next){
     if (i!=headings.length-1) req.queryString += ", ";
   }
   req.queryString += " WHERE ID = '"+req.body.ID+"';";
+  console.log(req.queryString);
   next();
 }, function(req,res,next) {
   dbConnection

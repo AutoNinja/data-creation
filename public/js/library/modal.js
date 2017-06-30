@@ -169,6 +169,7 @@ var initSourceDataTable = function (target, fields) {
     newData.EndDate = moment(endDate).format('MM/DD/YYYY').toString();
     $("#jsGrid").jsGrid("insertItem", newData);
 
+
     ++startYear;
   }
 }
@@ -178,11 +179,6 @@ var renderModal = function (fields) {
   for (var name in fields) {
 
     var displayText = name;
-
-
-    if (Cookies.get('UserID')!==undefined && Cookies.get('UserID')!=="") {
-  		fields.UserID = Cookies.get("UserID");
-  	}
 
     if (name != "RequestType")
      displayText = name.replace("Type","");
@@ -207,6 +203,10 @@ var renderModal = function (fields) {
       id: name,
       value: fields[name]
     }).appendTo(".r-"+name+" .c-2");
+
+    if (Cookies.get('UserID')!==undefined && Cookies.get('UserID')!=="") {
+  		$("#UserID").val(Cookies.get("UserID"));
+  	}
 
     if (name.indexOf("Date") !== -1) {
       $( "#"+name ).attr('data-toggle','tooltip');

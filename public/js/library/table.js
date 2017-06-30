@@ -154,7 +154,7 @@ exports.getFields = function (type) {
       "SDStatus",
       "ID",
       "SubmissionDate",
-      "UserID"
+      "UserID",
     ];
 
     for (var i = 0; i < newFields.length; i++) {
@@ -573,12 +573,15 @@ module.exports.createTable = function (target, type) {
           item.ID = $("#enrollmentID").val();
           item.SDStatus = 'submitted';
           item.SubmissionDate = util.date();
+          item.Progress = "2";
         }
 
       },
 
       fields: fields
     });
+  } else if ( type === "search_sourcedata_manual" ) {
+    
   }
 }
 
@@ -654,6 +657,7 @@ module.exports.sourcedata =
       {Id: "data issue"}],
     valueField: "Id",
     textField: "Id"},
+  { name: "SubmissionDate"},
   { name: "StartDate"},
   { name: "EndDate"},
   { name: "ServiceAmt"},

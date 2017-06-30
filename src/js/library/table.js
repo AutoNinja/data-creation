@@ -256,12 +256,15 @@ module.exports.createTable = function (target, type) {
           item.ID = $("#enrollmentID").val();
           item.SDStatus = 'submitted';
           item.SubmissionDate = util.date();
+          item.Progress = "2";
         }
 
       },
 
       fields: fields
     });
+  } else if ( type === "search_sourcedata_manual" ) {
+    
   }
 }
 

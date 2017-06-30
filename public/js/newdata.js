@@ -211,7 +211,7 @@ exports.getFields = function (type) {
       "SDStatus",
       "ID",
       "SubmissionDate",
-      "UserID"
+      "UserID",
     ];
 
     for (var i = 0; i < newFields.length; i++) {
@@ -454,6 +454,7 @@ var initSourceDataTable = function (target, fields) {
     newData.EndDate = moment(endDate).format('MM/DD/YYYY').toString();
     $("#jsGrid").jsGrid("insertItem", newData);
 
+
     ++startYear;
   }
 }
@@ -463,11 +464,6 @@ var renderModal = function (fields) {
   for (var name in fields) {
 
     var displayText = name;
-
-
-    if (Cookies.get('UserID')!==undefined && Cookies.get('UserID')!=="") {
-  		fields.UserID = Cookies.get("UserID");
-  	}
 
     if (name != "RequestType")
      displayText = name.replace("Type","");
@@ -492,6 +488,10 @@ var renderModal = function (fields) {
       id: name,
       value: fields[name]
     }).appendTo(".r-"+name+" .c-2");
+
+    if (Cookies.get('UserID')!==undefined && Cookies.get('UserID')!=="") {
+  		$("#UserID").val(Cookies.get("UserID"));
+  	}
 
     if (name.indexOf("Date") !== -1) {
       $( "#"+name ).attr('data-toggle','tooltip');
@@ -1135,12 +1135,15 @@ module.exports.createTable = function (target, type) {
           item.ID = $("#enrollmentID").val();
           item.SDStatus = 'submitted';
           item.SubmissionDate = util.date();
+          item.Progress = "2";
         }
 
       },
 
       fields: fields
     });
+  } else if ( type === "search_sourcedata_manual" ) {
+    
   }
 }
 
@@ -1216,6 +1219,7 @@ module.exports.sourcedata =
       {Id: "data issue"}],
     valueField: "Id",
     textField: "Id"},
+  { name: "SubmissionDate"},
   { name: "StartDate"},
   { name: "EndDate"},
   { name: "ServiceAmt"},
@@ -1254,6 +1258,7 @@ function isValidEnv() {
 
 },{}],10:[function(require,module,exports){
 var modal = require("./library/modal.js");
+var util = require("./library/table-util.js");
 var table = require("./library/table.js");
 var nav = require('./library/nav.js');
 var initcookies = require('./library/usecookies.js');
@@ -1265,6 +1270,7 @@ $(document).ready(function() {
   $("#detailsDialog").hide();
 
   if (page === 'enrollment') {
+    $('#save').click(enrollmentSave);
     if (user === "manual") {
       table.createTable("#jsGrid","newdata_enrollment_manual");
       modal.createModal("#detailsDialog","modal_enrollment_manual");
@@ -1273,6 +1279,7 @@ $(document).ready(function() {
       modal.createModal("#detailsDialog","modal_enrollment_automation");
     }
   } else if (page === 'sourcedata') {
+    $('#save').click(sourceDataSave);
     if (user === "manual") {
       table.createTable("#jsGrid","newdata_sourcedata_manual");
       modal.createModal("#detailsDialog","modal_sourcedata_manual");
@@ -1301,26 +1308,62 @@ $(document).ready(function() {
   }
   $("[data-toggle='tooltip']").tooltip();
   $('#control-btn').click(function () {modal.show('#detailsDialog');});
-  $('#save').click(handleClickSave);
   $('#home').click(function() {document.location.href = "./";});
 });
 
+function sourceDataSave () {
+  var items = $.extend([],$("#jsGrid").jsGrid("option", "data"));
+  console.log(items);
+  var combined = {};
+  for (var name in items[0]) {
+    combined[name]= items.map(function(elem) {
+      return elem[name];
+    }).join(',');
+  }
+  combined.Progress = items[0].Progress;
+  combined.ID = items[0].ID;
+  combined.SubmissionDate = items[0].SubmissionDate;
+  combined.SDStatus = items[0].SDStatus;
 
-function handleClickSave() {
-  var items = $("#jsGrid").jsGrid("option", "data");
+  items = combined;
+  console.log(combined);
+
+  $("#save").hide();
+  $("#home").hide();
+  $.ajax({
+    type: "POST",
+    contentType: "application/json; charset=utf-8",
+    url: "/db/update",
+    data: JSON.stringify(items),
+    dataType: "json"
+  })
+  .done(function(response){
+    alert("New Data Successfully Added");
+    table.setTableColumnVisible([
+      "ID",
+      "SDStatus",
+      "SubmissionDate"
+    ], true);
+    table.setTableColumnVisible([
+      "Control"
+    ], false);
+    $("#home").show();
+  })
+  .fail(function() {
+    alert("Internal Server Error, Please Resubmit Data");
+    location.reload();
+  });
+}
+
+function enrollmentSave() {
+  var items = $.extend([],$("#jsGrid").jsGrid("option", "data"));
 
   if (items.length==0) {
     alert("Nothing to submit!")
     return;
   }
 
-  if (page === "sourcedata") {
-    console.log(items);
-  }
-
-  if (page === "enrollment")
-    Cookies.set('UserID', items[0].UserID, { expires: 5 });
-
+  Cookies.set('UserID', items[0].UserID, { expires: 5 });
   $("#save").hide();
   $("#home").hide();
   $.ajax({
@@ -1348,6 +1391,7 @@ function handleClickSave() {
     alert("Internal Server Error, Please Resubmit Data");
     location.reload();
   });
+
 }
 
-},{"./library/modal.js":3,"./library/nav.js":5,"./library/table.js":7,"./library/usecookies.js":9}]},{},[10]);
+},{"./library/modal.js":3,"./library/nav.js":5,"./library/table-util.js":6,"./library/table.js":7,"./library/usecookies.js":9}]},{},[10]);

@@ -154,7 +154,7 @@ exports.getFields = function (type) {
       "SDStatus",
       "ID",
       "SubmissionDate",
-      "UserID"
+      "UserID",
     ];
 
     for (var i = 0; i < newFields.length; i++) {
@@ -349,6 +349,7 @@ module.exports.sourcedata =
       {Id: "data issue"}],
     valueField: "Id",
     textField: "Id"},
+  { name: "SubmissionDate"},
   { name: "StartDate"},
   { name: "EndDate"},
   { name: "ServiceAmt"},

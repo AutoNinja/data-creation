@@ -63,6 +63,7 @@ module.exports.sourcedata =
       {Id: "data issue"}],
     valueField: "Id",
     textField: "Id"},
+  { name: "SubmissionDate"},
   { name: "StartDate"},
   { name: "EndDate"},
   { name: "ServiceAmt"},
