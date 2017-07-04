@@ -1,0 +1,56 @@
+.inputbox {
+  display: block;
+  margin: 0;
+  width: 100%;
+  font-family: inherit;
+  font-size: 18px;
+  appearance: none;
+  box-shadow: none;
+  border-radius: none;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: solid 3px #dcdcdc;
+  transition: box-shadow 0.3s, border 0.3s;
+}
+.inputbox:focus {
+  outline: none;
+  border: solid 3px #0078d7;
+  box-shadow: 0 0 5px 1px #969696;
+}
+
+.no-close .ui-dialog-titlebar-close {
+  display: none;
+}
+
+.lock {
+  height: 100%;
+  width: 100%;
+  z-index: 1001;
+  opacity: 0.5;
+  background-color: black;
+  position: fixed;
+
+}
+
+.dialog-btn, #control-btn {
+  width:100px;
+  height: 30px;
+  background-color: #0078d7;
+  color: #FFF;
+  font-size: 0.8em;
+  text-align: center;
+  cursor: pointer;
+  border: 0px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+
+.dialog-btn:hover, #control-btn:hover{
+  opacity: 0.6;
+}
+
+.IDModal-btn {
+  height: 40px;
+  width: 150px;
+  margin-top: 10px;
+}

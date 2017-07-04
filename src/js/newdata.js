@@ -19,32 +19,28 @@ $(document).ready(function() {
       table.createTable("#jsGrid", "newdata_enrollment_automation");
       modal.createModal("#detailsDialog","modal_enrollment_automation");
     }
-  } else if (page === 'sourcedata') {
+  } else if (page === 'sourcedata') { //NEED FIX!!!
     $('#save').click(sourceDataSave);
     if (user === "manual") {
+      modal.createIDModal('#IDModal',"modal_sourcedata_manual");
       table.createTable("#jsGrid","newdata_sourcedata_manual");
       modal.createModal("#detailsDialog","modal_sourcedata_manual");
-      modal.createIDModal('#IDModal',"modal_sourcedata_manual");
     } else {
-      table.createTable("#jsGrid", "newdata_sourcedata_automation");
-      //modal.createModal("#detailsDialog","");
+
     }
   } else if (page === 'reporting') {
     if (user === "manual") {
       table.createTable("#jsGrid","newdata_reporting_manual");
-      modal.createModal("#detailsDialog","defaults-manual");
-
+      modal.createModal("#detailsDialog","modal_reporting_manual");
     } else {
-      table.createTable("#jsGrid", "newdata_reporting_automation");
-      modal.createModal("#detailsDialog","defaults-automation");
+
     }
   } else if (page === 'election') {
     if (user === "manual") {
       table.createTable("#jsGrid","newdata_election_manual");
       modal.createModal("#detailsDialog","defaults-manual");
     } else {
-      table.createTable("#jsGrid", "newdata_election_automation");
-      modal.createModal("#detailsDialog","defaults-automation");
+
     }
   }
   $("[data-toggle='tooltip']").tooltip();

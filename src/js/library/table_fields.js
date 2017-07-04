@@ -80,3 +80,36 @@ module.exports.sourcedata =
   { name: "CarryForward"},
   { name: "PostEvent"}
 ];
+
+module.exports.reporting =
+[
+  { name: "ID"},
+  { name: "UserID"},
+  { name: "SDStatus", type: "select",
+    items: [
+      {Id: ""},
+      {Id: "submitted"},
+      {Id: "new"},
+      {Id: "used"},
+      {Id: "failed"},
+      {Id: "terminated"},
+      {Id: "data issue"}],
+    valueField: "Id",
+    textField: "Id"},
+  { name: "SubmissionDate"},
+  { name: "StartDate"},
+  { name: "EndDate"},
+  { name: "ServiceAmt"},
+  { name: "EarningsAmt"},
+  { name: "ServiceEarningsType", type: "select",
+    items: [
+      {Id: ""},
+      {Id: "CR1"},
+      {Id: "PA1"}],
+    valueField: "Id",
+    textField: "Id"},
+  { name: "ContributionAmt"},
+  { name: "ContributionType"},
+  { name: "CarryForward"},
+  { name: "PostEvent"}
+];

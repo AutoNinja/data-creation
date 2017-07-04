@@ -235,6 +235,27 @@ exports.getFields = function (type) {
     };
 
     newFields.unshift(control);
+  } else if (type === "search_sourcedata_manual") {
+
+    newFields = fields.sourcedata;
+
+    for (var i = 0; i < newFields.length; i++) {
+
+      var item = newFields[i];
+
+      setSourceDataEditTemplate(item);
+    }
+
+    //add control column
+    var control = {
+        type: "control",
+        name: "Control",
+        width: "80px",
+        modeSwitchButton: false,
+        deleteButton: false
+    };
+
+    newFields.unshift(control);
   }
 
   for (var i = 0; i < newFields.length; i++) {
@@ -317,7 +338,6 @@ function setEnrollmentEditTemplate(col) {
       return $select;
     }
   } else {
-
     col.editTemplate = function (value, item) {
       var $input = this.__proto__.editTemplate.call(this);
       $input.prop("value",value);
@@ -336,7 +356,54 @@ function setEnrollmentEditTemplate(col) {
       }
       return $input;
     }
+  }
+}
 
+function setSourceDataEditTemplate(col) {
+  if (col.name === "SDStatus") {
+    col.editTemplate = function (value, item) {
+      var $select = this.__proto__.editTemplate.call(this);
+      $select.val(value);
+      $select.find("option[value='']").remove();
+      if (item.SDStatus==="submitted") {
+        $select.find("option[value='data issue']").remove();
+        $select.find("option[value='new']").remove();
+        $select.find("option[value='used']").remove();
+        $select.find("option[value='failed']").remove();
+      } else if (item.SDStatus==="failed") {
+        $select.find("option[value='new']").remove();
+        $select.find("option[value='used']").remove();
+      } else if (item.SDStatus==="new") {
+        $select.find("option[value='data issue']").remove();
+        $select.find("option[value='failed']").remove();
+        $select.find("option[value='terminated']").remove();
+        $select.find("option[value='submitted']").remove();
+      } else if (item.SDStatus==="data issue") {
+        $select.find("option[value='failed']").remove();
+        $select.find("option[value='new']").remove();
+        $select.find("option[value='used']").remove();
+      }
+      return $select;
+    }
+  } else {
+    col.editTemplate = function (value, item) {
+      var $input = this.__proto__.editTemplate.call(this);
+      $input.prop("value",value);
+      if (item.SDStatus==="submitted" || item.SDStatus==="failed" || item.SDStatus==="data issue") {
+        if (col.name === "ClientID" ||
+            col.name === "UserID" ||
+            col.name === "ID" ||
+            col.name === "SubmissionDate")
+        {
+          $input.prop('readonly', true);
+          $input.css('background-color' , '#EBEBE4');
+        }
+      } else {
+        $input.prop('readonly', true);
+        $input.css('background-color' , '#EBEBE4');
+      }
+      return $input;
+    }
   }
 }
 
@@ -370,6 +437,74 @@ exports.createModal = function (target, type) {
   setupValidation(fields);
 };
 
+exports.createIDSearchModal = function (target, type) {
+  var fields = formatFields.getDefaults(type);
+  $( target ).dialog({
+    dialogClass: "no-close",
+    autoOpen: true,
+    draggable: false,
+    width: "50%",
+    height: $(window).height()/2,
+    position: {
+      my: "center",
+      at: "center",
+      of: window
+    },
+    modal: true,
+    title: "You Must Provide The Following Information Before Proceeding"
+  });
+
+  $(target).submit(function (e) {
+    $('.lock').show();
+    var ID = $("#enrollmentID").val();
+
+    var query;
+
+    $.post("/db/query",{data: "SELECT Progress, UserID, SubmissionDate, SDStatus, StartDate, EndDate, ServiceAmt, EarningsAmt, ServiceEarningsType, ContributionAmt, ContributionType, PostEvent, CarryForward FROM EnrollmentData WHERE ID = '"+ID+"';"})
+    .done(function (res) {
+      $('.lock').hide();
+      res = JSON.parse(res);
+      console.log(res);
+      if (res.length === 0) {
+        alert('The Enrollment ID You Entered Does Not Exist');
+        return;
+      }
+      if (type === "modal_sourcedata_search" && res[0].Progress != '2')
+      {
+        alert("The Enrollment ID You Entered Is Not Available For The Current Step");
+        return;
+      }
+
+      var rowsCount;
+
+      $.each(res[0], function(index, item) {
+        if (index !== "SDStatus" && index !== "Progress" && index !== "UserID" && index !== "SubmissionDate") {
+          res[0][index] = item.split(',');
+          rowsCount = res[0][index].length;
+        }
+      });
+
+
+      for (var i = 0 ; i < rowsCount; i++) {
+        var tempRow = $.extend({}, res[0]);
+        $.each(tempRow, function(index, item) {
+          if (index !== "SDStatus" && index !== "Progress" && index !== "UserID" && index !== "SubmissionDate")
+            tempRow[index] = res[0][index][i];
+          tempRow.ID = ID;
+        });
+        $("#jsGrid").jsGrid("insertItem", tempRow);
+      }
+
+      $(target).dialog('close');
+    })
+    .fail(function() {
+      alert("Internal Server Error");
+      window.location.reload();
+    });
+    e.preventDefault();
+  });
+}
+
 exports.createIDModal = function (target, type) {
   var fields = formatFields.getDefaults(type);
   $( target ).dialog({
@@ -390,6 +525,8 @@ exports.createIDModal = function (target, type) {
   $(target).submit(function (e) {
     $('.lock').show();
     var ID = $("#enrollmentID").val();
+
+    var query;
 
     $.post("/db/query",{data: "SELECT * FROM EnrollmentData WHERE ID = '"+ID+"';"})
     .done(function (res) {
@@ -884,8 +1021,6 @@ var cols = require("./formatTableFields.js");
 Table API
 ******************************************************************************/
 
-
-
 module.exports.createTable = function (target, type) {
 
   var fields = cols.getFields(type);
@@ -1143,7 +1278,32 @@ module.exports.createTable = function (target, type) {
       fields: fields
     });
   } else if ( type === "search_sourcedata_manual" ) {
-    
+    $(target).jsGrid({
+        width: "100%",
+        height: "auto",
+        shrinkToFit: true,
+        autoload: true,
+        paging: true,
+        editing: true,
+        pageSize: 13,
+        pageButtonCount: 5,
+        noDataContent: "No Data Found",
+        loadIndicationDelay: 0,
+
+        controller: {
+
+
+        },
+
+        //disabled editing when status = used
+        onItemEditing: function(args) {
+          if (args.item.SDStatus === "used" || args.item.SDStatus === "terminated") {
+            args.cancel = true;
+          }
+        },
+
+        fields: fields
+    });
   }
 }
 
@@ -1237,6 +1397,39 @@ module.exports.sourcedata =
   { name: "PostEvent"}
 ];
 
+module.exports.reporting =
+[
+  { name: "ID"},
+  { name: "UserID"},
+  { name: "SDStatus", type: "select",
+    items: [
+      {Id: ""},
+      {Id: "submitted"},
+      {Id: "new"},
+      {Id: "used"},
+      {Id: "failed"},
+      {Id: "terminated"},
+      {Id: "data issue"}],
+    valueField: "Id",
+    textField: "Id"},
+  { name: "SubmissionDate"},
+  { name: "StartDate"},
+  { name: "EndDate"},
+  { name: "ServiceAmt"},
+  { name: "EarningsAmt"},
+  { name: "ServiceEarningsType", type: "select",
+    items: [
+      {Id: ""},
+      {Id: "CR1"},
+      {Id: "PA1"}],
+    valueField: "Id",
+    textField: "Id"},
+  { name: "ContributionAmt"},
+  { name: "ContributionType"},
+  { name: "CarryForward"},
+  { name: "PostEvent"}
+];
+
 },{}],9:[function(require,module,exports){
 module.exports = function() {
 
@@ -1278,32 +1471,28 @@ $(document).ready(function() {
       table.createTable("#jsGrid", "newdata_enrollment_automation");
       modal.createModal("#detailsDialog","modal_enrollment_automation");
     }
-  } else if (page === 'sourcedata') {
+  } else if (page === 'sourcedata') { //NEED FIX!!!
     $('#save').click(sourceDataSave);
     if (user === "manual") {
+      modal.createIDModal('#IDModal',"modal_sourcedata_manual");
       table.createTable("#jsGrid","newdata_sourcedata_manual");
       modal.createModal("#detailsDialog","modal_sourcedata_manual");
-      modal.createIDModal('#IDModal',"modal_sourcedata_manual");
     } else {
-      table.createTable("#jsGrid", "newdata_sourcedata_automation");
-      //modal.createModal("#detailsDialog","");
+
     }
   } else if (page === 'reporting') {
     if (user === "manual") {
       table.createTable("#jsGrid","newdata_reporting_manual");
-      modal.createModal("#detailsDialog","defaults-manual");
-
+      modal.createModal("#detailsDialog","modal_reporting_manual");
     } else {
-      table.createTable("#jsGrid", "newdata_reporting_automation");
-      modal.createModal("#detailsDialog","defaults-automation");
+
     }
   } else if (page === 'election') {
     if (user === "manual") {
       table.createTable("#jsGrid","newdata_election_manual");
       modal.createModal("#detailsDialog","defaults-manual");
     } else {
-      table.createTable("#jsGrid", "newdata_election_automation");
-      modal.createModal("#detailsDialog","defaults-automation");
+
     }
   }
   $("[data-toggle='tooltip']").tooltip();

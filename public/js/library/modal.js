@@ -85,6 +85,74 @@ exports.createModal = function (target, type) {
   setupValidation(fields);
 };
 
+exports.createIDSearchModal = function (target, type) {
+  var fields = formatFields.getDefaults(type);
+  $( target ).dialog({
+    dialogClass: "no-close",
+    autoOpen: true,
+    draggable: false,
+    width: "50%",
+    height: $(window).height()/2,
+    position: {
+      my: "center",
+      at: "center",
+      of: window
+    },
+    modal: true,
+    title: "You Must Provide The Following Information Before Proceeding"
+  });
+
+  $(target).submit(function (e) {
+    $('.lock').show();
+    var ID = $("#enrollmentID").val();
+
+    var query;
+
+    $.post("/db/query",{data: "SELECT Progress, UserID, SubmissionDate, SDStatus, StartDate, EndDate, ServiceAmt, EarningsAmt, ServiceEarningsType, ContributionAmt, ContributionType, PostEvent, CarryForward FROM EnrollmentData WHERE ID = '"+ID+"';"})
+    .done(function (res) {
+      $('.lock').hide();
+      res = JSON.parse(res);
+      console.log(res);
+      if (res.length === 0) {
+        alert('The Enrollment ID You Entered Does Not Exist');
+        return;
+      }
+      if (type === "modal_sourcedata_search" && res[0].Progress != '2')
+      {
+        alert("The Enrollment ID You Entered Is Not Available For The Current Step");
+        return;
+      }
+
+      var rowsCount;
+
+      $.each(res[0], function(index, item) {
+        if (index !== "SDStatus" && index !== "Progress" && index !== "UserID" && index !== "SubmissionDate") {
+          res[0][index] = item.split(',');
+          rowsCount = res[0][index].length;
+        }
+      });
+
+
+      for (var i = 0 ; i < rowsCount; i++) {
+        var tempRow = $.extend({}, res[0]);
+        $.each(tempRow, function(index, item) {
+          if (index !== "SDStatus" && index !== "Progress" && index !== "UserID" && index !== "SubmissionDate")
+            tempRow[index] = res[0][index][i];
+          tempRow.ID = ID;
+        });
+        $("#jsGrid").jsGrid("insertItem", tempRow);
+      }
+
+      $(target).dialog('close');
+    })
+    .fail(function() {
+      alert("Internal Server Error");
+      window.location.reload();
+    });
+    e.preventDefault();
+  });
+}
+
 exports.createIDModal = function (target, type) {
   var fields = formatFields.getDefaults(type);
   $( target ).dialog({
@@ -105,6 +173,8 @@ exports.createIDModal = function (target, type) {
   $(target).submit(function (e) {
     $('.lock').show();
     var ID = $("#enrollmentID").val();
+
+    var query;
 
     $.post("/db/query",{data: "SELECT * FROM EnrollmentData WHERE ID = '"+ID+"';"})
     .done(function (res) {

@@ -4,6 +4,8 @@
   <!-- base stylesheets -->
   <%- include ../partials/styles %>
 
+  <link type="text/css" rel="stylesheet" href="/css/IDModal.css" />
+
 
 </head>
 <body>
@@ -11,17 +13,29 @@
   <%- include('../partials/left_nav', {page: page}); %>
   <%- include('../partials/top_nav', {page: page}); %>
   <div id="content">
-    <input type="hidden" id="reqTypeValue" value="R"></input>
+    <div class="lock" hidden></div>
 
 
 
     <section class="main-content">
+
+      <% if (page === "sourcedata") { %>
+        <div id="IDModal">
+          <form id="IDModal-form" method='post' action=''>
+            <input type="text" id="enrollmentID" name="enrollmentIDInput" class="inputbox" placeholder="Enter Your Enrollment ID" required></input>
+            <input type="submit" id="submitEnrollmentID" class="dialog-btn IDModal-btn" value="Submit"></input>
+            <input type="button" class="dialog-btn IDModal-btn" value="Cancel" onclick="document.location.href='./'"></input>
+          </form>
+        </div>
+      <% } %>
+
       <div id="jsGrid"></div>
 
       <div class="table-buttons-wrapper">
         <div class="row">
           <div class="col-sm-12 col-md-12 col-xs-12 text-center">
             <input type="button" class="home table-btn" id="home" value="Home">
+            <input type="button" class="save table-btn" id="save" value="Submit" hidden>
           </div>
         </div>
       </div>
@@ -36,6 +50,7 @@
   <!-- Vendor Javascript -->
   <%- include ../partials/scripts %>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+  <script type="text/javascript" src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
 
   <!-- custom Javascript -->
   <script type="text/javascript" src='/js/search.js'></script>

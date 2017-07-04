@@ -5,8 +5,6 @@ var cols = require("./formatTableFields.js");
 Table API
 ******************************************************************************/
 
-
-
 module.exports.createTable = function (target, type) {
 
   var fields = cols.getFields(type);
@@ -264,7 +262,32 @@ module.exports.createTable = function (target, type) {
       fields: fields
     });
   } else if ( type === "search_sourcedata_manual" ) {
-    
+    $(target).jsGrid({
+        width: "100%",
+        height: "auto",
+        shrinkToFit: true,
+        autoload: true,
+        paging: true,
+        editing: true,
+        pageSize: 13,
+        pageButtonCount: 5,
+        noDataContent: "No Data Found",
+        loadIndicationDelay: 0,
+
+        controller: {
+
+
+        },
+
+        //disabled editing when status = used
+        onItemEditing: function(args) {
+          if (args.item.SDStatus === "used" || args.item.SDStatus === "terminated") {
+            args.cancel = true;
+          }
+        },
+
+        fields: fields
+    });
   }
 }
 

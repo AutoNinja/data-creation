@@ -177,6 +177,27 @@ exports.getFields = function (type) {
     };
 
     newFields.unshift(control);
+  } else if (type === "search_sourcedata_manual") {
+
+    newFields = fields.sourcedata;
+
+    for (var i = 0; i < newFields.length; i++) {
+
+      var item = newFields[i];
+
+      setSourceDataEditTemplate(item);
+    }
+
+    //add control column
+    var control = {
+        type: "control",
+        name: "Control",
+        width: "80px",
+        modeSwitchButton: false,
+        deleteButton: false
+    };
+
+    newFields.unshift(control);
   }
 
   for (var i = 0; i < newFields.length; i++) {
@@ -259,7 +280,6 @@ function setEnrollmentEditTemplate(col) {
       return $select;
     }
   } else {
-
     col.editTemplate = function (value, item) {
       var $input = this.__proto__.editTemplate.call(this);
       $input.prop("value",value);
@@ -278,6 +298,53 @@ function setEnrollmentEditTemplate(col) {
       }
       return $input;
     }
+  }
+}
 
+function setSourceDataEditTemplate(col) {
+  if (col.name === "SDStatus") {
+    col.editTemplate = function (value, item) {
+      var $select = this.__proto__.editTemplate.call(this);
+      $select.val(value);
+      $select.find("option[value='']").remove();
+      if (item.SDStatus==="submitted") {
+        $select.find("option[value='data issue']").remove();
+        $select.find("option[value='new']").remove();
+        $select.find("option[value='used']").remove();
+        $select.find("option[value='failed']").remove();
+      } else if (item.SDStatus==="failed") {
+        $select.find("option[value='new']").remove();
+        $select.find("option[value='used']").remove();
+      } else if (item.SDStatus==="new") {
+        $select.find("option[value='data issue']").remove();
+        $select.find("option[value='failed']").remove();
+        $select.find("option[value='terminated']").remove();
+        $select.find("option[value='submitted']").remove();
+      } else if (item.SDStatus==="data issue") {
+        $select.find("option[value='failed']").remove();
+        $select.find("option[value='new']").remove();
+        $select.find("option[value='used']").remove();
+      }
+      return $select;
+    }
+  } else {
+    col.editTemplate = function (value, item) {
+      var $input = this.__proto__.editTemplate.call(this);
+      $input.prop("value",value);
+      if (item.SDStatus==="submitted" || item.SDStatus==="failed" || item.SDStatus==="data issue") {
+        if (col.name === "ClientID" ||
+            col.name === "UserID" ||
+            col.name === "ID" ||
+            col.name === "SubmissionDate")
+        {
+          $input.prop('readonly', true);
+          $input.css('background-color' , '#EBEBE4');
+        }
+      } else {
+        $input.prop('readonly', true);
+        $input.css('background-color' , '#EBEBE4');
+      }
+      return $input;
+    }
   }
 }
