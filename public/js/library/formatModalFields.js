@@ -29,9 +29,9 @@ exports.getDefaults = function (type) {
   } else if  (type === "modal_sourcedata_manual") {
     return [fields.sourcedata1, fields.sourcedata2];
   } else if  (type === "modal_reporting_manual") {
-
+    return fields.reporting;
   } else if  (type === "modal_election_manual") {
-
+    return fields.election;
   }
 
 
@@ -117,6 +117,26 @@ module.exports.sourcedata2 = {
   ContributionType: 'RPP1',
   CarryForward: 'N',
   PostEvent: 'N'
+};
+
+module.exports.reporting = {
+  ID: '',
+  EventSubTypeID: 'Termination',
+  NumberOfEventCalculations: '9',
+  EventDate: '12/31/2014'
+};
+
+module.exports.election = {
+  ID: '',
+  EventOption: "Normal Retirement Pension",
+  EventComponent: "RPP Pension",
+  DestinationType: "",
+  BankAccountsType: "Bank Account",
+  BankID: "001",
+  BankBranchID: "00011",
+  AccountNumber: "1234567",
+  PaymentMethod: "Cheque",
+  BankInfo: ""
 };
 
 },{}]},{},[1]);

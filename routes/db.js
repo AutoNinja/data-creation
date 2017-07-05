@@ -51,6 +51,47 @@ router.use('/update', function(req,res,next){
     });
 });
 
+router.use('/update_multiple', function(req,res,next){
+  console.log(req.body);
+  req.queryString = [];
+  for (var m = 0; m < req.body.length; m++) {
+    var qStr = "UPDATE EnrollmentData SET ";
+    var headings = Object.keys(req.body[m]);
+    var values = Object.keys(req.body[m]).map(function(key){return "'"+req.body[m][key]+"'"});
+    for (i in headings) {
+      if (headings[i] === "ID") continue;
+      qStr += headings[i] + " = " + values[i];
+      if (i!=headings.length-1) qStr += ", ";
+    }
+    qStr += " WHERE ID = '"+req.body[m].ID+"';";
+    req.queryString.push(qStr);
+  }
+  next();
+  console.log(req.queryString);
+}, function(req,res,next) {
+  async.each(req.queryString,
+    function (query, done) {
+      dbConnection
+        .execute(query)
+        .on('done', function(data) {
+          done();
+        })
+        .on('fail', function(error) {
+          done(error);
+        });
+    }, function (err) {
+      if (err) {
+        console.error(err);
+        res.status(500).send(err);
+      } else {
+        console.log("Insertion Successful");
+        req.queryResult = {};
+        next('route');
+      }
+    }
+  );
+});
+
 router.use('/insert', function(req,res,next){
   req.queryString = [];
   for (var i = 0 ; i < req.body.length; i++) {
@@ -68,7 +109,7 @@ router.use('/insert', function(req,res,next){
           done();
         })
         .on('fail', function(error) {
-          done(error);
+           done(error);
         });
     }, function (err) {
       if (err) {

@@ -62,4 +62,24 @@ module.exports.sourcedata2 = {
   PostEvent: 'N'
 };
 
+module.exports.reporting = {
+  ID: '',
+  EventSubTypeID: 'Termination',
+  NumberOfEventCalculations: '9',
+  EventDate: '12/31/2014'
+};
+
+module.exports.election = {
+  ID: '',
+  EventOption: "Normal Retirement Pension",
+  EventComponent: "RPP Pension",
+  DestinationType: "",
+  BankAccountsType: "Bank Account",
+  BankID: "001",
+  BankBranchID: "00011",
+  AccountNumber: "1234567",
+  PaymentMethod: "Cheque",
+  BankInfo: ""
+};
+
 },{}]},{},[1]);

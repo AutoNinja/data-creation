@@ -68,7 +68,7 @@ exports.createIDSearchModal = function (target, type) {
       var rowsCount;
 
       $.each(res[0], function(index, item) {
-        if (index !== "SDStatus" && index !== "Progress" && index !== "UserID" && index !== "SubmissionDate") {
+        if (index !== "SDStatus" && index !== "Progress" && index !== "UserID" && index !== "SubmissionDate" && index !== "ClientID") {
           res[0][index] = item.split(',');
           rowsCount = res[0][index].length;
         }
@@ -78,7 +78,7 @@ exports.createIDSearchModal = function (target, type) {
       for (var i = 0 ; i < rowsCount; i++) {
         var tempRow = $.extend({}, res[0]);
         $.each(tempRow, function(index, item) {
-          if (index !== "SDStatus" && index !== "Progress" && index !== "UserID" && index !== "SubmissionDate")
+          if (index !== "SDStatus" && index !== "Progress" && index !== "UserID" && index !== "SubmissionDate"  && index !== "ClientID")
             tempRow[index] = res[0][index][i];
           tempRow.ID = ID;
         });

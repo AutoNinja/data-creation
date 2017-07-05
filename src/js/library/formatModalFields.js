@@ -28,9 +28,9 @@ exports.getDefaults = function (type) {
   } else if  (type === "modal_sourcedata_manual") {
     return [fields.sourcedata1, fields.sourcedata2];
   } else if  (type === "modal_reporting_manual") {
-
+    return fields.reporting;
   } else if  (type === "modal_election_manual") {
-
+    return fields.election;
   }
 
 

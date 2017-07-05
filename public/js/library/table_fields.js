@@ -53,6 +53,7 @@ module.exports.sourcedata =
 [
   { name: "ID"},
   { name: "UserID"},
+  { name: "ClientID"},
   { name: "SDStatus", type: "select",
     items: [
       {Id: ""},
@@ -86,7 +87,8 @@ module.exports.reporting =
 [
   { name: "ID"},
   { name: "UserID"},
-  { name: "SDStatus", type: "select",
+  { name: "ClientID"},
+  { name: "EventStatus", type: "select",
     items: [
       {Id: ""},
       {Id: "submitted"},
@@ -98,21 +100,37 @@ module.exports.reporting =
     valueField: "Id",
     textField: "Id"},
   { name: "SubmissionDate"},
-  { name: "StartDate"},
-  { name: "EndDate"},
-  { name: "ServiceAmt"},
-  { name: "EarningsAmt"},
-  { name: "ServiceEarningsType", type: "select",
+  { name: "EventSubTypeID"},
+  { name: "NumberOfEventCalculations"},
+  { name: "EventDate"}
+];
+
+module.exports.election =
+[
+  { name: "ID"},
+  { name: "UserID"},
+  { name: "ClientID"},
+  { name: "ElectionStatus", type: "select",
     items: [
       {Id: ""},
-      {Id: "CR1"},
-      {Id: "PA1"}],
+      {Id: "submitted"},
+      {Id: "new"},
+      {Id: "used"},
+      {Id: "failed"},
+      {Id: "terminated"},
+      {Id: "data issue"}],
     valueField: "Id",
     textField: "Id"},
-  { name: "ContributionAmt"},
-  { name: "ContributionType"},
-  { name: "CarryForward"},
-  { name: "PostEvent"}
+  { name: "SubmissionDate"},
+  { name: "EventOption"},
+  { name: "EventComponent"},
+  { name: "DestinationType"},
+  { name: "BankAccountsType"},
+  { name: "BankID"},
+  { name: "BankBranchID"},
+  { name: "AccountNumber"},
+  { name: "PaymentMethod"},
+  { name: "BankInfo"},
 ];
 
 },{}]},{},[1]);

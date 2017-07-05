@@ -26,15 +26,15 @@ $(document).ready(function() {
     }
   } else if (page === 'reporting') {
     if (user === "manual") {
-      table.createTable("#jsGrid","search_enrollment_manual");
+      table.createTable("#jsGrid","search_reporting_manual");
     } else {
-      table.createTable("#jsGrid","search_enrollment_manual");
+
     }
   } else if (page === 'election') {
     if (user === "manual") {
-      table.createTable("#jsGrid","search_enrollment_manual");
+      table.createTable("#jsGrid","search_election_manual");
     } else {
-      table.createTable("#jsGrid","search_enrollment_manual");
+
     }
   }
   $('#home').click(function() {window.location.href = "./";});
@@ -52,6 +52,7 @@ $(document).ready(function() {
     combined.Progress = '2';
     combined.ID = items[0].ID;
     combined.UserID = items[0].UserID;
+    combined.ClientID = items[0].ClientID;
     combined.SubmissionDate = util.date();
     combined.SDStatus = 'submitted';
 

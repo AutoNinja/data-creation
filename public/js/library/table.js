@@ -152,6 +152,7 @@ exports.getFields = function (type) {
 
     var hideColumns = [
       "SDStatus",
+      "ClientID",
       "ID",
       "SubmissionDate",
       "UserID",
@@ -199,7 +200,134 @@ exports.getFields = function (type) {
     };
 
     newFields.unshift(control);
-  }
+  } else if (type === "newdata_reporting_manual") {
+    newFields = fields.reporting;
+
+    var hideColumns = [
+      "EventStatus",
+      "UserID",
+      "ClientID",
+      "SubmissionDate"
+    ];
+
+    for (var i = 0; i < newFields.length; i++) {
+
+      var item = newFields[i];
+
+      if (hideColumns.indexOf(item.name)>-1)
+        item.visible = false;
+
+    }
+
+    //add control column
+    var control = {
+        type: "control",
+        name: "Control",
+        width: "80px",
+        modeSwitchButton: false,
+        editButton: false,
+        headerTemplate: function() {
+            return $("<button>").attr("type", "button").attr("id","control-btn").text("New Data");
+        }
+    };
+
+    newFields.unshift(control);
+
+  } else if (type === "search_reporting_manual") {
+
+        newFields = fields.reporting;
+
+        var hideColumns = [
+
+        ];
+
+        for (var i = 0; i < newFields.length; i++) {
+
+          var item = newFields[i];
+
+          setReportingEditTemplate(item);
+
+          if (hideColumns.indexOf(item.name)>-1)
+            item.visible = false;
+
+          if (item.name==="ClientID")
+            item.validate = "";
+
+        }
+
+        var control = {
+          name: "control",
+          type: "control",
+          deleteButton: false,
+          editButton: false,
+          width:"80px"
+        }
+
+        newFields.unshift(control);
+
+      } else if (type === "newdata_election_manual") {
+        newFields = fields.election;
+
+        var hideColumns = [
+          "ElectionStatus",
+          "UserID",
+          "ClientID",
+          "SubmissionDate"
+        ];
+
+        for (var i = 0; i < newFields.length; i++) {
+
+          var item = newFields[i];
+
+          if (hideColumns.indexOf(item.name)>-1)
+            item.visible = false;
+
+        }
+
+        //add control column
+        var control = {
+            type: "control",
+            name: "Control",
+            width: "80px",
+            modeSwitchButton: false,
+            editButton: false,
+            headerTemplate: function() {
+                return $("<button>").attr("type", "button").attr("id","control-btn").text("New Data");
+            }
+        };
+
+        newFields.unshift(control);
+
+      } else if (type === "search_election_manual") {
+
+            newFields = fields.election;
+
+            var hideColumns = [
+
+            ];
+
+            for (var i = 0; i < newFields.length; i++) {
+
+              var item = newFields[i];
+
+              setElectionEditTemplate(item);
+
+              if (hideColumns.indexOf(item.name)>-1)
+                item.visible = false;
+
+            }
+
+            var control = {
+              name: "control",
+              type: "control",
+              deleteButton: false,
+              editButton: false,
+              width:"80px"
+            }
+
+            newFields.unshift(control);
+
+      }
 
   for (var i = 0; i < newFields.length; i++) {
 
@@ -213,8 +341,10 @@ exports.getFields = function (type) {
     item.align = "center";
 
     //set validate except for ClientID
-    //if (item.name !== "ClientID")
-    item.validate = "required";
+    /*
+    if (item.name !== "ClientID" && item.name !== "Comment")
+      item.validate = "required";
+    */
 
     //set display headings
     setTitle(item);
@@ -333,6 +463,103 @@ function setSourceDataEditTemplate(col) {
       var $input = this.__proto__.editTemplate.call(this);
       $input.prop("value",value);
       if (item.SDStatus==="submitted" || item.SDStatus==="failed" || item.SDStatus==="data issue") {
+        if (col.name === "ClientID" ||
+            col.name === "UserID" ||
+            col.name === "ID" ||
+            col.name === "SubmissionDate" ||
+            col.name === "SDStatus")
+        {
+          $input.prop('readonly', true);
+          $input.css('background-color' , '#EBEBE4');
+        }
+      } else {
+        $input.prop('readonly', true);
+        $input.css('background-color' , '#EBEBE4');
+      }
+      return $input;
+    }
+  }
+}
+
+function setReportingEditTemplate(col) {
+  if (col.name === "EventStatus") {
+    col.editTemplate = function (value, item) {
+      var $select = this.__proto__.editTemplate.call(this);
+      $select.val(value);
+      $select.find("option[value='']").remove();
+      if (item.EventStatus==="submitted") {
+        $select.find("option[value='data issue']").remove();
+        $select.find("option[value='new']").remove();
+        $select.find("option[value='used']").remove();
+        $select.find("option[value='failed']").remove();
+      } else if (item.EventStatus==="failed") {
+        $select.find("option[value='new']").remove();
+        $select.find("option[value='used']").remove();
+      } else if (item.EventStatus==="new") {
+        $select.find("option[value='data issue']").remove();
+        $select.find("option[value='failed']").remove();
+        $select.find("option[value='terminated']").remove();
+        $select.find("option[value='submitted']").remove();
+      } else if (item.EventStatus==="data issue") {
+        $select.find("option[value='failed']").remove();
+        $select.find("option[value='new']").remove();
+        $select.find("option[value='used']").remove();
+      }
+      return $select;
+    }
+  } else {
+    col.editTemplate = function (value, item) {
+      var $input = this.__proto__.editTemplate.call(this);
+      $input.prop("value",value);
+      if (item.EventStatus==="submitted" || item.EventStatus==="failed" || item.EventStatus==="data issue") {
+        if (col.name === "ClientID" ||
+            col.name === "UserID" ||
+            col.name === "ID" ||
+            col.name === "SubmissionDate")
+        {
+          $input.prop('readonly', true);
+          $input.css('background-color' , '#EBEBE4');
+        }
+      } else {
+        $input.prop('readonly', true);
+        $input.css('background-color' , '#EBEBE4');
+      }
+      return $input;
+    }
+  }
+}
+
+function setElectionEditTemplate(col) {
+  if (col.name === "ElectionStatus") {
+    col.editTemplate = function (value, item) {
+      var $select = this.__proto__.editTemplate.call(this);
+      $select.val(value);
+      $select.find("option[value='']").remove();
+      if (item.ElectionStatus==="submitted") {
+        $select.find("option[value='data issue']").remove();
+        $select.find("option[value='new']").remove();
+        $select.find("option[value='used']").remove();
+        $select.find("option[value='failed']").remove();
+      } else if (item.ElectionStatus==="failed") {
+        $select.find("option[value='new']").remove();
+        $select.find("option[value='used']").remove();
+      } else if (item.ElectionStatus==="new") {
+        $select.find("option[value='data issue']").remove();
+        $select.find("option[value='failed']").remove();
+        $select.find("option[value='terminated']").remove();
+        $select.find("option[value='submitted']").remove();
+      } else if (item.ElectionStatus==="data issue") {
+        $select.find("option[value='failed']").remove();
+        $select.find("option[value='new']").remove();
+        $select.find("option[value='used']").remove();
+      }
+      return $select;
+    }
+  } else {
+    col.editTemplate = function (value, item) {
+      var $input = this.__proto__.editTemplate.call(this);
+      $input.prop("value",value);
+      if (item.ElectionStatus==="submitted" || item.ElectionStatus==="failed" || item.ElectionStatus==="data issue") {
         if (col.name === "ClientID" ||
             col.name === "UserID" ||
             col.name === "ID" ||
@@ -672,6 +899,226 @@ module.exports.createTable = function (target, type) {
 
         fields: fields
     });
+  } else if (type === "newdata_reporting_manual") {
+
+    $(target).jsGrid({
+      width: "100%",
+      paging: true,
+      autoload: true,
+      autowidth: false,
+
+      pageSize: 15,
+      pageButtonCount: 5,
+      deleteConfirm: "Confirm Delete Data?",
+      noDataContent: "No New Data Added Yet",
+      loadIndicationDelay: 0,
+
+      controller: {
+        insertItem: function (item) {
+          item.Progress = '3';
+          item.EventStatus = "submitted";
+          item.SubmissionDate = util.date();
+        }
+      },
+
+      fields: fields
+    });
+  } else if (type === "search_reporting_manual") {
+    $(target).jsGrid({
+        width: "100%",
+        height: "auto",
+        shrinkToFit: true,
+        autoload: true,
+        paging: true,
+        filtering: true,
+        editing: true,
+        sorting: true,
+        pageSize: 13,
+        pageButtonCount: 5,
+        noDataContent: "No Data Found",
+        loadIndicationDelay: 0,
+
+        controller: {
+          //get data from db
+          loadData: function (filter) {
+            var d = $.Deferred();
+
+            $.ajax({
+              type: "GET",
+              url: "/db/load",
+              cache: false,
+              dataType: "json"
+            })
+            .done(function(result) {
+              result = $.grep(result, function(item) {
+                if (item.Env !== Cookies.get("env") || item.Progress !== '3' || item.RequestType !== "R") {
+                  return false;
+                }
+                for (var property in filter) {
+                  if (filter[property]!=="" &&
+                      item[property] !== filter[property])
+                  {
+                    return false;
+                  }
+                }
+                return true;
+              });
+              d.resolve(result);
+            })
+            .fail(function() {
+              alert("An Unexpected Error Has Occured");
+              d.resolve();
+            });
+
+            return d.promise();
+          },
+
+          //submit updated data to db
+          updateItem: function(item) {
+            item.SubmissionDate = util.date();
+            var d = $.Deferred();
+            $.ajax({
+              type: "POST",
+              url: "/db/update",
+              contentType: "application/json; charset=utf-8",
+              dataType: "json",
+              data: JSON.stringify(item)
+            }).done(function(result) {
+              d.resolve(item);
+              alert('Update Success');
+            })
+            .fail(function() {
+              d.resolve(previousItem);
+              alert("Update Failed, Unexpected Error");
+            });
+            return d.promise();
+          }
+        },
+
+        //disabled editing when status = used
+        onItemEditing: function(args) {
+          if (args.item.EventStatus === "used" || args.item.EventStatus === "terminated") {
+            args.cancel = true;
+          }
+        },
+
+        onItemUpdating: function(args) {
+          previousItem = args.previousItem;
+        },
+
+        fields: fields
+    });
+
+  } else if (type === "newdata_election_manual") {
+
+    $(target).jsGrid({
+      width: "100%",
+      paging: true,
+      autoload: true,
+      autowidth: false,
+
+      pageSize: 15,
+      pageButtonCount: 5,
+      deleteConfirm: "Confirm Delete Data?",
+      noDataContent: "No New Data Added Yet",
+      loadIndicationDelay: 0,
+
+      controller: {
+        insertItem: function (item) {
+          item.Progress = '4';
+          item.ElectionStatus = "submitted";
+          item.SubmissionDate = util.date();
+        }
+      },
+
+      fields: fields
+    });
+  } else if (type === "search_election_manual") {
+    $(target).jsGrid({
+        width: "100%",
+        height: "auto",
+        shrinkToFit: true,
+        autoload: true,
+        paging: true,
+        filtering: true,
+        editing: true,
+        sorting: true,
+        pageSize: 13,
+        pageButtonCount: 5,
+        noDataContent: "No Data Found",
+        loadIndicationDelay: 0,
+
+        controller: {
+          //get data from db
+          loadData: function (filter) {
+            var d = $.Deferred();
+
+            $.ajax({
+              type: "GET",
+              url: "/db/load",
+              cache: false,
+              dataType: "json"
+            })
+            .done(function(result) {
+              result = $.grep(result, function(item) {
+                if (item.Env !== Cookies.get("env") || item.Progress !== '4' || item.RequestType !== "R") {
+                  return false;
+                }
+                for (var property in filter) {
+                  if (filter[property]!=="" &&
+                      item[property] !== filter[property])
+                  {
+                    return false;
+                  }
+                }
+                return true;
+              });
+              d.resolve(result);
+            })
+            .fail(function() {
+              alert("An Unexpected Error Has Occured");
+              d.resolve();
+            });
+
+            return d.promise();
+          },
+
+          //submit updated data to db
+          updateItem: function(item) {
+            item.SubmissionDate = util.date();
+            var d = $.Deferred();
+            $.ajax({
+              type: "POST",
+              url: "/db/update",
+              contentType: "application/json; charset=utf-8",
+              dataType: "json",
+              data: JSON.stringify(item)
+            }).done(function(result) {
+              d.resolve(item);
+              alert('Update Success');
+            })
+            .fail(function() {
+              d.resolve(previousItem);
+              alert("Update Failed, Unexpected Error");
+            });
+            return d.promise();
+          }
+        },
+
+        //disabled editing when status = used
+        onItemEditing: function(args) {
+          if (args.item.ElectionStatus === "used" || args.item.ElectionStatus === "terminated") {
+            args.cancel = true;
+          }
+        },
+
+        onItemUpdating: function(args) {
+          previousItem = args.previousItem;
+        },
+
+        fields: fields
+    });
+
   }
 }
 
@@ -736,6 +1183,7 @@ module.exports.sourcedata =
 [
   { name: "ID"},
   { name: "UserID"},
+  { name: "ClientID"},
   { name: "SDStatus", type: "select",
     items: [
       {Id: ""},
@@ -769,7 +1217,8 @@ module.exports.reporting =
 [
   { name: "ID"},
   { name: "UserID"},
-  { name: "SDStatus", type: "select",
+  { name: "ClientID"},
+  { name: "EventStatus", type: "select",
     items: [
       {Id: ""},
       {Id: "submitted"},
@@ -781,21 +1230,37 @@ module.exports.reporting =
     valueField: "Id",
     textField: "Id"},
   { name: "SubmissionDate"},
-  { name: "StartDate"},
-  { name: "EndDate"},
-  { name: "ServiceAmt"},
-  { name: "EarningsAmt"},
-  { name: "ServiceEarningsType", type: "select",
+  { name: "EventSubTypeID"},
+  { name: "NumberOfEventCalculations"},
+  { name: "EventDate"}
+];
+
+module.exports.election =
+[
+  { name: "ID"},
+  { name: "UserID"},
+  { name: "ClientID"},
+  { name: "ElectionStatus", type: "select",
     items: [
       {Id: ""},
-      {Id: "CR1"},
-      {Id: "PA1"}],
+      {Id: "submitted"},
+      {Id: "new"},
+      {Id: "used"},
+      {Id: "failed"},
+      {Id: "terminated"},
+      {Id: "data issue"}],
     valueField: "Id",
     textField: "Id"},
-  { name: "ContributionAmt"},
-  { name: "ContributionType"},
-  { name: "CarryForward"},
-  { name: "PostEvent"}
+  { name: "SubmissionDate"},
+  { name: "EventOption"},
+  { name: "EventComponent"},
+  { name: "DestinationType"},
+  { name: "BankAccountsType"},
+  { name: "BankID"},
+  { name: "BankBranchID"},
+  { name: "AccountNumber"},
+  { name: "PaymentMethod"},
+  { name: "BankInfo"},
 ];
 
 },{}]},{},[3]);
