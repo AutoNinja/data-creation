@@ -1,35 +1,32 @@
-var express = require('express');
-var router = express.Router();
-var dbConnection = require ('node-adodb')
-      .open('Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../Access/database.mdb;');
-var async = require('async');
 
-router.use(function(req,res,next){
-  next();
-});
+module.exports = function (type, item) {
+  switch (type) {
+    case "loadAllData":
+      return "SELECT * FROM EnrollmentData;";
+    case "updateOneRow":
+      return updateOneRow(item);
+  }
+}
 
-router.use('/load', function(req,res,next){
-  req.queryString = "SELECT * FROM EnrollmentData;";
-  next();
-}, function(req,res,next) {
-  dbConnection
-    .query(req.queryString)
-    .on('done', function(data) {
-      req.queryResult = data;
-      next('route');
-    })
-    .on('fail', function(error) {
-      console.error(error);
-      res.status(500);
-      res.send(error);
-    });
-});
+function updateOneRow (row) {
+  var queryString = "UPDATE EnrollmentData SET ";
+  var headings = Object.keys(row);
+  var values = Object.keys(row).map(function(key){return "'"+row[key]+"'"});
+  for (var i in headings) {
+    queryString += headings[i] + " = " + values[i];
+    if (i!=headings.length-1) queryString += ", ";
+  }
+  queryString += " WHERE ID = '"+row.ID+"';";
+  return queryString;
+}
+
+/*
 
 router.use('/update', function(req,res,next){
   req.queryString = "UPDATE EnrollmentData SET ";
   var headings = Object.keys(req.body);
   var values = Object.keys(req.body).map(function(key){return "'"+req.body[key]+"'"});
-  for (i in headings) {
+  for (var i in headings) {
     req.queryString += headings[i] + " = " + values[i];
     if (i!=headings.length-1) req.queryString += ", ";
   }
@@ -126,7 +123,6 @@ router.use('/insert', function(req,res,next){
 
 router.use('/execute', function(req,res,next){
   req.queryString = req.body.data;
-    console.log(req.queryString);
   next();
 }, function(req,res,next) {
   dbConnection
@@ -144,7 +140,7 @@ router.use('/execute', function(req,res,next){
 
 router.use('/query', function(req,res,next){
   req.queryString = req.body.data;
-
+  console.log(req.queryString);
   next();
 }, function(req,res,next) {
   dbConnection
@@ -166,3 +162,4 @@ router.all('*',function(req, res) {
 
 
 module.exports = router;
+*/

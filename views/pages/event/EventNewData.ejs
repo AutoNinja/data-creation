@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <%- include('../partials/meta', {page: page}); %>
+  <%- include('../../partials/meta', {page: page}); %>
   <!-- base stylesheets -->
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -17,26 +17,54 @@
 
 </head>
 <body>
-  <%- include('../partials/left_nav', {page: page}); %>
-  <%- include('../partials/top_nav', {page: page}); %>
+  <%- include('../../partials/left_nav', {page: page}); %>
+  <%- include('../../partials/top_nav', {page: page}); %>
 
   <div id="content">
 
     <section class="main-content">
 
-      <div id="jsGrid"></div>
+      <div id="ID-modal">
+        <form id="IDModal-form" method='post' action=''>
+          <h4>ID Type:</h4>
+          <select id="IDType" name="IDType" class="inputbox">
+            <option value="ClientID" selected>Client ID</option>
+            <option value="ID">Enrollment ID</option>
+          </select>
+          <h4>ID:</h4>
+          <input type="text" id="IDInput" name="IDInput" class="inputbox" placeholder="Enter Your ID" required></input>
+
+          <!--
+          <input type="text" id="masterStartYear" class="inputbox" placeholder="Enter Source Data Start Year" required></input>
+          <input type="text" id="masterEndYear" class="inputbox" placeholder="Enter Source Data End Year" required></input>
+          -->
+          <input type="submit" id="submitEnrollmentID" class="dialog-btn IDModal-btn" value="Submit"></input>
+          <input type="button" class="dialog-btn IDModal-btn" value="Cancel" onclick="document.location.href='/'"></input>
+        </form>
+      </div>
+
+      <div id="confirm-modal" hidden>
+        <input type="button" id="next" class="dialog-btn IDModal-btn" value="Yes" ></input>
+        <input type="button" class="dialog-btn IDModal-btn" value="No" onclick="document.location.href='/'"></input>
+      </div>
+
+      <div id="sd-modal" hidden>
+        <input type="text" id="masterStartYear" class="inputbox" placeholder="Enter Source Data Start Year" required></input>
+        <input type="text" id="masterEndYear" class="inputbox" placeholder="Enter Source Data End Year" required></input>
+        <input type="submit" id="submitSDYears" class="dialog-btn IDModal-btn" value="Submit"></input>
+        <input type="button" class="dialog-btn IDModal-btn" value="Cancel" onclick="document.location.href='/'"></input>
+      </div>
 
       <div id="newdata-modal" class="newdata-modal" hidden>
-
         <div class="dialog-content" id="dialog-textboxes">
           <form id='detailsForm'>
             <button class='dialog-btn' type='submit' id='submit'>Add</button>
             <button class='dialog-btn' type='button' id='cancel' onClick='$("#newdata-modal").dialog("close")'>Cancel</button>
           </form>
-
         </div>
-
       </div>
+
+      <div id="jsGrid"></div>
 
       <div class="table-buttons-wrapper">
         <div class="row">
@@ -46,6 +74,7 @@
           </div>
         </div>
       </div>
+
     </section>
 
   </div>
@@ -66,10 +95,11 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
   <script type="text/javascript" src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
   <script type="text/javascript" src="/js/vendor/nav.js"></script>
 
   <!-- page scripts -->
-  <script type="text/javascript" src='/js/newdata.js'></script>
+  <script type="text/javascript" src='/js/EventNewData.js'></script>
 
 </body>
 </html>

@@ -1,11 +1,22 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!-- stylesheets -->
-  <%- include ../partials/styles %>
-  <link rel="stylesheet" href="css/base.css" />
-  <link rel="stylesheet" href="css/vendor/terminal/jquery.terminal.min.css" />
-  <link rel="stylesheet" href="css/console.css" />
+  <meta charset="utf-8">
+  <title>Enrollment Data Creation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- base stylesheets -->
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/base.css" />
+
+  <!-- module stylesheets -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css">
+  <link rel="stylesheet" href="/css/vendor/terminal/jquery.terminal.min.css" />
+
+  <!-- page stylesheets -->
+  <link rel="stylesheet" href="/css/console.css" />
 
 
 </head>
@@ -18,10 +29,16 @@
   </div>
 
 
-  <!-- Vendor Javascript -->
-  <%- include ../partials/scripts %>
+  <!-- base scripts -->
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script>
+
+  <!-- modules scripts -->
   <script type="text/javascript" src="/js/vendor/terminal/jquery.terminal.min.js"></script>
   <script type="text/javascript" src="/js/vendor/terminal/jquery.mousewheel-min.js"></script>
+  <script type="text/javascript" src="/js/vendor/nav.js"></script>
+
   <!-- custom Javascript -->
   <script type="text/javascript" src="/js/console.js"></script>
 

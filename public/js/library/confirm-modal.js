@@ -2,66 +2,7 @@
 var fields = require("./table_fields.js").defaults;
 var exports = module.exports;
 
-/******************************************************************************
-MODAL API
-******************************************************************************/
-
 exports.createModal = function (target, type) {
-  var options = {
-    width: "70%",
-    autoOpen: false,
-    height: $(window).height(),
-    position: {
-      my: "center",
-      at: "top",
-      of: window
-    },
-    modal: true,
-    title: "Create New Data",
-    close: function() {resetModal(fields);}
-  };
-
-/*
-  switch (type) {
-    case "enrollment":
-    break;
-    case "sourcedata":
-    break;
-    case "reporting":
-    break;
-    case "election":
-    break;
-
-  }
-*/
-  renderModalFields(fields(type));
-  console.log(fields(type));
-  $(target).dialog(options);
-}
-
-/*
-exports.createModal = function (target, type) {
-  modalId = target;
-  var fields = formatFields.getDefaults(type);
-  if (type.indexOf('sourcedata') > -1) fields = fields[0];
-  $(modalId).dialog({
-      width: "70%",
-      autoOpen: false,
-      height: $(window).height(),
-      position: {
-        my: "center",
-        at: "top",
-        of: window
-      },
-      modal: true,
-      title: "Create New Data",
-      close: function() {resetModal(fields);}
-  });
-  renderModal(fields);
-  setupValidation(fields);
-};
-*/
-exports.createIDSearchModal = function (target, type) {
   var fields = formatFields.getDefaults(type);
   $( target ).dialog({
     dialogClass: "no-close",
@@ -75,9 +16,9 @@ exports.createIDSearchModal = function (target, type) {
       of: window
     },
     modal: true,
-    title: "You Must Provide The Following Information Before Proceeding"
+    title: "Do You Want To Create "+type+" Data?"
   });
-
+/*
   $(target).submit(function (e) {
     $('.lock').show();
     var ID = $("#enrollmentID").val();
@@ -127,67 +68,15 @@ exports.createIDSearchModal = function (target, type) {
     });
     e.preventDefault();
   });
+*/
 }
 
-exports.createIDModal = function (target, type) {
-  var fields = formatFields.getDefaults(type);
-  $( target ).dialog({
-    dialogClass: "no-close",
-    autoOpen: true,
-    draggable: false,
-    width: "50%",
-    height: $(window).height()/2,
-    position: {
-      my: "center",
-      at: "center",
-      of: window
-    },
-    modal: true,
-    title: "You Must Provide The Following Information Before Proceeding"
-  });
 
-  $(target).submit(function (e) {
-    $('.lock').show();
-    var ID = $("#enrollmentID").val();
-
-    var query;
-
-    $.post("/db/query",{data: "SELECT * FROM EnrollmentData WHERE ID = '"+ID+"';"})
-    .done(function (res) {
-      $('.lock').hide();
-      res = JSON.parse(res);
-      if (res.length === 0) {
-        alert('The Enrollment ID You Entered Does Not Exist');
-        return;
-      }
-      if ((type === "modal_sourcedata_manual" && res[0].Progress != '1') ||
-        (type === "modal_reporting_manual" && res[0].Progress != '2')  ||
-        (type === "modal_election_manual" && res[0].Progress != '3'))
-      {
-        alert("The Enrollment ID You Entered Is Not Available For The Current Step");
-        return;
-      }
-      if (type === "modal_sourcedata_manual") {
-        initSourceDataTable (target,fields)
-      }
-      $(target).dialog('close');
-    })
-    .fail(function() {
-      alert("Internal Server Error");
-      window.location.reload();
-    });
-    e.preventDefault();
-  });
-}
-
-exports.show = function (target) {
-    $(target).dialog("open");
-};
 
 /******************************************************************************
 MODAL PRIVATE FUNCTIONS
 ******************************************************************************/
-
+/*
 var modalId;
 
 var initSourceDataTable = function (target, fields) {
@@ -258,56 +147,7 @@ var renderModalFields = function (fields) {
   }
 };
 
-//reset fields to default
-//reset error messages
-var resetModal = function (fields) {
-
-  for (var name in fields) {
-    $('#'+name).val(fields[name]);
-  }
-
-  $(modalId+" form").validate().resetForm();
-  $(modalId+" form").find(".error").removeClass("error");
-};
-
-/******************************************************************************
-FORM SUBMISSION VALIDATION
-******************************************************************************/
-//JQuery Validation plug in setup
-function setupValidation(fields) {
-  $(modalId+" form").validate({
-      rules: createRules(fields),
-      submitHandler: function() {
-        formSubmitHandler(fields);
-      }
-  });
-};
-
-//dynamically set rules for all fields
-function createRules(fields) {
-
-  var rules = {};
-
-  for (var name in fields) {
-    if (name!="ClientID" && name!="Comment")
-      rules[name] = {required: true};
-  }
-
-  return rules;
-};
-
-//get user input data from modal
-function formSubmitHandler(fields) {
-  var newData = {};
-
-  for (var name in fields) {newData[name] =  $("#"+name).val();}
-
-  $("#jsGrid").jsGrid("insertItem", newData);
-
-  resetModal(fields);
-
-  //$(modalId).dialog("close");
-};
+*/
 
 },{"./table_fields.js":2}],2:[function(require,module,exports){
 module.exports.fields = function (type) {

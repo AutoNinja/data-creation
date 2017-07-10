@@ -3,7 +3,7 @@
 * https://github.com/christophery/pushy/
 * by Christopher Yee */
 
-module.exports = function ($) {
+(function ($) {
 	var pushy = $('.pushy'), //menu css class
 		body = $('body'),
 		container = $('#container'), //container css class
@@ -219,4 +219,4 @@ module.exports = function ($) {
 			}
 		});
 	}
-};
+})(jQuery);

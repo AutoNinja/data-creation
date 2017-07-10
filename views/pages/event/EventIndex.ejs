@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Landing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- base stylesheets -->
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/base.css" />
+
+  <!-- module stylesheets -->
+
+  <!-- custom stylesheets -->
+  <link rel="stylesheet" href="/css/index.css">
+
+</head>
+<body>
+
+  <%- include('../../partials/left_nav', {page: page}); %>
+  <%- include('../../partials/top_nav', {page: page}); %>
+
+
+  <!-- Your Content -->
+  <div id="content">
+
+    <div class="table-buttons-wrapper">
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-xs-12 text-center">
+          <input type="button" class="table-btn" id="newdata" onclick="document.location.href = '/event/newdata';" value="Start Event Creation">
+          <input type="button" class="table-btn" onclick="document.location.href = '/sourcedata/search';" value="Search Source Data">
+          <input type="button" class="table-btn" onclick="document.location.href = '/reporting/search';" value="Search Reporting Data">
+          <input type="button" class="table-btn" onclick="document.location.href = '/election/search';" value="Search Election Data">
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    var user = <%- JSON.stringify(user) %>;
+  </script>
+
+  <!-- base scripts -->
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script>
+
+  <!-- modules scripts -->
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
+  <script type="text/javascript" src="/js/vendor/nav.js"></script>
+
+  <!-- page scripts -->
+  <script type="text/javascript" src="/js/index.js"></script>
+
+</body>
+<html>

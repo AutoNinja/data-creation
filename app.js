@@ -24,8 +24,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //routes
-app.use('/', require('./routes/index'));
-app.use(['/enrollment','/sourcedata','/reporting','/election'], require('./routes/page_routes'));
+app.use(['/'], require('./routes/index'));
+//app.use(['/enrollment','/sourcedata','/reporting','/election'], require('./routes/routes'));
+app.use('/enrollment', require('./routes/routes'));
+app.use('/event', require('./routes/event'));
 app.use('/auto/enrollment', require('./routes/enrollment_auto'));
 app.use('/db',require('./routes/db'));
 
@@ -38,6 +40,7 @@ app.use(function(req,res,next) {
 
 //handle errors
 app.use(function (err, req, res, next) {
+  console.error(err);
   if (err.status != 404)
     res.render('pages/500');
   else

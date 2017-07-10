@@ -1,8 +1,16 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <meta charset="utf-8">
+  <title>Landing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <!-- base stylesheets -->
-  <%- include ../partials/styles %>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/base.css" />
+
+  <!-- module stylesheets -->
 
   <!-- custom stylesheets -->
   <link rel="stylesheet" href="/css/index.css">
@@ -24,33 +32,18 @@
           <% if (page==="enrollment") { %>
             <input type="button" class="table-btn" id="newdata" onclick="document.location.href = './newdata';" value="New Enrollment Data">
             <input type="button" class="table-btn" id="search" onclick="document.location.href = './search';" value="Search Enrollment">
-          <% } else if (page==="sourcedata") { %>
-            <input type="button" class="table-btn" id="newdata" onclick="document.location.href = './newdata';" value="New Source Data">
-            <input type="button" class="table-btn" id="search" onclick="document.location.href = './search';" value="Search Source Data">
-          <% } else if (page==="reporting") { %>
-            <input type="button" class="table-btn" id="newdata" onclick="document.location.href = './newdata';" value="New Reporting Data">
-            <input type="button" class="table-btn" id="search" onclick="document.location.href = './search';" value="Search Reporting">
-          <% } else if (page==="election") { %>
-            <input type="button" class="table-btn" id="newdata" onclick="document.location.href = './newdata';" value="New Election Data">
-            <input type="button" class="table-btn" id="search" onclick="document.location.href = './search';" value="Search Election">
+          <% } else if (page==="event") { %>
+            <input type="button" class="table-btn" id="newdata" onclick="document.location.href = '/validateID';" value="Start Event Creation">
+            <input type="button" class="table-btn" onclick="document.location.href = '/sourcedata/search';" value="Search Source Data">
+            <input type="button" class="table-btn" onclick="document.location.href = '/reporting/search';" value="Search Reporting Data">
+            <input type="button" class="table-btn" onclick="document.location.href = '/election/search';" value="Search Election Data">
           <% } %>
         </div>
         <div class="col-sm-0 col-md-3 col-xs-0 text-center">
         </div>
       </div>
     </div>
-    <% } else { %>
-      <div class="table-buttons-wrapper">
-        <div class="row">
-          <div class="col-sm-12 col-md-12 col-xs-12 text-center">
-            <input type="button" class="table-btn" value="New Enrollment Data">
-            <input type="button" class="table-btn" value="New Source Data">
-            <input type="button" class="table-btn" value="New Reporting Data">
-            <input type="button" class="table-btn" value="New Election Data">
-          </div>
-        </div>
-      </div>
-    <% }  %>
+    <% } %>
     <!-- info -->
     <section class="main-content">
 
@@ -62,11 +55,7 @@
           <div class="col-sm-12 col-md-12 col-xs-12 text-center">
           <% } %>
             <h3>
-              <% if (page==="main") { %>
-                All Submitted Data Are Processed Daily At
-              <% } else { %>
-                Submitted Data Will Be Processed At:
-              <% } %>
+              Submitted Data Will Be Processed At:
             </h3>
             <h4>05:00:00 AM</h4>
             <h4>12:00:00 PM</h4>
@@ -153,10 +142,17 @@
     var user = <%- JSON.stringify(user) %>;
   </script>
 
-  <!-- vendor scripts -->
-  <%- include ../partials/scripts %>
+  <!-- base scripts -->
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script>
 
-  <!-- custom scripts -->
+  <!-- modules scripts -->
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
+  <script type="text/javascript" src="/js/vendor/nav.js"></script>
+
+  <!-- page scripts -->
   <script type="text/javascript" src="/js/index.js"></script>
+
 </body>
 <html>

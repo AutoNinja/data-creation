@@ -1,9 +1,17 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <%- include('../partials/meta', {page: page}); %>
   <!-- base stylesheets -->
-  <%- include ../partials/styles %>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/base.css" />
 
+  <!-- module stylesheets -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css">
+
+  <!-- page stylesheets -->
   <link type="text/css" rel="stylesheet" href="/css/IDModal.css" />
 
 
@@ -34,7 +42,7 @@
       <div class="table-buttons-wrapper">
         <div class="row">
           <div class="col-sm-12 col-md-12 col-xs-12 text-center">
-            <input type="button" class="home table-btn" id="home" value="Home">
+            <input type="button" class="home table-btn" id="home" value="Home" onclick = "window.location.href = './'">
             <input type="button" class="save table-btn" id="save" value="Submit" hidden>
           </div>
         </div>
@@ -47,12 +55,18 @@
     var user = <%- JSON.stringify(user) %>;
     var page = <%- JSON.stringify(page) %>;
   </script>
-  <!-- Vendor Javascript -->
-  <%- include ../partials/scripts %>
+
+  <!-- base scripts -->
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script>
+
+  <!-- modules scripts -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
   <script type="text/javascript" src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="/js/vendor/nav.js"></script>
 
-  <!-- custom Javascript -->
+  <!-- page Javascript -->
   <script type="text/javascript" src='/js/search.js'></script>
 
 </body>

@@ -1,4 +1,4 @@
-var nav = require('./library/nav.js');
+
 var initcookies = require('./library/usecookies.js');
 
 //SQL Syntax Highlight Settings
@@ -56,7 +56,6 @@ $.terminal.defaults.formatters.push(function(string) {
 
 $(document).ready(function() {
   initcookies();
-  nav($);
 
   //terminal input validation and submission
   $('#term').terminal(function(cmd, term) {

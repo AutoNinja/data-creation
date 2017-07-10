@@ -1,6 +1,5 @@
 var table = require("./library/table.js");
-var modal = require("./library/modal.js");
-var nav = require('./library/nav.js');
+var modal = require("./library/id_modal.js");
 var initcookies = require('./library/usecookies.js');
 var util = require("./library/table-util.js");
 
@@ -9,36 +8,7 @@ $(document).ready(function() {
   var previousItem;
   initcookies();
 
-  nav($);
-  if (page === 'enrollment') {
-    if (user === "manual") {
-      table.createTable("#jsGrid","search_enrollment_manual");
-    } else {
-      table.createTable("#jsGrid","search_enrollment_automation");
-    }
-  } else if (page === 'sourcedata') {
-    $('#save').show().click(sourceDataSave);;
-    if (user === "manual") {
-      modal.createIDSearchModal('#IDModal',"modal_sourcedata_search");
-      table.createTable("#jsGrid","search_sourcedata_manual");
-    } else {
-      //table.createTable("#jsGrid","search_enrollment_manual");
-    }
-  } else if (page === 'reporting') {
-    if (user === "manual") {
-      table.createTable("#jsGrid","search_reporting_manual");
-    } else {
-
-    }
-  } else if (page === 'election') {
-    if (user === "manual") {
-      table.createTable("#jsGrid","search_election_manual");
-    } else {
-
-    }
-  }
-  $('#home').click(function() {window.location.href = "./";});
-
+  table.createTable("#jsGrid","search_"+page);
 
   function sourceDataSave () {
     var items = $.extend([],$("#jsGrid").jsGrid("option", "data"));

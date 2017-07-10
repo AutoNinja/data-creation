@@ -189,6 +189,8 @@ exports.getFields = function (type) {
       setSourceDataEditTemplate(item);
     }
 
+
+
     //add control column
     var control = {
         type: "control",

@@ -1,35 +1,33 @@
-var express = require('express');
-var router = express.Router();
-var dbConnection = require ('node-adodb')
-      .open('Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../Access/database.mdb;');
-var async = require('async');
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 
-router.use(function(req,res,next){
-  next();
-});
+module.exports = function (type, item) {
+  switch (type) {
+    case "loadAllData":
+      return "SELECT * FROM EnrollmentData;";
+    case "updateOneRow":
+      return updateOneRow(item);
+  }
+}
 
-router.use('/load', function(req,res,next){
-  req.queryString = "SELECT * FROM EnrollmentData;";
-  next();
-}, function(req,res,next) {
-  dbConnection
-    .query(req.queryString)
-    .on('done', function(data) {
-      req.queryResult = data;
-      next('route');
-    })
-    .on('fail', function(error) {
-      console.error(error);
-      res.status(500);
-      res.send(error);
-    });
-});
+function updateOneRow (row) {
+  var queryString = "UPDATE EnrollmentData SET ";
+  var headings = Object.keys(row);
+  var values = Object.keys(row).map(function(key){return "'"+row[key]+"'"});
+  for (var i in headings) {
+    queryString += headings[i] + " = " + values[i];
+    if (i!=headings.length-1) queryString += ", ";
+  }
+  queryString += " WHERE ID = '"+row.ID+"';";
+  return queryString;
+}
+
+/*
 
 router.use('/update', function(req,res,next){
   req.queryString = "UPDATE EnrollmentData SET ";
   var headings = Object.keys(req.body);
   var values = Object.keys(req.body).map(function(key){return "'"+req.body[key]+"'"});
-  for (i in headings) {
+  for (var i in headings) {
     req.queryString += headings[i] + " = " + values[i];
     if (i!=headings.length-1) req.queryString += ", ";
   }
@@ -126,7 +124,6 @@ router.use('/insert', function(req,res,next){
 
 router.use('/execute', function(req,res,next){
   req.queryString = req.body.data;
-    console.log(req.queryString);
   next();
 }, function(req,res,next) {
   dbConnection
@@ -144,7 +141,7 @@ router.use('/execute', function(req,res,next){
 
 router.use('/query', function(req,res,next){
   req.queryString = req.body.data;
-
+  console.log(req.queryString);
   next();
 }, function(req,res,next) {
   dbConnection
@@ -166,3 +163,6 @@ router.all('*',function(req, res) {
 
 
 module.exports = router;
+*/
+
+},{}]},{},[1]);
