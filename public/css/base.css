@@ -46,3 +46,11 @@ h1, h2, h3, h4, h5, h6 {
 .capitalize {
   text-transform: capitalize;
 }
+
+#screenlock {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  color: black;
+  opacity: 0.8;
+}

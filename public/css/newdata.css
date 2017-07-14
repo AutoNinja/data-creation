@@ -6,7 +6,7 @@ Dialog
   width: 80%;
 }
 
-.dialog-btn, #control-btn {
+.dialog-btn, .control-btn {
   width:100px;
   height: 30px;
   background-color: #0078d7;
@@ -19,7 +19,7 @@ Dialog
   margin-right: 10px;
 }
 
-.dialog-btn:hover, #control-btn:hover{
+.dialog-btn:hover, .control-btn:hover{
   opacity: 0.6;
 }
 
@@ -29,7 +29,7 @@ Dialog
   margin-top: 10px;
 }
 
-#control-btn {
+.control-btn {
   font-size: 0.9em;
   width: 100%;
   height: 40px;

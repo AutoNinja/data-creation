@@ -15,13 +15,13 @@ function buildOptions (type) {
 
   switch (type) {
   case "newdata_enrollment":
-    console.log("hello");
     options = {
       width: "100%",
       height: "auto",
       paging: true,
       autoload: true,
       autowidth: false,
+      editing: true,
       pageSize: 15,
       pageButtonCount: 5,
       deleteConfirm: "Confirm Delete Data?",
@@ -29,14 +29,13 @@ function buildOptions (type) {
       loadIndicationDelay: 0,
       controller: {
         insertItem: function (item) {
-            item.Progress = '1';
-            item.RequestType = "R";
-            item.Status = "submitted";
-            item.Env = Cookies.get("env");
-            item.ClientID = "";
-            item.DepartmentCode = item.TypeDepartmentId;
-            item.SubmissionDate = util.date();
-            item.ID = util.guid();
+          item.RequestType = "R";
+          item.Status = "submitted";
+          item.Env = Cookies.get("env");
+          item.ClientID = "";
+          item.DepartmentCode = item.TypeDepartmentId;
+          item.SubmissionDate = util.date();
+          item.ID = util.guid();
         }
       },
       fields: fields("enrollment")
@@ -246,12 +245,7 @@ function buildOptions (type) {
       loadIndicationDelay: 0,
 
       controller: {
-        insertItem: function (item) {
-          item.ID = $("#enrollmentID").val();
-          item.SDStatus = 'submitted';
-          item.SubmissionDate = util.date();
-          item.Progress = "2";
-        }
+
       },
 
       fields: fields('sourcedata')
@@ -290,6 +284,7 @@ function buildOptions (type) {
       width: "100%",
       paging: true,
       autoload: true,
+      editing: true,
       autowidth: false,
 
       pageSize: 15,
@@ -301,7 +296,7 @@ function buildOptions (type) {
       controller: {
         insertItem: function (item) {
           item.Progress = '3';
-          item.EventStatus = "submitted";
+          item.ReportingStatus = "submitted";
           item.SubmissionDate = util.date();
         }
       },
@@ -401,6 +396,7 @@ function buildOptions (type) {
       paging: true,
       autoload: true,
       autowidth: false,
+      editing: true,
 
       pageSize: 15,
       pageButtonCount: 5,

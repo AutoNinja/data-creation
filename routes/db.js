@@ -124,39 +124,34 @@ router.use('/insert', function(req,res,next){
   );
 });
 
-router.use('/execute', function(req,res,next){
+router.post('/execute', function(req,res,next){
   req.queryString = req.body.data;
-    console.log(req.queryString);
+  console.log(req.queryString);
   next();
 }, function(req,res,next) {
   dbConnection
     .execute(req.queryString)
     .on('done', function(data) {
-      req.queryResult = "Success";
-      next('route');
+      res.status(200).end();
     })
-    .on('fail', function(error) {
-      console.error(error);
-      req.queryResult = error;
-      next('route');
+    .on('fail', function(err) {
+      next(err);
     });
 });
 
-router.use('/query', function(req,res,next){
+router.post('/query', function(req,res,next){
   req.queryString = req.body.data;
-
+  console.log(req.queryString);
   next();
 }, function(req,res,next) {
   dbConnection
     .query(req.queryString)
     .on('done', function(data) {
-      req.queryResult = data;
+      res.status(200).send(data);
       next('route');
     })
-    .on('fail', function(error) {
-      console.error(error);
-      req.queryResult = error;
-      next('route');
+    .on('fail', function(err) {
+      next(err);
     });
 });
 

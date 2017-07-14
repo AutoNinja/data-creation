@@ -43,7 +43,7 @@ var enrollment_defaults = {
   UserID: '',
   Description: '',
   Comment: '',
-  ID: '',
+  TypeDepartmentId: '',
   PhoneType: 'HOME',
   PhoneNumber: '413-164-369',
   BirthDate: '01/22/1970',
@@ -59,11 +59,8 @@ var enrollment_defaults = {
   NationalIdType: 'PR',
   BenefitProgramName: 'OMR',
   BenefitSystem: 'BN',
-  ClientID: '',
-  DepartmentCode: '',
   EmpClass: '65',
   EmpRecordType: '1',
-  Env: '',
   Format: 'English',
   JobCode: 'Other',
   MemberClass: 'NRA65',
@@ -71,7 +68,6 @@ var enrollment_defaults = {
   PensionPlanType: '80',
   RateCode: 'NAANNL',
   Status: 'submitted',
-  SubmissionDate: '',
   TypeCompRate: '75000',
   UnionCode: 'O02'
 };
@@ -101,14 +97,11 @@ var sourcedata_defaults_two = {
 };
 
 var reporting_defaults = {
-  ID: '',
   EventSubTypeID: 'Termination',
-  NumberOfEventCalculations: '9',
   EventDate: '12/31/2014'
 };
 
 var election_defaults = {
-  ID: '',
   EventOption: "Normal Retirement Pension",
   EventComponent: "RPP Pension",
   DestinationType: "",
@@ -129,21 +122,21 @@ var general_fields =
     name: "Control",
     width: "80px",
     modeSwitchButton: false,
-    editButton: false,
     headerTemplate: function() {
         return $("<button>")
                 .attr("type", "button")
-                .attr("id","control-btn")
+                .attr("class","control-btn")
                 .text("New data")
                 .on("click", function () {
                     $(".newdata-modal").dialog("open");
                 });
     }
   },
-  { name: "ID", width: "120px", editTemplate: disabledEditTemplate},
+  { name: "ID", width: "120px", editTemplate: disabledEditTemplate, visible: false},
   { name: "UserID", editTemplate: disabledEditTemplate},
-  { name: "ClientID", editTemplate: disabledEditTemplate},
-  { name: "SubmissionDate", editTemplate: disabledEditTemplate}
+  { name: "ClientID", editTemplate: disabledEditTemplate, visible: false},
+  { name: "SubmissionDate", editTemplate: disabledEditTemplate, visible: false},
+  { name: "RequestType", visible: false}
 ]
 
 var enrollment_fields =
@@ -159,13 +152,13 @@ var enrollment_fields =
       {Id: "data issue"}],
     valueField: "Id",
     textField: "Id",
-    editTemplate: statusEditTemplate},
+    editTemplate: statusEditTemplate,
+    visible: false},
   { name: "Description"},
   { name: "Comment"},
-  { name: "RequestType"},
-  { name: "Env"},
+  { name: "Env", visible: false},
   { name: "TypeDepartmentId"},
-  { name: "DepartmentCode"},
+  { name: "DepartmentCode", visible: false},
   { name: "PhoneType"},
   { name: "PhoneNumber"},
   { name: "BirthDate"},
@@ -205,7 +198,8 @@ var sourcedata_fields =
       {Id: "terminated"},
       {Id: "data issue"}],
     valueField: "Id",
-    textField: "Id"},
+    textField: "Id",
+    visible: false},
   { name: "StartDate"},
   { name: "EndDate"},
   { name: "ServiceAmt"},
@@ -237,17 +231,14 @@ var reporting_fields =
       {Id: "data issue"}],
     valueField: "Id",
     textField: "Id",
-    editTemplate: statusEditTemplate},
+    editTemplate: statusEditTemplate,
+    visible: false},
   { name: "EventSubTypeID"},
-  { name: "NumberOfEventCalculations"},
   { name: "EventDate"}
 ];
 
 var election_fields =
 [
-  { name: "ID"},
-  { name: "UserID"},
-  { name: "ClientID"},
   { name: "ElectionStatus", title: "Status", type: "select",
     items: [
       {Id: ""},
@@ -259,7 +250,8 @@ var election_fields =
       {Id: "data issue"}],
     valueField: "Id",
     textField: "Id",
-    editTemplate: statusEditTemplate},
+    editTemplate: statusEditTemplate,
+    visible: false},
   { name: "SubmissionDate"},
   { name: "EventOption"},
   { name: "EventComponent"},

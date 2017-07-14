@@ -24,27 +24,22 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //routes
-app.use(['/'], require('./routes/index'));
-//app.use(['/enrollment','/sourcedata','/reporting','/election'], require('./routes/routes'));
-app.use('/enrollment', require('./routes/routes'));
+app.use('/', require('./routes/index'));
+app.use('/enrollment', require('./routes/enrollment'));
 app.use('/event', require('./routes/event'));
+
 app.use('/auto/enrollment', require('./routes/enrollment_auto'));
 app.use('/db',require('./routes/db'));
 
 //throw error if page not found
 app.use(function(req,res,next) {
-  var err = new Error();
-  err.status = 404;
-  next(err);
+  res.render('pages/404');
 });
 
 //handle errors
 app.use(function (err, req, res, next) {
   console.error(err);
-  if (err.status != 404)
-    res.render('pages/500');
-  else
-    res.render('pages/404');
+  res.status(500).send(err);
 });
 
 app.listen(PORT, function () {

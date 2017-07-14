@@ -17,6 +17,8 @@
 
 </head>
 <body>
+
+  <div id='screenlock'></div>
   <%- include('../../partials/left_nav', {page: page}); %>
   <%- include('../../partials/top_nav', {page: page}); %>
 
@@ -24,15 +26,10 @@
 
     <section class="main-content">
 
-      <div id="ID-modal">
+      <div id="ID-modal" style='z-index: 10000;'>
         <form id="IDModal-form" method='post' action=''>
-          <h4>ID Type:</h4>
-          <select id="IDType" name="IDType" class="inputbox">
-            <option value="ClientID" selected>Client ID</option>
-            <option value="ID">Enrollment ID</option>
-          </select>
           <h4>ID:</h4>
-          <input type="text" id="IDInput" name="IDInput" class="inputbox" placeholder="Enter Your ID" required></input>
+          <input type="text" id="IDInput" name="IDInput" class="inputbox" placeholder="Enter Your Client ID" required></input>
 
           <!--
           <input type="text" id="masterStartYear" class="inputbox" placeholder="Enter Source Data Start Year" required></input>
@@ -43,34 +40,49 @@
         </form>
       </div>
 
-      <div id="confirm-modal" hidden>
+      <div id="confirm-modal">
         <input type="button" id="next" class="dialog-btn IDModal-btn" value="Yes" ></input>
-        <input type="button" class="dialog-btn IDModal-btn" value="No" onclick="document.location.href='/'"></input>
+        <input type="button" id="noconfirm" class="dialog-btn IDModal-btn" value="No"></input>
       </div>
 
-      <div id="sd-modal" hidden>
+      <div id="sd-modal">
         <input type="text" id="masterStartYear" class="inputbox" placeholder="Enter Source Data Start Year" required></input>
         <input type="text" id="masterEndYear" class="inputbox" placeholder="Enter Source Data End Year" required></input>
         <input type="submit" id="submitSDYears" class="dialog-btn IDModal-btn" value="Submit"></input>
         <input type="button" class="dialog-btn IDModal-btn" value="Cancel" onclick="document.location.href='/'"></input>
       </div>
 
-      <div id="newdata-modal" class="newdata-modal" hidden>
-        <div class="dialog-content" id="dialog-textboxes">
-          <form id='detailsForm'>
-            <button class='dialog-btn' type='submit' id='submit'>Add</button>
-            <button class='dialog-btn' type='button' id='cancel' onClick='$("#newdata-modal").dialog("close")'>Cancel</button>
-          </form>
+      <div id="newdata-modal" class="newdata-modal">
+        <button class='dialog-btn' type='button' id='insertNewRow'>Add</button>
+        <button class='dialog-btn' type='button' id='cancel' onClick='$("#newdata-modal").dialog("close")'>Cancel</button>
+        <div class="dialog-content newdata-content" id="dialog-textboxes">
+
         </div>
       </div>
 
-      <div id="jsGrid"></div>
+      <div step='0' class='table-container' hidden>
+        <p>Enrollment</p>
+        <div id="step0-table" class='table' ></div>
+      </div>
+      <div step='1' class='table-container'  hidden>
+        <p>Source Data</p>
+        <div id="step1-table" class='table'></div>
+      </div>
+      <div step='2' class='table-container'  hidden>
+        <p>Event Reporting</p>
+        <div id="step2-table" class='table'></div>
+      </div>
+      <div step='3' class='table-container'  hidden>
+        <p>Event Election</p>
+        <div id="step3-table" class='table'></div>
+      </div>
 
       <div class="table-buttons-wrapper">
         <div class="row">
           <div class="col-sm-12 col-md-12 col-xs-12 text-center">
             <input type="button" class="home table-btn" id="home" value="Home" onclick = "document.location.href = './'" />
-            <input type="button" class="save table-btn" id="save" value="Submit" />
+            <input type="button" class="save table-btn" id="save" value="Next" />
+            <input type="button" class="save table-btn" id="submit" value="Submit" hidden />
           </div>
         </div>
       </div>
@@ -99,7 +111,7 @@
   <script type="text/javascript" src="/js/vendor/nav.js"></script>
 
   <!-- page scripts -->
-  <script type="text/javascript" src='/js/EventNewData.js'></script>
+  <script type="text/javascript" src='/js/eventNewData.js'></script>
 
 </body>
 </html>
