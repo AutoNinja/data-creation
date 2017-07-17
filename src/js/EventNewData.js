@@ -1,21 +1,18 @@
 var util = require("./library/table-util.js");
-var table = require("./library/table.js");
 var initcookies = require('./library/usecookies.js');
 var fields = require('./library/table_fields').defaults;
+var columns = require("./library/table_fields").fields;
 var buildQueryString = require('./library/buildQueryString.js');
 
 var step = -1;
 var ClientID;
+var UserID;
 var finalItem = {};
 
 // Main
 $(document).ready(function() {
   initcookies();
-  $("[data-toggle='tooltip']").tooltip();
-    table.createTable("#step0-table","newdata_enrollment");
-    table.createTable("#step1-table","newdata_sourcedata");
-    table.createTable("#step2-table","newdata_reporting");
-    table.createTable("#step3-table","newdata_election");
+  //$("[data-toggle='tooltip']").tooltip();
 });
 
 //initialize bind buttons
@@ -23,8 +20,13 @@ $(document).ready(function() {
 
   $('#submit').click(submitToDB);
 
+  $('#insertCancel, #sdCancel').click(function () {
+    $("#newdata-modal").dialog("close");
+    --step;
+  });
+
   // 'no' button on confirm modal
-  $("#noconfirm").click(function () {
+  $("#noconfirm, #insertCancel, #sdCancel").click(function () {
     $('#confirm-modal').dialog('close');
     switch (step) {
       case -1:
@@ -45,30 +47,23 @@ $(document).ready(function() {
     }
   });
 
+
+
   // 'yes' button on confirm modal
   $("#next").click(nextStep);
 
   // ID submit
   $("#ID-modal").submit(function (e) {
     var ID = $("#IDInput").val();
+    var uID = $("#UserIDInput").val()
 
-    $.post("/db/query",{data: "SELECT * FROM EventData WHERE ClientID = '"+ID+"';"})
-    .done(function (res) {
-      if (res.length > 1 && res[0].Progress != '1') {
-        alert("You Have Already Initiated An Event Creation! Try a different ID.");
-        return;
-      }
+    ClientID = ID;
+    UserID = uID;
 
-      ClientID = ID;
+    $("#ID-modal").dialog('close');
+    if (step === 1)
+      $('#sd-modal').dialog('open');
 
-      $("#ID-modal").dialog('close');
-      if (step === 1)
-        $('#sd-modal').dialog('open');
-    })
-    .fail(function() {
-      alert("Internal Server Error");
-      window.location.reload();
-    });
     e.preventDefault();
   });
 
@@ -101,11 +96,11 @@ $(document).ready(function() {
       ++startYear;
     }
     $( "#sd-modal" ).dialog("close");
+    sourceDataSave();
   });
 });
 
-/*Initialize all dialogs
-*/
+/*Initialize all dialogs*/
 $(document).ready(function() {
   $( "#ID-modal" ).dialog({
     dialogClass: "no-close",
@@ -119,7 +114,7 @@ $(document).ready(function() {
       of: window
     },
     modal: true,
-    title: "Enter An Enrollment ID or A Client ID"
+    title: "Enter A Client ID"
   });
 
   $( "#confirm-modal" ).dialog({
@@ -167,6 +162,105 @@ $(document).ready(function() {
   });
 });
 
+/*Initialize all tables*/
+$(document).ready(function() {
+  $("#step0-table").jsGrid({
+      width: "100%",
+      height: "auto",
+      paging: true,
+      autoload: true,
+      autowidth: false,
+      editing: true,
+      pageSize: 15,
+      pageButtonCount: 5,
+      deleteConfirm: "Confirm Delete Data?",
+      noDataContent: "Using Existing Client",
+      loadIndicationDelay: 0,
+      controller: {
+        insertItem: function (item) {
+          item.RequestType = "R";
+          item.EnrollStatus = "submitted";
+          item.Env = Cookies.get("env");
+          item.ClientID = "";
+          item.DepartmentCode = item.TypeDepartmentId;
+          item.SubmissionDate = util.date();
+          item.ID = util.guid();
+        }
+      },
+      fields: columns("enrollment")
+    });
+
+  $("#step1-table").jsGrid({
+      width: "100%",
+      paging: true,
+      autoload: true,
+      autowidth: false,
+      editing: true,
+      sorting: true,
+
+      pageSize: 15,
+      pageButtonCount: 5,
+      deleteConfirm: "Confirm Delete Data?",
+      noDataContent: "Not Selected",
+      loadIndicationDelay: 0,
+
+      controller: {
+
+      },
+
+      fields: columns('sourcedata')
+  });
+
+  $("#step2-table").jsGrid({
+    width: "100%",
+    paging: true,
+    autoload: true,
+    editing: true,
+    autowidth: false,
+
+    pageSize: 15,
+    pageButtonCount: 5,
+    deleteConfirm: "Confirm Delete Data?",
+    noDataContent: "Not Selected",
+    loadIndicationDelay: 0,
+
+    controller: {
+      insertItem: function (item) {
+        item.Progress = '3';
+        item.ReportingStatus = "submitted";
+        item.SubmissionDate = util.date();
+      }
+    },
+
+    fields: columns('reporting')
+  });
+
+  $("#step3-table").jsGrid({
+      width: "100%",
+      paging: true,
+      autoload: true,
+      autowidth: false,
+      editing: true,
+
+      pageSize: 15,
+      pageButtonCount: 5,
+      deleteConfirm: "Confirm Delete Data?",
+      noDataContent: "Not Selected",
+      loadIndicationDelay: 0,
+
+      controller: {
+        insertItem: function (item) {
+          item.Progress = '4';
+          item.ElectionStatus = "submitted";
+          item.SubmissionDate = util.date();
+        }
+      },
+
+      fields: columns('election')
+  });
+
+});
+
 //********************SUPPORT FUNCTIONS*******************************
 
 function submitToDB () {
@@ -176,7 +270,7 @@ function submitToDB () {
   sourceDataSave();
   electionSave();
 
-  if (ClientID == 'enrollment')
+  if (ClientID == 'existing enrollment')
     finalItem.ClientID = '';
   else
     finalItem.ClientID = ClientID;
@@ -185,13 +279,11 @@ function submitToDB () {
   finalItem.SubmissionDate = util.date();
   finalItem.RequestType = 'R';
   finalItem.Env = Cookies.get('env');
-
-
-  console.log(finalItem);
+  finalItem.OverallStatus = "submitted";
 
   $.post("/db/execute",{data: buildInsertQueryString(finalItem)})
   .done(function(response){
-    window.location.href = '/';
+    window.location.href = '/event';
     alert("Data Submitted, Your request ID is "+finalItem.ID);
   })
   .fail(function() {
@@ -204,42 +296,40 @@ function submitToDB () {
 function showReviewPage () {
   if ($.isEmptyObject(finalItem)) {
     alert('You Have Not Entered Any Data!');
-    window.location.href = '/';
+    window.location.href = '/event';
     return;
   }
 
   if (step === 4)
     return;
   step = 4;
-  alert("please review your data before submitting");
   $('.table-container').show();
   $('#submit').show();
-  $('#save').hide();
-
+  //$('#save').hide();
+  $('#ClientIDDisplay').text(ClientID);
+  $('#meta').show();
   $(".table").jsGrid("fieldOption", "Control", "deleteButton", false);
   $("#step1-table").jsGrid("fieldOption", "Control", "deleteButton", true);
+  $("#step0-table")
+    .jsGrid("option", "noDataContent", "ClientID = "+ClientID+", UserID = "+UserID)
+    .jsGrid("fieldOption", "UserID", "visible", true);
   $('.control-btn').hide();
   $('#step1-table .control-btn').show();
   renderNewDataModalFields (1);
 }
 
-
 function nextStep() {
-  $("[step='%s']".replace(/%s/g, step++)).hide();
-  $("[step='%s']".replace(/%s/g, step)).show();
 
   $('#confirm-modal').dialog('close');
 
-  renderNewDataModalFields (step);
+  renderNewDataModalFields (++step);
   $('#newdata-modal').dialog('open');
 
 
   switch (step) {
     case 0:
-      $('#save').off("click").click(enrollmentSave);
       break;
     case 1:
-      $('#save').off("click").click(sourceDataSave);
       $('#newdata-modal').dialog('close');
       if (!ClientID)
         $('#ID-modal').dialog('open');
@@ -249,12 +339,10 @@ function nextStep() {
     case 2:
       if (!ClientID)
         $('#ID-modal').dialog('open');
-      $('#save').off("click").click(reportingSave);
       break;
     case 3:
       if (!ClientID)
         $('#ID-modal').dialog('open');
-      $('#save').off("click").click(electionSave);
       break;
   }
 }
@@ -271,12 +359,24 @@ function renderNewDataModalFields (step) {
     for (var name in modalFields) {newData[name] =  $("#"+name).val();}
     $("#step"+step+"-table").jsGrid("insertItem", newData);
     resetModal();
+
+    switch (step) {
+      case 0:
+        enrollmentSave();
+        break;
+      case 1:
+        sourceDataSave();
+        break;
+      case 2:
+        reportingSave();
+        break;
+      case 3:
+        electionSave();
+        break;
+    }
   });
 
   for (var name in modalFields) {
-
-    if (name === "UserID")
-      continue;
 
     $(".newdata-content")
       .append("<div class='row r-"+name+"'></div>");
@@ -327,7 +427,7 @@ function enrollmentSave() {
 
   if (!$.isEmptyObject(item)) {
     item.Progress = '1';
-    ClientID = 'enrollment';
+    ClientID = 'existing enrollment';
     $.extend(finalItem,item);
 
   }
@@ -362,7 +462,7 @@ function sourceDataSave () {
 }
 
 function reportingSave() {
-  var item = $.extend([],$("#step1-table").jsGrid("option", "data"))[0];
+  var item = $.extend([],$("#step2-table").jsGrid("option", "data"))[0];
 
   if (item) {
     item.Progress = '3';

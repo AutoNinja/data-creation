@@ -9,14 +9,13 @@ router.get('/newdata', function(req, res) {
     res.render('pages/event/newdata', {user: 'manual', page: "Event New Data"});
 });
 
-/*
 router.get('/search', function(req, res) {
-    res.render('pages/search', {user: 'manual', page: req.baseUrl.replace(/\//g, "")});
+    res.render('pages/event/search', {user: 'manual', page: "Event Search"});
 });
 
 router.get('/help', function(req, res) {
-    res.render('pages/help', {user: 'manual', page: req.baseUrl.replace(/\//g, "")});
+    res.render('pages/event/help', {user: 'manual', page: req.baseUrl.replace(/\//g, "")});
 });
 
-*/
+
 module.exports = router;

@@ -29,13 +29,15 @@
       <div id="ID-modal" style='z-index: 10000;'>
         <form id="IDModal-form" method='post' action=''>
           <h4>ID:</h4>
-          <input type="text" id="IDInput" name="IDInput" class="inputbox" placeholder="Enter Your Client ID" required></input>
+          <input type="number" id="IDInput" name="IDInput" class="inputbox" placeholder="Enter Your Client ID" required></input>
+          <h4>UserID:</h4>
+          <input type="text" id="UserIDInput" name="UserIDInput" class="inputbox" placeholder="Enter a UserID" required></input>
 
           <!--
           <input type="text" id="masterStartYear" class="inputbox" placeholder="Enter Source Data Start Year" required></input>
           <input type="text" id="masterEndYear" class="inputbox" placeholder="Enter Source Data End Year" required></input>
           -->
-          <input type="submit" id="submitEnrollmentID" class="dialog-btn IDModal-btn" value="Submit"></input>
+          <input type="submit" id="submitEnrollmentID" class="dialog-btn IDModal-btn" value="Next"></input>
           <input type="button" class="dialog-btn IDModal-btn" value="Cancel" onclick="document.location.href='/'"></input>
         </form>
       </div>
@@ -46,15 +48,15 @@
       </div>
 
       <div id="sd-modal">
-        <input type="text" id="masterStartYear" class="inputbox" placeholder="Enter Source Data Start Year" required></input>
-        <input type="text" id="masterEndYear" class="inputbox" placeholder="Enter Source Data End Year" required></input>
-        <input type="submit" id="submitSDYears" class="dialog-btn IDModal-btn" value="Submit"></input>
-        <input type="button" class="dialog-btn IDModal-btn" value="Cancel" onclick="document.location.href='/'"></input>
+        <input type="number" id="masterStartYear" class="inputbox" placeholder="Enter Source Data Start Year (YYYY)" required></input>
+        <input type="number" id="masterEndYear" class="inputbox" placeholder="Enter Source Data End Year (YYYY)" required></input>
+        <input type="submit" id="submitSDYears" class="dialog-btn IDModal-btn" value="Next"></input>
+        <input type="button" id="sdCancel" class="dialog-btn IDModal-btn" value="Cancel"></input>
       </div>
 
       <div id="newdata-modal" class="newdata-modal">
-        <button class='dialog-btn' type='button' id='insertNewRow'>Add</button>
-        <button class='dialog-btn' type='button' id='cancel' onClick='$("#newdata-modal").dialog("close")'>Cancel</button>
+        <button class='dialog-btn' type='button' id='insertNewRow'>Next</button>
+        <button class='dialog-btn' type='button' id='insertCancel'>Cancel</button>
         <div class="dialog-content newdata-content" id="dialog-textboxes">
 
         </div>
@@ -80,8 +82,11 @@
       <div class="table-buttons-wrapper">
         <div class="row">
           <div class="col-sm-12 col-md-12 col-xs-12 text-center">
+            <!--
             <input type="button" class="home table-btn" id="home" value="Home" onclick = "document.location.href = './'" />
             <input type="button" class="save table-btn" id="save" value="Next" />
+            -->
+            <input type="button" class="home table-btn" id="home" value="Home" onclick = "document.location.href = './'" />
             <input type="button" class="save table-btn" id="submit" value="Submit" hidden />
           </div>
         </div>

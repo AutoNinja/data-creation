@@ -224,7 +224,7 @@ function buildOptions (type) {
       pageSize: 15,
       pageButtonCount: 5,
       deleteConfirm: "Confirm Delete Data?",
-      noDataContent: "No New Data Added Yet",
+      noDataContent: "Using Existing Client",
       loadIndicationDelay: 0,
       controller: {
         insertItem: function (item) {
@@ -440,7 +440,7 @@ function buildOptions (type) {
       pageSize: 15,
       pageButtonCount: 5,
       deleteConfirm: "Confirm Delete Data?",
-      noDataContent: "No New Data Added Yet",
+      noDataContent: "Not Selected",
       loadIndicationDelay: 0,
 
       controller: {
@@ -489,7 +489,7 @@ function buildOptions (type) {
       pageSize: 15,
       pageButtonCount: 5,
       deleteConfirm: "Confirm Delete Data?",
-      noDataContent: "No New Data Added Yet",
+      noDataContent: "Not Selected",
       loadIndicationDelay: 0,
 
       controller: {
@@ -600,7 +600,7 @@ function buildOptions (type) {
       pageSize: 15,
       pageButtonCount: 5,
       deleteConfirm: "Confirm Delete Data?",
-      noDataContent: "No New Data Added Yet",
+      noDataContent: "Not Selected",
       loadIndicationDelay: 0,
 
       controller: {
@@ -720,40 +720,42 @@ module.exports.fields = function (type) {
     var item = fields[i];
     item.type = item.type || "text";
     item.align = item.align || "center";
-    //item.validate = item.validate || "required";
+    item.validate = item.validate || "required";
     item.title = item.title || trimItemName (item);
     item.width = item.width || calcColWidth (item);
-    item.editTemplate = item.editTemplate || defaultEditTemplate;
+    if (type.indexOf('search') !== -1)
+      item.editTemplate = item.editTemplate || defaultEditTemplate;
   }
   return fields;
 }
 
 module.exports.defaults = function (type) {
-  switch (type) {
-    case "enrollment":
-      return enrollment_defaults;
-    case "sourcedata":
-      return [sourcedata_defaults_one, sourcedata_defaults_two];
-    case "reporting":
-      return reporting_defaults;
-    case "election":
-      return election_defaults;
-  }
+  if (type.indexOf("enrollment") !== -1)
+    return enrollment_defaults;
+  else if(type.indexOf("sourcedata") !== -1)
+    return [sourcedata_defaults_one, sourcedata_defaults_two];
+  else if(type.indexOf("reporting") !== -1)
+    return reporting_defaults;
+  else if (type.indexOf("election") !== -1)
+    return election_defaults;
 }
 
 
 function getFieldsBasedOnType (type) {
-  switch (type) {
-    case "enrollment":
-      return enrollment_fields;
-    case "sourcedata":
-      return sourcedata_fields;
-    case "reporting":
-      return reporting_fields;
-    case "election":
-      return election_fields;
-  }
+  if (type.indexOf("enrollment") !== -1)
+    return enrollment_fields;
+  else if(type.indexOf("sourcedata") !== -1)
+    return sourcedata_fields;
+  else if(type.indexOf("reporting") !== -1)
+    return reporting_fields;
+  else if (type.indexOf("election") !== -1)
+    return election_fields;
+  else if (type === "general")
+    return [];
+
 }
+
+
 
 var enrollment_defaults = {
   UserID: '',
@@ -783,7 +785,6 @@ var enrollment_defaults = {
   NotificationType: 'General',
   PensionPlanType: '80',
   RateCode: 'NAANNL',
-  Status: 'submitted',
   TypeCompRate: '75000',
   UnionCode: 'O02'
 };
@@ -848,16 +849,12 @@ var general_fields =
                 });
     }
   },
-  { name: "ID", width: "120px", editTemplate: disabledEditTemplate, visible: false},
-  { name: "UserID", editTemplate: disabledEditTemplate},
   { name: "ClientID", editTemplate: disabledEditTemplate, visible: false},
+  { name: "UserID", editTemplate: disabledEditTemplate, visible: false},
+  { name: "ID", width: "120px", editTemplate: disabledEditTemplate, visible: false},
   { name: "SubmissionDate", editTemplate: disabledEditTemplate, visible: false},
-  { name: "RequestType", visible: false}
-]
-
-var enrollment_fields =
-[
-  { name: "Status", title: "EnrollStatus", type: "select",
+  { name: "RequestType", visible: false},
+  { name: "OverallStatus", title: "Overall Status", type: "select",
     items: [
       {Id: ""},
       {Id: "submitted"},
@@ -870,8 +867,25 @@ var enrollment_fields =
     textField: "Id",
     editTemplate: statusEditTemplate,
     visible: false},
-  { name: "Description"},
+]
+
+var enrollment_fields =
+[
+  { name: "EnrollStatus", title: "EnrollStatus", type: "select",
+    items: [
+      {Id: ""},
+      {Id: "submitted"},
+      {Id: "new"},
+      {Id: "used"},
+      {Id: "failed"},
+      {Id: "terminated"},
+      {Id: "data issue"}],
+    valueField: "Id",
+    textField: "Id",
+    editTemplate: statusEditTemplate,
+    visible: false},
   { name: "Comment"},
+  { name: "Description"},
   { name: "Env", visible: false},
   { name: "TypeDepartmentId"},
   { name: "DepartmentCode", visible: false},
@@ -936,7 +950,7 @@ var sourcedata_fields =
 
 var reporting_fields =
 [
-  { name: "EventStatus", title: "Status", type: "select",
+  { name: "ReportingStatus", title: "Status", type: "select",
     items: [
       {Id: ""},
       {Id: "submitted"},
@@ -968,7 +982,6 @@ var election_fields =
     textField: "Id",
     editTemplate: statusEditTemplate,
     visible: false},
-  { name: "SubmissionDate"},
   { name: "EventOption"},
   { name: "EventComponent"},
   { name: "DestinationType"},

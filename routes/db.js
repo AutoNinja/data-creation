@@ -132,7 +132,7 @@ router.post('/execute', function(req,res,next){
   dbConnection
     .execute(req.queryString)
     .on('done', function(data) {
-      res.status(200).end();
+      next('route');
     })
     .on('fail', function(err) {
       next(err);
@@ -147,7 +147,7 @@ router.post('/query', function(req,res,next){
   dbConnection
     .query(req.queryString)
     .on('done', function(data) {
-      res.status(200).send(data);
+      res.send(data);
       next('route');
     })
     .on('fail', function(err) {

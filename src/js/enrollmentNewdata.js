@@ -1,4 +1,5 @@
 var fields = require('./library/table_fields').defaults;
+var columns = require('./library/table_fields').fields;
 var util = require("./library/table-util.js");
 var table = require("./library/table.js");
 var initcookies = require('./library/usecookies.js');
@@ -6,7 +7,33 @@ var initcookies = require('./library/usecookies.js');
 $(document).ready(function() {
   initcookies();
 
-  table.createTable("#jsGrid","newdata_enrollment");
+  $('#jsGrid')
+    .jsGrid({
+      width: "100%",
+      height: "auto",
+      paging: true,
+      autoload: true,
+      autowidth: false,
+      editing: false,
+      pageSize: 15,
+      pageButtonCount: 5,
+      deleteConfirm: "Confirm Delete Data?",
+      noDataContent: "Using Existing Client",
+      loadIndicationDelay: 0,
+      controller: {
+        insertItem: function (item) {
+          item.RequestType = "R";
+          item.EnrollStatus = "submitted";
+          item.Env = Cookies.get("env");
+          item.ClientID = "";
+          item.DepartmentCode = item.TypeDepartmentId;
+          item.SubmissionDate = util.date();
+          item.ID = util.guid();
+        }
+      },
+      fields: columns("enrollment")
+    })
+    .jsGrid("fieldOption", "UserID", "visible", true);
 
   $("[data-toggle='tooltip']").tooltip();
 
@@ -40,9 +67,12 @@ function enrollmentSave() {
     return;
   }
 
+
   Cookies.set('UserID', items[0].UserID, { expires: 5 });
   $("#save").hide();
   $("#home").hide();
+
+  console.log(items);
   $.ajax({
     type: "POST",
     contentType: "application/json; charset=utf-8",
@@ -56,7 +86,7 @@ function enrollmentSave() {
     $("#jsGrid")
       .jsGrid("fieldOption", "Control", "visible", false)
       .jsGrid("fieldOption", "ID", "visible", true)
-      .jsGrid("fieldOption", "Status", "visible", true)
+      .jsGrid("fieldOption", "EnrollStatus", "visible", true)
       .jsGrid("fieldOption", "SubmissionDate", "visible", true)
       .jsGrid("option", 'editing', false);
   })

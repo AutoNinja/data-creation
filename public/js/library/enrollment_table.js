@@ -1,163 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var fields = require('./library/table_fields').defaults;
-var columns = require('./library/table_fields').fields;
-var util = require("./library/table-util.js");
-var table = require("./library/table.js");
-var initcookies = require('./library/usecookies.js');
-
-$(document).ready(function() {
-  initcookies();
-
-  $('#jsGrid')
-    .jsGrid({
-      width: "100%",
-      height: "auto",
-      paging: true,
-      autoload: true,
-      autowidth: false,
-      editing: false,
-      pageSize: 15,
-      pageButtonCount: 5,
-      deleteConfirm: "Confirm Delete Data?",
-      noDataContent: "Using Existing Client",
-      loadIndicationDelay: 0,
-      controller: {
-        insertItem: function (item) {
-          item.RequestType = "R";
-          item.EnrollStatus = "submitted";
-          item.Env = Cookies.get("env");
-          item.ClientID = "";
-          item.DepartmentCode = item.TypeDepartmentId;
-          item.SubmissionDate = util.date();
-          item.ID = util.guid();
-        }
-      },
-      fields: columns("enrollment")
-    })
-    .jsGrid("fieldOption", "UserID", "visible", true);
-
-  $("[data-toggle='tooltip']").tooltip();
-
-  $( "#newdata-modal" ).dialog({
-    width: "70%",
-    autoOpen: true,
-    height: $(window).height(),
-    position: {
-      my: "center",
-      at: "top",
-      of: window
-    },
-    modal: true,
-    title: "Create New Data",
-    close: function() {resetModal();}
-  });
-
-  renderNewDataModalFields();
-
-
-
-  $('#save').click(enrollmentSave);
-});
-
-
-function enrollmentSave() {
-  var items = $.extend([],$("#jsGrid").jsGrid("option", "data"));
-
-  if (items.length==0) {
-    alert("Nothing to submit!")
-    return;
-  }
-
-
-  Cookies.set('UserID', items[0].UserID, { expires: 5 });
-  $("#save").hide();
-  $("#home").hide();
-
-  console.log(items);
-  $.ajax({
-    type: "POST",
-    contentType: "application/json; charset=utf-8",
-    url: "/db/insert",
-    data: JSON.stringify(items),
-    dataType: "json"
-  })
-  .done(function(response){
-    alert("New Data Successfully Added");
-    $('#home').show();
-    $("#jsGrid")
-      .jsGrid("fieldOption", "Control", "visible", false)
-      .jsGrid("fieldOption", "ID", "visible", true)
-      .jsGrid("fieldOption", "EnrollStatus", "visible", true)
-      .jsGrid("fieldOption", "SubmissionDate", "visible", true)
-      .jsGrid("option", 'editing', false);
-  })
-  .fail(function() {
-    alert("Internal Server Error, Please Resubmit Data");
-    location.reload();
-  });
-
-}
-
-function renderNewDataModalFields (step) {
-  var modalFields = fields("enrollment");
-
-  $('#insertNewRow').click(function() {
-    var newData = {};
-    for (var name in modalFields) {newData[name] =  $("#"+name).val();}
-    $("#jsGrid").jsGrid("insertItem", newData);
-    resetModal();
-  });
-
-  $('#cancel').click(function() {
-    $('#newdata-modal').dialog('close');
-    resetModal();
-  });
-
-  for (var name in modalFields) {
-
-    $(".newdata-content")
-      .append("<div class='row r-"+name+"'></div>");
-
-    $(".r-"+name)
-      .append("<div class='col-xs-4 col-sm-4 c-1'></div>")
-      .append("<div class='col-xs-8 col-sm-8 c-2'></div>");
-
-    $('<label>', {
-      for: name,
-      text: name+":"
-    }).appendTo(".r-"+name+" .c-1");
-
-    $('<input>', {
-      type: "text",
-      name: name,
-      id: name,
-      value: modalFields[name]
-    }).appendTo(".r-"+name+" .c-2");
-
-  	$("#UserID").val(Cookies.get("UserID") || "");
-
-    if (name.indexOf("Date") !== -1) {
-      $( "#"+name ).attr('data-toggle','tooltip');
-      if (name.indexOf("Enrolment") !== -1) {
-        $( "#"+name ).datepicker({ dateFormat: 'dd/mm/yy', yearRange: "-80:+50", changeYear: true, changeMonth: true});
-        $( "#"+name ).attr('title','dd/mm/yy');
-      } else {
-        $( "#"+name ).datepicker({ dateFormat: 'mm/dd/yy', yearRange: "-80:+50", changeYear: true, changeMonth: true });
-        $( "#"+name ).attr('title','mm/dd/yy');
-      }
-    }
-  }
-}
-
-function resetModal () {
-  var modalFields = fields("enrollment");
-  for (var name in modalFields) {
-    if (name === "UserID") continue;
-    $('#'+name).val(modalFields[name]);
-  }
-};
-
-},{"./library/table-util.js":3,"./library/table.js":4,"./library/table_fields":5,"./library/usecookies.js":6}],2:[function(require,module,exports){
 
 module.exports = function (type, item) {
   switch (type) {
@@ -324,38 +165,7 @@ router.all('*',function(req, res) {
 module.exports = router;
 */
 
-},{}],3:[function(require,module,exports){
-var exports = module.exports;
-
-/******************************************************************************
-Table-util API
-******************************************************************************/
-
-//get today's date (mmddyyyy)
-exports.date = function () {
-  var today = new Date();
-  var dd = today.getDate();
-
-  var mm = today.getMonth()+1;
-  var yyyy = today.getFullYear();
-  if(dd<10)
-  {
-    dd='0'+dd;
-  }
-
-  if(mm<10)
-  {
-    mm='0'+mm;
-  }
-  return mm+'/'+dd+'/'+yyyy;
-}
-
-//generate random 12 digit id
-exports.guid = function () {
-  return Math.round(Math.random() * (1000000000000 - 100000000000) + 100000000000);
-}
-
-},{}],4:[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 var util = require('./table-util.js');
 var fields = require("./table_fields.js").fields;
 var buildQueryString = require("./buildQueryString.js");
@@ -872,7 +682,38 @@ module.exports.setTableColumnVisible = function (cols, visibility) {
   }
 }
 
-},{"./buildQueryString.js":2,"./table-util.js":3,"./table_fields.js":5}],5:[function(require,module,exports){
+},{"./buildQueryString.js":1,"./table-util.js":3,"./table_fields.js":4}],3:[function(require,module,exports){
+var exports = module.exports;
+
+/******************************************************************************
+Table-util API
+******************************************************************************/
+
+//get today's date (mmddyyyy)
+exports.date = function () {
+  var today = new Date();
+  var dd = today.getDate();
+
+  var mm = today.getMonth()+1;
+  var yyyy = today.getFullYear();
+  if(dd<10)
+  {
+    dd='0'+dd;
+  }
+
+  if(mm<10)
+  {
+    mm='0'+mm;
+  }
+  return mm+'/'+dd+'/'+yyyy;
+}
+
+//generate random 12 digit id
+exports.guid = function () {
+  return Math.round(Math.random() * (1000000000000 - 100000000000) + 100000000000);
+}
+
+},{}],4:[function(require,module,exports){
 module.exports.fields = function (type) {
   var fields = general_fields.concat(getFieldsBasedOnType(type));
   for (var i = 1; i < fields.length; i++) {
@@ -1192,23 +1033,4 @@ function disabledEditTemplate (value, item) {
   return $input;
 }
 
-},{}],6:[function(require,module,exports){
-module.exports = function() {
-
-	if (Cookies.get('env')==undefined || Cookies.get('env')==""  || !isValidEnv())
-		Cookies.set('env', 'TST', { expires: 15 });
-	};
-
-function isValidEnv() {
-	var validEnv = ["TST","OAT","SIT2"];
-	var valid = false;
-	for (var i = 0; i < validEnv.length; i++) {
-		if (Cookies.get('env') === validEnv[i]) {
-			valid = true;
-			break;
-		}
-	}
-	return valid;
-}
-
-},{}]},{},[1]);
+},{}]},{},[2]);
