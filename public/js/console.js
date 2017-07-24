@@ -79,11 +79,12 @@ $(document).ready(function() {
       });
     } else if (token === "DELETE") {
       term.echo("Confirm Execute Delete? (Y/n):");
-      term.push(function(cmd, term) {
-        if (cmd.toUpperCase() === 'N') {
+      term.push(function(cmd2, term) {
+        if (cmd2.toUpperCase() === 'N') {
           term.echo('Execution Aborted');
           term.pop();
         } else {
+          console.log(cmd);
           //query without return value
           return $.post("/db/execute",{data: cmd}, function (res) {
             term.echo(res);

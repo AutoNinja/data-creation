@@ -35,8 +35,7 @@ $(document).ready(function() {
         $('#confirm-modal').dialog('option', 'title', 'Do You Want to Create Source Data?').dialog('open');
         break;
       case 0:
-        step = 1;
-        $('#confirm-modal').dialog('option', 'title', 'Do You Want to Create Reporting Data?').dialog('open');
+        $('#existing-SD-modal').dialog('open');
         break;
       case 1:
         step = 2;
@@ -69,6 +68,44 @@ $(document).ready(function() {
   });
 
   // 'submit' button on sourcedata modal
+  $('#submitExistingSD').click(function () {
+    var startYear = $('#existingStartYear').val();
+    var endYear = $('#existingEndYear').val();
+    var startDate = new Date (startYear, 0, 1);
+    var endDate = new Date (startYear, 11, 31);
+    var employer = $('#existingEmployer').val();
+    var serviceEarningsType = $('#existingServiceEarningsType').val();
+    var contributionType = $('#existingContributionType').val();
+    if (endYear < startYear) {
+      alert("Error: Invalid Start and End Year");
+      return;
+    }
+
+    var newData = {};
+    newData.StartDate = moment(startDate).format('MM/DD/YYYY').toString();
+    newData.EndDate = moment(endDate).format('MM/DD/YYYY').toString();
+    newData.Employer = employer;
+    newData.ServiceEarningsType = serviceEarningsType;
+    newData.ContributionType = contributionType;
+
+  console.log(newData)
+
+    $("#step1-table")
+      .jsGrid("fieldOption", "ServiceAmt", "visible", false)
+      .jsGrid("fieldOption", "EarningsAmt", "visible", false)
+      .jsGrid("fieldOption", "CarryForward", "visible", false)
+      .jsGrid("fieldOption", "PostEvent", "visible", false)
+      .jsGrid("fieldOption", "ContributionAmt", "visible", false)
+      .jsGrid("fieldOption", "Control", "visible", false)
+      .jsGrid("option", "editing", false)
+      .jsGrid("insertItem", newData);
+    $( "#existing-SD-modal" ).dialog("close");
+    sourceDataSave();
+    $('#confirm-modal').dialog('option', 'title', 'Do You Want to Create Reporting Data?').dialog('open');
+    step = 1;
+  });
+
+  // 'submit' button on sourcedata modal
   $('#submitSDYears').click(function () {
     var modalFields = fields("sourcedata");
     var startYear = $('#masterStartYear').val();
@@ -88,11 +125,13 @@ $(document).ready(function() {
       var endDate = new Date (startYear, 11, 31);
       newData.StartDate = moment(startDate).format('MM/DD/YYYY').toString();
       newData.EndDate = moment(endDate).format('MM/DD/YYYY').toString();
+      newData.Employer = $('#SDEmployer').val();
       $("#step1-table").jsGrid("insertItem", newData);
 
       newData = $.extend({},modalFields[1]);
       newData.StartDate = moment(startDate).format('MM/DD/YYYY').toString();
       newData.EndDate = moment(endDate).format('MM/DD/YYYY').toString();
+      newData.Employer = $('#SDEmployer').val();
       $("#step1-table").jsGrid("insertItem", newData);
       ++startYear;
     }
@@ -103,6 +142,21 @@ $(document).ready(function() {
 
 /*Initialize all dialogs*/
 $(document).ready(function() {
+  $( "#existing-SD-modal" ).dialog({
+    dialogClass: "no-close",
+    autoOpen: false,
+    draggable: false,
+    width: "50%",
+    height: $(window).height(),
+    position: {
+      my: "center",
+      at: "center",
+      of: window
+    },
+    modal: true,
+    title: "Enter Search Criteria For Exisiting Source Data"
+  });
+
   $( "#ID-modal" ).dialog({
     dialogClass: "no-close",
     autoOpen: false,
@@ -449,7 +503,8 @@ function sourceDataSave () {
         return elem[name];
       }).join(',');
     }
-    combined.SubmissionDate = util.date();;
+    combined.SubmissionDate = util.date();
+    combined.Employer = items[0].Employer;
     combined.SDStatus = 'submitted';
     combined.Progress = '2';
 
@@ -841,7 +896,8 @@ var enrollment_defaults = {
   PensionPlanType: '80',
   RateCode: 'NAANNL',
   TypeCompRate: '75000',
-  UnionCode: 'O02'
+  UnionCode: 'O02',
+  ConsentIndicator: 'N'
 };
 
 var sourcedata_defaults_one = {
@@ -870,13 +926,14 @@ var sourcedata_defaults_two = {
 
 var reporting_defaults = {
   EventSubTypeID: 'Termination',
-  EventDate: '12/31/2014'
+  EventDate: '12/31/2014',
+  NumberOfEventCalculations: '2'
 };
 
 var election_defaults = {
-  EventOption: "Normal Retirement Pension",
-  EventComponent: "RPP Pension",
-  DestinationType: "",
+  EventOption: "Deferred Pension",
+  EventComponent: "RPP Deferred Pension",
+  DestinationType: "Non Tax Sheltered",
   BankAccountsType: "Bank Account",
   BankID: "001",
   BankBranchID: "00011",
@@ -968,7 +1025,8 @@ var enrollment_fields =
   { name: "BenefitProgramName"},
   { name: "NotificationType"},
   { name: "PensionPlanType"},
-  { name: "MemberClass"}
+  { name: "MemberClass"},
+  { name: "ConsentIndicator"}
 ];
 
 var sourcedata_fields =
@@ -987,6 +1045,7 @@ var sourcedata_fields =
     visible: false},
   { name: "StartDate"},
   { name: "EndDate"},
+  { name: "Employer"},
   { name: "ServiceAmt"},
   { name: "EarningsAmt"},
   { name: "ServiceEarningsType", type: "select",
@@ -1019,6 +1078,7 @@ var reporting_fields =
     editTemplate: statusEditTemplate,
     visible: false},
   { name: "EventSubTypeID"},
+  { name: "NumberOfEventCalculations"},
   { name: "EventDate"}
 ];
 

@@ -945,7 +945,8 @@ var enrollment_defaults = {
   PensionPlanType: '80',
   RateCode: 'NAANNL',
   TypeCompRate: '75000',
-  UnionCode: 'O02'
+  UnionCode: 'O02',
+  ConsentIndicator: 'N'
 };
 
 var sourcedata_defaults_one = {
@@ -974,13 +975,14 @@ var sourcedata_defaults_two = {
 
 var reporting_defaults = {
   EventSubTypeID: 'Termination',
-  EventDate: '12/31/2014'
+  EventDate: '12/31/2014',
+  NumberOfEventCalculations: '2'
 };
 
 var election_defaults = {
-  EventOption: "Normal Retirement Pension",
-  EventComponent: "RPP Pension",
-  DestinationType: "",
+  EventOption: "Deferred Pension",
+  EventComponent: "RPP Deferred Pension",
+  DestinationType: "Non Tax Sheltered",
   BankAccountsType: "Bank Account",
   BankID: "001",
   BankBranchID: "00011",
@@ -1072,7 +1074,8 @@ var enrollment_fields =
   { name: "BenefitProgramName"},
   { name: "NotificationType"},
   { name: "PensionPlanType"},
-  { name: "MemberClass"}
+  { name: "MemberClass"},
+  { name: "ConsentIndicator"}
 ];
 
 var sourcedata_fields =
@@ -1091,6 +1094,7 @@ var sourcedata_fields =
     visible: false},
   { name: "StartDate"},
   { name: "EndDate"},
+  { name: "Employer"},
   { name: "ServiceAmt"},
   { name: "EarningsAmt"},
   { name: "ServiceEarningsType", type: "select",
@@ -1123,6 +1127,7 @@ var reporting_fields =
     editTemplate: statusEditTemplate,
     visible: false},
   { name: "EventSubTypeID"},
+  { name: "NumberOfEventCalculations"},
   { name: "EventDate"}
 ];
 

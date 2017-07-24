@@ -50,8 +50,21 @@
       <div id="sd-modal">
         <input type="number" id="masterStartYear" class="inputbox" placeholder="Enter Source Data Start Year (YYYY)" required></input>
         <input type="number" id="masterEndYear" class="inputbox" placeholder="Enter Source Data End Year (YYYY)" required></input>
+        <input type="number" id="SDEmployer" class="inputbox" placeholder="EmployerID" required></input>
         <input type="submit" id="submitSDYears" class="dialog-btn IDModal-btn" value="Next"></input>
-        <input type="button" id="sdCancel" class="dialog-btn IDModal-btn" value="Cancel"></input>
+      </div>
+
+      <div id="existing-SD-modal">
+        <input type="number" id="existingStartYear" class="inputbox" placeholder="Enter Source Data Start Year (YYYY)" required></input>
+        <input type="number" id="existingEndYear" class="inputbox" placeholder="Enter Source Data End Year (YYYY)" required></input>
+        <input type="number" id="existingEmployer" class="inputbox" placeholder="EmployerID" required></input>
+        <select id="existingServiceEarningsType" class="inputbox" required>
+          <option disabled selected>Choose ServiceEarningsType</option>
+          <option value="CR1">CR1</option>
+          <option value="PA1">PA1</option>
+        </select>
+        <input type="text" id="existingContributionType" class="inputbox" placeholder="ContributionType" required></input>
+        <input type="submit" id="submitExistingSD" class="dialog-btn IDModal-btn" value="Next"></input>
       </div>
 
       <div id="newdata-modal" class="newdata-modal">
