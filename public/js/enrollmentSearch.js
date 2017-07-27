@@ -80,7 +80,7 @@ $(document).ready(function() {
     fields: columns("enrollment_search")
   })
   .jsGrid("fieldOption", "ID", "visible", true)
-  .jsGrid("fieldOption", "Status", "visible", true)
+  .jsGrid("fieldOption", "EnrollStatus", "visible", true)
   .jsGrid("fieldOption", "SubmissionDate", "visible", true)
   .jsGrid("fieldOption", "ClientID", "visible", true)
   .jsGrid("fieldOption", "Control", "deleteButton", false);
@@ -294,11 +294,13 @@ module.exports.fields = function (type) {
     var item = fields[i];
     item.type = item.type || "text";
     item.align = item.align || "center";
-    item.validate = item.validate || "required";
+    //item.validate = item.validate === "required" ? "required" : "none";
     item.title = item.title || trimItemName (item);
     item.width = item.width || calcColWidth (item);
-    if (type.indexOf('search') !== -1)
-      item.editTemplate = item.editTemplate || defaultEditTemplate;
+    if (type === "enrollment_search" && (item.name === "ID" || item.name === "ClientID" || item.name === "SubmissionDate"))
+      item.editTemplate = disabledEditTemplate;
+    else if (type === "enrollment_search" && item.name !== "EnrollStatus")
+      item.editTemplate = defaultEditTemplate;
   }
   return fields;
 }
@@ -313,7 +315,6 @@ module.exports.defaults = function (type) {
   else if (type.indexOf("election") !== -1)
     return election_defaults;
 }
-
 
 function getFieldsBasedOnType (type) {
   if (type.indexOf("enrollment") !== -1)
@@ -425,10 +426,10 @@ var general_fields =
                 });
     }
   },
-  { name: "ClientID", editTemplate: disabledEditTemplate, visible: false},
-  { name: "UserID", editTemplate: disabledEditTemplate, visible: false},
-  { name: "ID", width: "120px", editTemplate: disabledEditTemplate, visible: false},
-  { name: "SubmissionDate", editTemplate: disabledEditTemplate, visible: false},
+  { name: "ClientID", visible: false},
+  { name: "UserID", visible: false},
+  { name: "ID", width: "120px", visible: false},
+  { name: "SubmissionDate", visible: false},
   { name: "RequestType", visible: false},
   { name: "OverallStatus", title: "Overall Status", type: "select",
     items: [
@@ -509,7 +510,6 @@ var sourcedata_fields =
     visible: false},
   { name: "StartDate"},
   { name: "EndDate"},
-  { name: "Employer"},
   { name: "ServiceAmt"},
   { name: "EarningsAmt"},
   { name: "ServiceEarningsType", type: "select",
@@ -518,8 +518,7 @@ var sourcedata_fields =
       {Id: "CR1"},
       {Id: "PA1"}],
     valueField: "Id",
-    textField: "Id",
-    editTemplate: statusEditTemplate},
+    textField: "Id"},
   { name: "ContributionAmt"},
   { name: "ContributionType"},
   { name: "CarryForward"},
@@ -539,7 +538,6 @@ var reporting_fields =
       {Id: "data issue"}],
     valueField: "Id",
     textField: "Id",
-    editTemplate: statusEditTemplate,
     visible: false},
   { name: "EventSubTypeID"},
   { name: "NumberOfEventCalculations"},
@@ -559,7 +557,6 @@ var election_fields =
       {Id: "data issue"}],
     valueField: "Id",
     textField: "Id",
-    editTemplate: statusEditTemplate,
     visible: false},
   { name: "EventOption"},
   { name: "EventComponent"},
@@ -585,14 +582,18 @@ function statusEditTemplate(value, item) {
   var $select = this.__proto__.editTemplate.call(this);
   $select.val(value);
   $select.find("option[value='']").remove();
-  if (item.Status==="submitted") {
+  if (item.EnrollStatus==="submitted") {
     $select.find("option[value='data issue'],option[value='new'],option[value='used'],option[value='failed']").remove();
-  } else if (item.Status==="failed") {
-    $select.find("option[value='new'],option[value='used']").remove();
-  } else if (item.Status==="new") {
+  } else if (item.EnrollStatus==="failed") {
+    $select.find("option[value='new'],option[value='used'],option[value='data issue']").remove();
+  } else if (item.EnrollStatus==="new") {
     $select.find("option[value='data issue'],option[value='failed'],option[value='terminated'],option[value='submitted']").remove();
-  } else if (item.Status==="data issue") {
+  } else if (item.EnrollStatus==="data issue") {
     $select.find("option[value='failed'],option[value='new'],option[value='used']").remove();
+  } else if (item.EnrollStatus==="terminated") {
+    $select.find("option").remove();
+  } else if (item.EnrollStatus==="used") {
+    $select.find("option[value='data issue'],option[value='failed'],option[value='submitted']").remove();
   }
   return $select;
 }
@@ -600,7 +601,8 @@ function statusEditTemplate(value, item) {
 function defaultEditTemplate(value, item) {
   var $input = this.__proto__.editTemplate.call(this);
   $input.prop("value",value);
-  if (item.Status==="submitted" || item.Status==="failed" || item.Status==="data issue") {
+
+  if (item.EnrollStatus==="submitted" || item.EnrollStatus==="new" || item.EnrollStatus==="used" || item.EnrollStatus === "terminated") {
     $input.prop('readonly', true).css('background-color', '#EBEBE4');
   }
   return $input;

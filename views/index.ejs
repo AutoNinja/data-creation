@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <%- include('partials/meta', {page: page}); %>
+
+  <!-- base stylesheets -->
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/base.css" />
+
+  <!-- module stylesheets -->
+
+  <!-- custom stylesheets -->
+  <link rel="stylesheet" href="/css/index.css">
+
+</head>
+<body>
+
+  <%- include('partials/left_nav', {page: page}); %>
+  <%- include('partials/top_nav', {page: page}); %>
+
+
+  <!-- Your Content -->
+  <div id="content">
+
+    <!-- info -->
+    <section class="main-content">
+
+      <div class="container-fluid main-content-container">
+        <div class='row'>
+          <div class="col-sm-12 col-md-12 col-xs-12 text-center">
+            <h3>
+              Submitted Data Will Be Processed At:
+            </h3>
+            <h4>05:00:00 AM</h4>
+            <h4>12:00:00 PM</h4>
+            <h3 id="date" class="paddingdate"></h3>
+            <div class="row">
+              <div class="col-sm-2 col-md-2 col-xs-2 text-center"></div>
+              <div class="col-sm-4 col-md-4 col-xs-4 text-center">
+                <p>
+                  Website Support:<br>
+                  <a href="mailto:QAutomation@Omers.com?Subject=Issue&#58%20Enrollment%20Data%20Web%20App" target="_top">QAutomation@Omers.com</a>
+                </p>
+              </div>
+              <div class="col-sm-4 col-md-4 col-xs-4 text-center">
+                <p>Visit Our <a href="./help">Help Page</a><br>
+                For a Detailed Documentation
+                </p>
+
+              </div>
+              <div class="col-sm-2 col-md-2 col-xs-2 text-center"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    var user = <%- JSON.stringify(user) %>;
+  </script>
+
+  <!-- base scripts -->
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script>
+
+  <!-- modules scripts -->
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
+  <script type="text/javascript" src="/js/vendor/nav.js"></script>
+
+  <!-- page scripts -->
+  <script type="text/javascript" src="/js/index.js"></script>
+  <script>
+    $("#date").text("EST "+new Date().toLocaleDateString("en-US",{
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }));
+  </script>
+</body>
+<html>

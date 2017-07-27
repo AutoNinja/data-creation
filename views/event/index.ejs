@@ -1,9 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Enrollment Landing Page</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <%- include('../partials/meta', {page: page}); %>
 
   <!-- base stylesheets -->
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
@@ -18,8 +16,8 @@
 </head>
 <body>
 
-  <%- include('../../partials/left_nav', {page: page}); %>
-  <%- include('../../partials/top_nav', {page: page}); %>
+  <%- include('../partials/left_nav', {page: page}); %>
+  <%- include('../partials/top_nav', {page: page}); %>
 
 
   <!-- Your Content -->
@@ -28,8 +26,8 @@
     <div class="table-buttons-wrapper">
       <div class="row">
         <div class="col-sm-12 col-md-12 col-xs-12 text-center">
-          <input type="button" class="table-btn" id="newdata" onclick="document.location.href = '/enrollment/newdata';" value="Start Enrollment Creation"></input>
-          <input type="button" class="table-btn" onclick="document.location.href = '/enrollment/search';" value="Search Enrollment Data"></input>
+          <input type="button" class="table-btn" id="newdata" onclick="document.location.href = '/event/newdata';" value="Start Event Creation">
+          <input type="button" class="table-btn" onclick="document.location.href = '/event/search';" value="Search Event Data">
         </div>
       </div>
     </div>

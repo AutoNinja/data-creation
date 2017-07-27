@@ -8,6 +8,7 @@ var buildQueryString = require('./library/buildQueryString.js');
 var step = -1;
 var ClientID;
 var UserID;
+var Employer;
 var finalItem = {};
 
 // Main
@@ -69,11 +70,11 @@ $(document).ready(function() {
 
   // 'submit' button on sourcedata modal
   $('#submitExistingSD').click(function () {
+
     var startYear = $('#existingStartYear').val();
     var endYear = $('#existingEndYear').val();
     var startDate = new Date (startYear, 0, 1);
     var endDate = new Date (startYear, 11, 31);
-    var employer = $('#existingEmployer').val();
     var serviceEarningsType = $('#existingServiceEarningsType').val();
     var contributionType = $('#existingContributionType').val();
     if (endYear < startYear) {
@@ -82,9 +83,9 @@ $(document).ready(function() {
     }
 
     var newData = {};
+    Employer = $('#existingEmployer').val();
     newData.StartDate = moment(startDate).format('MM/DD/YYYY').toString();
     newData.EndDate = moment(endDate).format('MM/DD/YYYY').toString();
-    newData.Employer = employer;
     newData.ServiceEarningsType = serviceEarningsType;
     newData.ContributionType = contributionType;
 
@@ -125,17 +126,16 @@ $(document).ready(function() {
       var endDate = new Date (startYear, 11, 31);
       newData.StartDate = moment(startDate).format('MM/DD/YYYY').toString();
       newData.EndDate = moment(endDate).format('MM/DD/YYYY').toString();
-      newData.Employer = $('#SDEmployer').val();
       $("#step1-table").jsGrid("insertItem", newData);
 
       newData = $.extend({},modalFields[1]);
       newData.StartDate = moment(startDate).format('MM/DD/YYYY').toString();
       newData.EndDate = moment(endDate).format('MM/DD/YYYY').toString();
-      newData.Employer = $('#SDEmployer').val();
       $("#step1-table").jsGrid("insertItem", newData);
       ++startYear;
     }
     $( "#sd-modal" ).dialog("close");
+    Employer = $('#SDEmployer').val();
     sourceDataSave();
   });
 });
@@ -184,7 +184,7 @@ $(document).ready(function() {
       of: window
     },
     modal: true,
-    title: 'Do Need to Create New Enrollment?'
+    title: 'Do You Need to Create New Enrollment?'
   });
 
   $( "#sd-modal" ).dialog({
@@ -320,6 +320,8 @@ $(document).ready(function() {
 
 function submitToDB () {
 
+  $(".table-buttons-wrapper").hide();
+
   enrollmentSave();
   reportingSave();
   sourceDataSave();
@@ -331,10 +333,12 @@ function submitToDB () {
     finalItem.ClientID = ClientID;
 
   finalItem.ID = util.guid();
+  finalItem.UserID = UserID;
   finalItem.SubmissionDate = util.date();
   finalItem.RequestType = 'R';
   finalItem.Env = Cookies.get('env');
   finalItem.OverallStatus = "submitted";
+  finalItem.TypeDepartmentId = Employer || finalItem.TypeDepartmentId;
 
   $.post("/db/execute",{data: buildInsertQueryString(finalItem)})
   .done(function(response){
@@ -487,8 +491,10 @@ function enrollmentSave() {
 
   }
 
+  $("#SDEmployer, #existingEmployer").hide();
+
   if (step != 4)
-    $('#confirm-modal').dialog('option', 'title', 'Do You Want to Create Source Data?').dialog('open');
+    $('#confirm-modal').dialog('option', 'title', 'Do You Want to Create New Source Data?').dialog('open');
 }
 
 function sourceDataSave () {
@@ -504,7 +510,6 @@ function sourceDataSave () {
       }).join(',');
     }
     combined.SubmissionDate = util.date();
-    combined.Employer = items[0].Employer;
     combined.SDStatus = 'submitted';
     combined.Progress = '2';
 
@@ -830,11 +835,13 @@ module.exports.fields = function (type) {
     var item = fields[i];
     item.type = item.type || "text";
     item.align = item.align || "center";
-    item.validate = item.validate || "required";
+    //item.validate = item.validate === "required" ? "required" : "none";
     item.title = item.title || trimItemName (item);
     item.width = item.width || calcColWidth (item);
-    if (type.indexOf('search') !== -1)
-      item.editTemplate = item.editTemplate || defaultEditTemplate;
+    if (type === "enrollment_search" && (item.name === "ID" || item.name === "ClientID" || item.name === "SubmissionDate"))
+      item.editTemplate = disabledEditTemplate;
+    else if (type === "enrollment_search" && item.name !== "EnrollStatus")
+      item.editTemplate = defaultEditTemplate;
   }
   return fields;
 }
@@ -849,7 +856,6 @@ module.exports.defaults = function (type) {
   else if (type.indexOf("election") !== -1)
     return election_defaults;
 }
-
 
 function getFieldsBasedOnType (type) {
   if (type.indexOf("enrollment") !== -1)
@@ -961,10 +967,10 @@ var general_fields =
                 });
     }
   },
-  { name: "ClientID", editTemplate: disabledEditTemplate, visible: false},
-  { name: "UserID", editTemplate: disabledEditTemplate, visible: false},
-  { name: "ID", width: "120px", editTemplate: disabledEditTemplate, visible: false},
-  { name: "SubmissionDate", editTemplate: disabledEditTemplate, visible: false},
+  { name: "ClientID", visible: false},
+  { name: "UserID", visible: false},
+  { name: "ID", width: "120px", visible: false},
+  { name: "SubmissionDate", visible: false},
   { name: "RequestType", visible: false},
   { name: "OverallStatus", title: "Overall Status", type: "select",
     items: [
@@ -1045,7 +1051,6 @@ var sourcedata_fields =
     visible: false},
   { name: "StartDate"},
   { name: "EndDate"},
-  { name: "Employer"},
   { name: "ServiceAmt"},
   { name: "EarningsAmt"},
   { name: "ServiceEarningsType", type: "select",
@@ -1054,8 +1059,7 @@ var sourcedata_fields =
       {Id: "CR1"},
       {Id: "PA1"}],
     valueField: "Id",
-    textField: "Id",
-    editTemplate: statusEditTemplate},
+    textField: "Id"},
   { name: "ContributionAmt"},
   { name: "ContributionType"},
   { name: "CarryForward"},
@@ -1075,7 +1079,6 @@ var reporting_fields =
       {Id: "data issue"}],
     valueField: "Id",
     textField: "Id",
-    editTemplate: statusEditTemplate,
     visible: false},
   { name: "EventSubTypeID"},
   { name: "NumberOfEventCalculations"},
@@ -1095,7 +1098,6 @@ var election_fields =
       {Id: "data issue"}],
     valueField: "Id",
     textField: "Id",
-    editTemplate: statusEditTemplate,
     visible: false},
   { name: "EventOption"},
   { name: "EventComponent"},
@@ -1121,14 +1123,18 @@ function statusEditTemplate(value, item) {
   var $select = this.__proto__.editTemplate.call(this);
   $select.val(value);
   $select.find("option[value='']").remove();
-  if (item.Status==="submitted") {
+  if (item.EnrollStatus==="submitted") {
     $select.find("option[value='data issue'],option[value='new'],option[value='used'],option[value='failed']").remove();
-  } else if (item.Status==="failed") {
-    $select.find("option[value='new'],option[value='used']").remove();
-  } else if (item.Status==="new") {
+  } else if (item.EnrollStatus==="failed") {
+    $select.find("option[value='new'],option[value='used'],option[value='data issue']").remove();
+  } else if (item.EnrollStatus==="new") {
     $select.find("option[value='data issue'],option[value='failed'],option[value='terminated'],option[value='submitted']").remove();
-  } else if (item.Status==="data issue") {
+  } else if (item.EnrollStatus==="data issue") {
     $select.find("option[value='failed'],option[value='new'],option[value='used']").remove();
+  } else if (item.EnrollStatus==="terminated") {
+    $select.find("option").remove();
+  } else if (item.EnrollStatus==="used") {
+    $select.find("option[value='data issue'],option[value='failed'],option[value='submitted']").remove();
   }
   return $select;
 }
@@ -1136,7 +1142,8 @@ function statusEditTemplate(value, item) {
 function defaultEditTemplate(value, item) {
   var $input = this.__proto__.editTemplate.call(this);
   $input.prop("value",value);
-  if (item.Status==="submitted" || item.Status==="failed" || item.Status==="data issue") {
+
+  if (item.EnrollStatus==="submitted" || item.EnrollStatus==="new" || item.EnrollStatus==="used" || item.EnrollStatus === "terminated") {
     $input.prop('readonly', true).css('background-color', '#EBEBE4');
   }
   return $input;

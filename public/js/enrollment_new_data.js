@@ -1,161 +1,172 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+"use strict";
+
 var fields = require('./library/table_fields').defaults;
 var columns = require('./library/table_fields').fields;
 var util = require("./library/table-util.js");
 var table = require("./library/table.js");
 var initcookies = require('./library/usecookies.js');
 
-$(document).ready(function() {
-  initcookies();
+(function ($) {
 
-  $('#jsGrid')
-    .jsGrid({
-      width: "100%",
-      height: "auto",
-      paging: true,
-      autoload: true,
-      autowidth: false,
-      editing: false,
-      pageSize: 15,
-      pageButtonCount: 5,
-      deleteConfirm: "Confirm Delete Data?",
-      noDataContent: "Using Existing Client",
-      loadIndicationDelay: 0,
-      controller: {
-        insertItem: function (item) {
-          item.RequestType = "R";
-          item.EnrollStatus = "submitted";
-          item.Env = Cookies.get("env");
-          item.ClientID = "";
-          item.DepartmentCode = item.TypeDepartmentId;
-          item.SubmissionDate = util.date();
-          item.ID = util.guid();
-        }
-      },
-      fields: columns("enrollment")
+  var enrollmentSave = function () {
+    var items = $.extend([],$("#jsGrid").jsGrid("option", "data"));
+    $('#jsGrid').jsGrid("option", "editing", false);
+    if (items.length==0) {
+      alert("Nothing to submit!")
+      return;
+    }
+
+
+    Cookies.set('UserID', items[0].UserID, { expires: 5 });
+    $("#save").hide();
+    $("#home").hide();
+
+    console.log(items);
+    $.ajax({
+      type: "POST",
+      contentType: "application/json; charset=utf-8",
+      url: "/db/insert",
+      data: JSON.stringify(items),
+      dataType: "json"
     })
-    .jsGrid("fieldOption", "UserID", "visible", true);
+    .done(function(response){
+      alert("New Data Successfully Added");
+      $('#home').show();
+      $("#jsGrid")
+        .jsGrid("fieldOption", "Control", "visible", false)
+        .jsGrid("fieldOption", "ID", "visible", true)
+        .jsGrid("fieldOption", "EnrollStatus", "visible", true)
+        .jsGrid("fieldOption", "SubmissionDate", "visible", true)
+        .jsGrid("option", 'editing', false);
+    })
+    .fail(function() {
+      alert("Internal Server Error, Please Resubmit Data");
+      location.reload();
+    });
 
-  $("[data-toggle='tooltip']").tooltip();
-
-  $( "#newdata-modal" ).dialog({
-    width: "70%",
-    autoOpen: true,
-    height: $(window).height(),
-    position: {
-      my: "center",
-      at: "top",
-      of: window
-    },
-    modal: true,
-    title: "Create New Data",
-    close: function() {resetModal();}
-  });
-
-  renderNewDataModalFields();
-
-
-
-  $('#save').click(enrollmentSave);
-});
-
-
-function enrollmentSave() {
-  var items = $.extend([],$("#jsGrid").jsGrid("option", "data"));
-
-  if (items.length==0) {
-    alert("Nothing to submit!")
-    return;
   }
 
+  var renderNewDataModalFields = function (step) {
+    var modalFields = fields("enrollment");
 
-  Cookies.set('UserID', items[0].UserID, { expires: 5 });
-  $("#save").hide();
-  $("#home").hide();
+    $('#insertNewRow').click(function() {
+      var newData = {};
+      for (var name in modalFields) {newData[name] =  $("#"+name).val();}
+      $("#jsGrid").jsGrid("insertItem", newData);
+      resetModal();
+    });
 
-  console.log(items);
-  $.ajax({
-    type: "POST",
-    contentType: "application/json; charset=utf-8",
-    url: "/db/insert",
-    data: JSON.stringify(items),
-    dataType: "json"
-  })
-  .done(function(response){
-    alert("New Data Successfully Added");
-    $('#home').show();
-    $("#jsGrid")
-      .jsGrid("fieldOption", "Control", "visible", false)
-      .jsGrid("fieldOption", "ID", "visible", true)
-      .jsGrid("fieldOption", "EnrollStatus", "visible", true)
-      .jsGrid("fieldOption", "SubmissionDate", "visible", true)
-      .jsGrid("option", 'editing', false);
-  })
-  .fail(function() {
-    alert("Internal Server Error, Please Resubmit Data");
-    location.reload();
-  });
+    $('#cancel').click(function() {
+      $('#newdata-modal').dialog('close');
+      resetModal();
+    });
 
-}
+    for (var name in modalFields) {
 
-function renderNewDataModalFields (step) {
-  var modalFields = fields("enrollment");
+      $(".newdata-content")
+        .append("<div class='row r-"+name+"'></div>");
 
-  $('#insertNewRow').click(function() {
-    var newData = {};
-    for (var name in modalFields) {newData[name] =  $("#"+name).val();}
-    $("#jsGrid").jsGrid("insertItem", newData);
-    resetModal();
-  });
+      $(".r-"+name)
+        .append("<div class='col-xs-4 col-sm-4 c-1'></div>")
+        .append("<div class='col-xs-8 col-sm-8 c-2'></div>");
 
-  $('#cancel').click(function() {
-    $('#newdata-modal').dialog('close');
-    resetModal();
-  });
+      $('<label>', {
+        for: name,
+        text: name+":"
+      }).appendTo(".r-"+name+" .c-1");
 
-  for (var name in modalFields) {
+      $('<input>', {
+        type: "text",
+        name: name,
+        id: name,
+        value: modalFields[name]
+      }).appendTo(".r-"+name+" .c-2");
 
-    $(".newdata-content")
-      .append("<div class='row r-"+name+"'></div>");
+    	$("#UserID").val(Cookies.get("UserID") || "");
 
-    $(".r-"+name)
-      .append("<div class='col-xs-4 col-sm-4 c-1'></div>")
-      .append("<div class='col-xs-8 col-sm-8 c-2'></div>");
-
-    $('<label>', {
-      for: name,
-      text: name+":"
-    }).appendTo(".r-"+name+" .c-1");
-
-    $('<input>', {
-      type: "text",
-      name: name,
-      id: name,
-      value: modalFields[name]
-    }).appendTo(".r-"+name+" .c-2");
-
-  	$("#UserID").val(Cookies.get("UserID") || "");
-
-    if (name.indexOf("Date") !== -1) {
-      $( "#"+name ).attr('data-toggle','tooltip');
-      if (name.indexOf("Enrolment") !== -1) {
-        $( "#"+name ).datepicker({ dateFormat: 'dd/mm/yy', yearRange: "-80:+50", changeYear: true, changeMonth: true});
-        $( "#"+name ).attr('title','dd/mm/yy');
-      } else {
-        $( "#"+name ).datepicker({ dateFormat: 'mm/dd/yy', yearRange: "-80:+50", changeYear: true, changeMonth: true });
-        $( "#"+name ).attr('title','mm/dd/yy');
+      if (name.indexOf("Date") !== -1) {
+        $( "#"+name ).attr('data-toggle','tooltip');
+        if (name.indexOf("Enrolment") !== -1) {
+          $( "#"+name ).datepicker({ dateFormat: 'dd/mm/yy', yearRange: "-80:+50", changeYear: true, changeMonth: true});
+          $( "#"+name ).attr('title','dd/mm/yy');
+        } else {
+          $( "#"+name ).datepicker({ dateFormat: 'mm/dd/yy', yearRange: "-80:+50", changeYear: true, changeMonth: true });
+          $( "#"+name ).attr('title','mm/dd/yy');
+        }
       }
     }
   }
-}
 
-function resetModal () {
-  var modalFields = fields("enrollment");
-  for (var name in modalFields) {
-    if (name === "UserID") continue;
-    $('#'+name).val(modalFields[name]);
+  var resetModal = function () {
+    var modalFields = fields("enrollment");
+    for (var name in modalFields) {
+      if (name === "UserID") continue;
+      $('#'+name).val(modalFields[name]);
+    }
+  };
+
+  var bindEvents = function () {
+    $('#save').click(enrollmentSave);
   }
-};
+
+  var initTable = function ($selector) {
+    $( $selector ).jsGrid({
+        width: "100%",
+        height: "auto",
+        paging: true,
+        autoload: true,
+        autowidth: false,
+        editing: true,
+        pageSize: 15,
+        pageButtonCount: 5,
+        deleteConfirm: "Confirm Delete Data?",
+        noDataContent: "No Data Entered!",
+        loadIndicationDelay: 0,
+        controller: {
+          insertItem: function (item) {
+            item.RequestType = "R";
+            item.EnrollStatus = "submitted";
+            item.Env = Cookies.get("env");
+            item.ClientID = "";
+            item.DepartmentCode = item.TypeDepartmentId;
+            item.SubmissionDate = util.date();
+            item.ID = util.guid();
+          }
+        },
+        fields: columns("enrollment")
+      })
+      .jsGrid("fieldOption", "UserID", "visible", true);
+  }
+
+  var initDialog = function ($selector) {
+    $( $selector ).dialog({
+      width: "70%",
+      autoOpen: true,
+      height: $(window).height(),
+      position: {
+        my: "center",
+        at: "top",
+        of: window
+      },
+      modal: true,
+      title: "Create New Data",
+      close: function() {resetModal();}
+    });
+
+    renderNewDataModalFields();
+  };
+
+  var init = function ($tableSelector, $dialogSelector) {
+    initcookies();
+    initTable($tableSelector);
+    initDialog($dialogSelector);
+    bindEvents();
+  };
+
+  return init;
+
+})(jQuery)("#jsGrid","#newdata-modal");
 
 },{"./library/table-util.js":3,"./library/table.js":4,"./library/table_fields":5,"./library/usecookies.js":6}],2:[function(require,module,exports){
 
@@ -879,11 +890,13 @@ module.exports.fields = function (type) {
     var item = fields[i];
     item.type = item.type || "text";
     item.align = item.align || "center";
-    item.validate = item.validate || "required";
+    //item.validate = item.validate === "required" ? "required" : "none";
     item.title = item.title || trimItemName (item);
     item.width = item.width || calcColWidth (item);
-    if (type.indexOf('search') !== -1)
-      item.editTemplate = item.editTemplate || defaultEditTemplate;
+    if (type === "enrollment_search" && (item.name === "ID" || item.name === "ClientID" || item.name === "SubmissionDate"))
+      item.editTemplate = disabledEditTemplate;
+    else if (type === "enrollment_search" && item.name !== "EnrollStatus")
+      item.editTemplate = defaultEditTemplate;
   }
   return fields;
 }
@@ -898,7 +911,6 @@ module.exports.defaults = function (type) {
   else if (type.indexOf("election") !== -1)
     return election_defaults;
 }
-
 
 function getFieldsBasedOnType (type) {
   if (type.indexOf("enrollment") !== -1)
@@ -1010,10 +1022,10 @@ var general_fields =
                 });
     }
   },
-  { name: "ClientID", editTemplate: disabledEditTemplate, visible: false},
-  { name: "UserID", editTemplate: disabledEditTemplate, visible: false},
-  { name: "ID", width: "120px", editTemplate: disabledEditTemplate, visible: false},
-  { name: "SubmissionDate", editTemplate: disabledEditTemplate, visible: false},
+  { name: "ClientID", visible: false},
+  { name: "UserID", visible: false},
+  { name: "ID", width: "120px", visible: false},
+  { name: "SubmissionDate", visible: false},
   { name: "RequestType", visible: false},
   { name: "OverallStatus", title: "Overall Status", type: "select",
     items: [
@@ -1094,7 +1106,6 @@ var sourcedata_fields =
     visible: false},
   { name: "StartDate"},
   { name: "EndDate"},
-  { name: "Employer"},
   { name: "ServiceAmt"},
   { name: "EarningsAmt"},
   { name: "ServiceEarningsType", type: "select",
@@ -1103,8 +1114,7 @@ var sourcedata_fields =
       {Id: "CR1"},
       {Id: "PA1"}],
     valueField: "Id",
-    textField: "Id",
-    editTemplate: statusEditTemplate},
+    textField: "Id"},
   { name: "ContributionAmt"},
   { name: "ContributionType"},
   { name: "CarryForward"},
@@ -1124,7 +1134,6 @@ var reporting_fields =
       {Id: "data issue"}],
     valueField: "Id",
     textField: "Id",
-    editTemplate: statusEditTemplate,
     visible: false},
   { name: "EventSubTypeID"},
   { name: "NumberOfEventCalculations"},
@@ -1144,7 +1153,6 @@ var election_fields =
       {Id: "data issue"}],
     valueField: "Id",
     textField: "Id",
-    editTemplate: statusEditTemplate,
     visible: false},
   { name: "EventOption"},
   { name: "EventComponent"},
@@ -1170,14 +1178,18 @@ function statusEditTemplate(value, item) {
   var $select = this.__proto__.editTemplate.call(this);
   $select.val(value);
   $select.find("option[value='']").remove();
-  if (item.Status==="submitted") {
+  if (item.EnrollStatus==="submitted") {
     $select.find("option[value='data issue'],option[value='new'],option[value='used'],option[value='failed']").remove();
-  } else if (item.Status==="failed") {
-    $select.find("option[value='new'],option[value='used']").remove();
-  } else if (item.Status==="new") {
+  } else if (item.EnrollStatus==="failed") {
+    $select.find("option[value='new'],option[value='used'],option[value='data issue']").remove();
+  } else if (item.EnrollStatus==="new") {
     $select.find("option[value='data issue'],option[value='failed'],option[value='terminated'],option[value='submitted']").remove();
-  } else if (item.Status==="data issue") {
+  } else if (item.EnrollStatus==="data issue") {
     $select.find("option[value='failed'],option[value='new'],option[value='used']").remove();
+  } else if (item.EnrollStatus==="terminated") {
+    $select.find("option").remove();
+  } else if (item.EnrollStatus==="used") {
+    $select.find("option[value='data issue'],option[value='failed'],option[value='submitted']").remove();
   }
   return $select;
 }
@@ -1185,7 +1197,8 @@ function statusEditTemplate(value, item) {
 function defaultEditTemplate(value, item) {
   var $input = this.__proto__.editTemplate.call(this);
   $input.prop("value",value);
-  if (item.Status==="submitted" || item.Status==="failed" || item.Status==="data issue") {
+
+  if (item.EnrollStatus==="submitted" || item.EnrollStatus==="new" || item.EnrollStatus==="used" || item.EnrollStatus === "terminated") {
     $input.prop('readonly', true).css('background-color', '#EBEBE4');
   }
   return $input;

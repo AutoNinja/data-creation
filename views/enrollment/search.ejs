@@ -12,7 +12,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css">
 
   <!-- page stylesheets -->
-  <link type="text/css" rel="stylesheet" href="/css/IDModal.css" />
 
 
 </head>
@@ -27,23 +26,12 @@
 
     <section class="main-content">
 
-      <% if (page === "sourcedata") { %>
-        <div id="IDModal">
-          <form id="IDModal-form" method='post' action=''>
-            <input type="text" id="enrollmentID" name="enrollmentIDInput" class="inputbox" placeholder="Enter Your Enrollment ID" required></input>
-            <input type="submit" id="submitEnrollmentID" class="dialog-btn IDModal-btn" value="Submit"></input>
-            <input type="button" class="dialog-btn IDModal-btn" value="Cancel" onclick="document.location.href='./'"></input>
-          </form>
-        </div>
-      <% } %>
-
       <div id="jsGrid"></div>
 
       <div class="table-buttons-wrapper">
         <div class="row">
           <div class="col-sm-12 col-md-12 col-xs-12 text-center">
-            <input type="button" class="home table-btn" id="home" value="Home" onclick = "window.location.href = './'">
-            <input type="button" class="save table-btn" id="save" value="Submit" hidden>
+            <input type="button" class="home table-btn" id="home" value="Home" onclick = "window.location.href = '/enrollment'">
           </div>
         </div>
       </div>
@@ -67,7 +55,7 @@
   <script type="text/javascript" src="/js/vendor/nav.js"></script>
 
   <!-- page Javascript -->
-  <script type="text/javascript" src='/js/search.js'></script>
+  <script type="text/javascript" src='/js/enrollmentSearch.js'></script>
 
 </body>
 </html>

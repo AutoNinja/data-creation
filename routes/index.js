@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/', function(req, res) {
-    res.render('pages/index', {user: 'manual', page: req.baseUrl.replace(/\//g, "")});
+    res.render('index', {user: 'manual', page: "Data Creation"});
 });
 
 

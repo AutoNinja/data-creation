@@ -7,6 +7,7 @@ var buildQueryString = require('./library/buildQueryString.js');
 var step = -1;
 var ClientID;
 var UserID;
+var Employer;
 var finalItem = {};
 
 // Main
@@ -68,11 +69,11 @@ $(document).ready(function() {
 
   // 'submit' button on sourcedata modal
   $('#submitExistingSD').click(function () {
+
     var startYear = $('#existingStartYear').val();
     var endYear = $('#existingEndYear').val();
     var startDate = new Date (startYear, 0, 1);
     var endDate = new Date (startYear, 11, 31);
-    var employer = $('#existingEmployer').val();
     var serviceEarningsType = $('#existingServiceEarningsType').val();
     var contributionType = $('#existingContributionType').val();
     if (endYear < startYear) {
@@ -81,9 +82,9 @@ $(document).ready(function() {
     }
 
     var newData = {};
+    Employer = $('#existingEmployer').val();
     newData.StartDate = moment(startDate).format('MM/DD/YYYY').toString();
     newData.EndDate = moment(endDate).format('MM/DD/YYYY').toString();
-    newData.Employer = employer;
     newData.ServiceEarningsType = serviceEarningsType;
     newData.ContributionType = contributionType;
 
@@ -124,17 +125,16 @@ $(document).ready(function() {
       var endDate = new Date (startYear, 11, 31);
       newData.StartDate = moment(startDate).format('MM/DD/YYYY').toString();
       newData.EndDate = moment(endDate).format('MM/DD/YYYY').toString();
-      newData.Employer = $('#SDEmployer').val();
       $("#step1-table").jsGrid("insertItem", newData);
 
       newData = $.extend({},modalFields[1]);
       newData.StartDate = moment(startDate).format('MM/DD/YYYY').toString();
       newData.EndDate = moment(endDate).format('MM/DD/YYYY').toString();
-      newData.Employer = $('#SDEmployer').val();
       $("#step1-table").jsGrid("insertItem", newData);
       ++startYear;
     }
     $( "#sd-modal" ).dialog("close");
+    Employer = $('#SDEmployer').val();
     sourceDataSave();
   });
 });
@@ -183,7 +183,7 @@ $(document).ready(function() {
       of: window
     },
     modal: true,
-    title: 'Do Need to Create New Enrollment?'
+    title: 'Do You Need to Create New Enrollment?'
   });
 
   $( "#sd-modal" ).dialog({
@@ -319,6 +319,8 @@ $(document).ready(function() {
 
 function submitToDB () {
 
+  $(".table-buttons-wrapper").hide();
+
   enrollmentSave();
   reportingSave();
   sourceDataSave();
@@ -330,10 +332,12 @@ function submitToDB () {
     finalItem.ClientID = ClientID;
 
   finalItem.ID = util.guid();
+  finalItem.UserID = UserID;
   finalItem.SubmissionDate = util.date();
   finalItem.RequestType = 'R';
   finalItem.Env = Cookies.get('env');
   finalItem.OverallStatus = "submitted";
+  finalItem.TypeDepartmentId = Employer || finalItem.TypeDepartmentId;
 
   $.post("/db/execute",{data: buildInsertQueryString(finalItem)})
   .done(function(response){
@@ -486,8 +490,10 @@ function enrollmentSave() {
 
   }
 
+  $("#SDEmployer, #existingEmployer").hide();
+
   if (step != 4)
-    $('#confirm-modal').dialog('option', 'title', 'Do You Want to Create Source Data?').dialog('open');
+    $('#confirm-modal').dialog('option', 'title', 'Do You Want to Create New Source Data?').dialog('open');
 }
 
 function sourceDataSave () {
@@ -503,7 +509,6 @@ function sourceDataSave () {
       }).join(',');
     }
     combined.SubmissionDate = util.date();
-    combined.Employer = items[0].Employer;
     combined.SDStatus = 'submitted';
     combined.Progress = '2';
 

@@ -79,7 +79,7 @@ $(document).ready(function() {
     fields: columns("enrollment_search")
   })
   .jsGrid("fieldOption", "ID", "visible", true)
-  .jsGrid("fieldOption", "Status", "visible", true)
+  .jsGrid("fieldOption", "EnrollStatus", "visible", true)
   .jsGrid("fieldOption", "SubmissionDate", "visible", true)
   .jsGrid("fieldOption", "ClientID", "visible", true)
   .jsGrid("fieldOption", "Control", "deleteButton", false);

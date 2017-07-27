@@ -22,6 +22,11 @@ app.use(cookieParser());
 app.use(bodyParser.json() );
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false
+}))
 
 //routes
 app.use('/', require('./routes/index'));
@@ -33,7 +38,7 @@ app.use('/db',require('./routes/db'));
 
 //throw error if page not found
 app.use(function(req,res,next) {
-  res.render('pages/404');
+  res.render('404');
 });
 
 //handle errors
