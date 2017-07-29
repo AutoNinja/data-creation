@@ -3,9 +3,7 @@
 <head>
   <%- include('../partials/meta', {page: page}); %>
   <!-- base stylesheets -->
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/base.css" />
+  <%- include('../partials/common_css'); %>
 
   <!-- module stylesheets -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css">
@@ -26,7 +24,7 @@
 
       <div id="jsGrid"></div>
 
-      <div id="newdata-modal" class="newdata-modal" hidden>
+      <div id="newdata-modal" class="newdata-modal">
 
         <div class="dialog-content newdata-content" id="dialog-textboxes">
           <button class='dialog-btn' type='submit' id='insertNewRow'>Add</button>
@@ -55,9 +53,7 @@
 
 
   <!-- base scripts -->
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script>
+  <%- include('../partials/common_scripts'); %>
 
   <!-- modules scripts -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
@@ -66,7 +62,14 @@
   <script type="text/javascript" src="/js/vendor/nav.js"></script>
 
   <!-- page scripts -->
-  <script type="text/javascript" src='/js/enrollment_new_data.js'></script>
+  <script type="text/javascript" src='/js/enrollment/fields.js'></script>
+  <script type="text/javascript" src='/js/common/build_fields.js'></script>
+  <script type="text/javascript" src='/js/enrollment/newdata/table.js'></script>
+  <script type="text/javascript" src='/js/enrollment/newdata/popup.js'></script>
+  <script>
+    newDataTable.init("#jsGrid", generalFields.concat(enrollmentTableFields));
+    newDataPopup.init("#newdata-modal","#jsGrid", enrollmentPopupFields);
+  </script>
 
 </body>
 </html>

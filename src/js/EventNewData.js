@@ -88,7 +88,7 @@ $(document).ready(function() {
     newData.ServiceEarningsType = serviceEarningsType;
     newData.ContributionType = contributionType;
 
-  console.log(newData)
+    console.log(newData)
 
     $("#step1-table")
       .jsGrid("fieldOption", "ServiceAmt", "visible", false)
@@ -575,56 +575,3 @@ function buildUpdateQueryString (item) {
   query += " WHERE ClientID = '"+item.ClientID+"';";
   return query;
 }
-
-
-/* SEARCH
-  $(target).submit(function (e) {
-    $('.lock').show();
-    var ID = $("#enrollmentID").val();
-
-    var query;
-
-    $.post("/db/query",{data: "SELECT Progress, UserID, SubmissionDate, SDStatus, StartDate, EndDate, ServiceAmt, EarningsAmt, ServiceEarningsType, ContributionAmt, ContributionType, PostEvent, CarryForward FROM EnrollmentData WHERE ID = '"+ID+"';"})
-    .done(function (res) {
-      $('.lock').hide();
-      res = JSON.parse(res);
-      console.log(res);
-      if (res.length === 0) {
-        alert('The Enrollment ID You Entered Does Not Exist');
-        return;
-      }
-      if (type === "modal_sourcedata_search" && res[0].Progress != '2')
-      {
-        alert("The Enrollment ID You Entered Is Not Available For The Current Step");
-        return;
-      }
-
-      var rowsCount;
-
-      $.each(res[0], function(index, item) {
-        if (index !== "SDStatus" && index !== "Progress" && index !== "UserID" && index !== "SubmissionDate" && index !== "ClientID") {
-          res[0][index] = item.split(',');
-          rowsCount = res[0][index].length;
-        }
-      });
-
-
-      for (var i = 0 ; i < rowsCount; i++) {
-        var tempRow = $.extend({}, res[0]);
-        $.each(tempRow, function(index, item) {
-          if (index !== "SDStatus" && index !== "Progress" && index !== "UserID" && index !== "SubmissionDate"  && index !== "ClientID")
-            tempRow[index] = res[0][index][i];
-          tempRow.ID = ID;
-        });
-        $("#jsGrid").jsGrid("insertItem", tempRow);
-      }
-
-      $(target).dialog('close');
-    })
-    .fail(function() {
-      alert("Internal Server Error");
-      window.location.reload();
-    });
-    e.preventDefault();
-  });
-*/

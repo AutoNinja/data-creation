@@ -3,9 +3,7 @@
 <head>
   <%- include('../partials/meta', {page: page}); %>
   <!-- base stylesheets -->
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/base.css" />
+  <%- include('../partials/common_css'); %>
 
   <!-- module stylesheets -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css">
@@ -26,38 +24,32 @@
 
     <section class="main-content">
 
-      <div id="ID-modal" style='z-index: 10000;'>
-        <form id="IDModal-form" method='post' action=''>
-          <h4>ID:</h4>
-          <input type="number" id="IDInput" name="IDInput" class="inputbox" placeholder="Enter Your Client ID" required></input>
-          <h4>UserID:</h4>
-          <input type="text" id="UserIDInput" name="UserIDInput" class="inputbox" placeholder="Enter a UserID" required></input>
+      <div id="iDPopup" class="popup">
+        <h4>ClientID:</h4>
+        <input type="number" id="IDInput" name="IDInput" class="inputbox" placeholder="Enter Your Client ID" required></input>
+        <h4>UserID:</h4>
+        <input type="text" id="UserIDInput" name="UserIDInput" class="inputbox" placeholder="Enter a UserID" required></input>
 
-          <!--
-          <input type="text" id="masterStartYear" class="inputbox" placeholder="Enter Source Data Start Year" required></input>
-          <input type="text" id="masterEndYear" class="inputbox" placeholder="Enter Source Data End Year" required></input>
-          -->
-          <input type="submit" id="submitEnrollmentID" class="dialog-btn IDModal-btn" value="Next"></input>
-          <input type="button" class="dialog-btn IDModal-btn" value="Cancel" onclick="document.location.href='/'"></input>
-        </form>
+        <input type="button" id="submitEnrollmentID" class="dialog-btn IDModal-btn" value="Next"></input>
+        <input type="button" class="dialog-btn IDModal-btn" value="Cancel" onclick="document.location.href='/'"></input>
       </div>
 
-      <div id="confirm-modal">
-        <input type="button" id="next" class="dialog-btn IDModal-btn" value="Yes" ></input>
-        <input type="button" id="noconfirm" class="dialog-btn IDModal-btn" value="No"></input>
+      <div id="confirmPopup" class="popup">
+        <input type="button" id="yes" class="dialog-btn IDModal-btn" value="Yes" ></input>
+        <input type="button" id="no" class="dialog-btn IDModal-btn" value="No"></input>
       </div>
 
-      <div id="sd-modal">
+      <div id="newSourceDataPopup" class="popup">
         <input type="number" id="masterStartYear" class="inputbox" placeholder="Enter Source Data Start Year (YYYY)" required></input>
         <input type="number" id="masterEndYear" class="inputbox" placeholder="Enter Source Data End Year (YYYY)" required></input>
-        <input type="number" id="SDEmployer" class="inputbox" placeholder="EmployerID" required></input>
+        <input type="hidden" id="SDEmployer" class="inputbox" placeholder="EmployerID"></input>
         <input type="submit" id="submitSDYears" class="dialog-btn IDModal-btn" value="Next"></input>
       </div>
 
-      <div id="existing-SD-modal">
+      <div id="existingSourceDataPopup" class="popup">
         <input type="number" id="existingStartYear" class="inputbox" placeholder="Enter Source Data Start Year (YYYY)" required></input>
         <input type="number" id="existingEndYear" class="inputbox" placeholder="Enter Source Data End Year (YYYY)" required></input>
-        <input type="number" id="existingEmployer" class="inputbox" placeholder="EmployerID" required></input>
+        <input type="hidden" id="existingEmployer" class="inputbox" placeholder="EmployerID"></input>
         <select id="existingServiceEarningsType" class="inputbox" required>
           <option disabled selected>Choose ServiceEarningsType</option>
           <option value="CR1">CR1</option>
@@ -67,9 +59,8 @@
         <input type="submit" id="submitExistingSD" class="dialog-btn IDModal-btn" value="Next"></input>
       </div>
 
-      <div id="newdata-modal" class="newdata-modal">
+      <div id="newDataPopup" class="popup">
         <button class='dialog-btn' type='button' id='insertNewRow'>Next</button>
-        <button class='dialog-btn' type='button' id='insertCancel'>Cancel</button>
         <div class="dialog-content newdata-content" id="dialog-textboxes">
 
         </div>
@@ -77,30 +68,26 @@
 
       <div step='0' class='table-container' hidden>
         <p>Enrollment</p>
-        <div id="step0-table" class='table' ></div>
+        <div id="enrollmentTable" class='table' ></div>
       </div>
       <div step='1' class='table-container'  hidden>
         <p>Source Data</p>
-        <div id="step1-table" class='table'></div>
+        <div id="sdTable" class='table'></div>
       </div>
       <div step='2' class='table-container'  hidden>
         <p>Event Reporting</p>
-        <div id="step2-table" class='table'></div>
+        <div id="reportingTable" class='table'></div>
       </div>
       <div step='3' class='table-container'  hidden>
         <p>Event Election</p>
-        <div id="step3-table" class='table'></div>
+        <div id="electionTable" class='table'></div>
       </div>
 
-      <div class="table-buttons-wrapper">
+      <div class="table-buttons-wrapper" hidden>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-xs-12 text-center">
-            <!--
             <input type="button" class="home table-btn" id="home" value="Home" onclick = "document.location.href = './'" />
-            <input type="button" class="save table-btn" id="save" value="Next" />
-            -->
-            <input type="button" class="home table-btn" id="home" value="Home" onclick = "document.location.href = './'" />
-            <input type="button" class="save table-btn" id="submit" value="Submit" hidden />
+            <input type="button" class="save table-btn" id="submit" value="Submit" />
           </div>
         </div>
       </div>
@@ -117,9 +104,7 @@
 
 
   <!-- base scripts -->
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script>
+  <%- include('../partials/common_scripts'); %>
 
   <!-- modules scripts -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
@@ -129,7 +114,17 @@
   <script type="text/javascript" src="/js/vendor/nav.js"></script>
 
   <!-- page scripts -->
-  <script type="text/javascript" src='/js/eventNewData.js'></script>
+  <script type="text/javascript" src='/js/event/fields.js'></script>
+  <script type="text/javascript" src='/js/common/build_fields.js'></script>
+  <script type="text/javascript" src='/js/event/newdata/table.js'></script>
+  <script type="text/javascript" src='/js/event/newdata/popup.js'></script>
+  <script type="text/javascript" src='/js/event/newdata/page.js'></script>
+
+  <script>
+    page.init("#enrollmentTable","#sdTable","#reportingTable",
+      "#electionTable","#confirmPopup","#existingSourceDataPopup",
+      "#newSourceDataPopup", "#newDataPopup", "#iDPopup")
+  </script>
 
 </body>
 </html>

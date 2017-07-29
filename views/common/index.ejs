@@ -4,9 +4,7 @@
   <%- include('../partials/meta', {page: page}); %>
 
   <!-- base stylesheets -->
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/base.css" />
+  <%- include('../partials/common_css'); %>
 
   <!-- module stylesheets -->
 
@@ -76,16 +74,12 @@
   </script>
 
   <!-- base scripts -->
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script>
+  <%- include('../partials/common_scripts'); %>
 
   <!-- modules scripts -->
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
   <script type="text/javascript" src="/js/vendor/nav.js"></script>
 
   <!-- page scripts -->
-  <script type="text/javascript" src="/js/index.js"></script>
 
   <script>
     $("#date").text("EST "+new Date().toLocaleDateString("en-US",{

@@ -94,7 +94,7 @@ var sourcedata_defaults_two = {
   EarningsAmt: '17867',
   ServiceEarningsType: 'PA1',
   ContributionAmt: '0',
-  ContributionType: '',
+  ContributionType: 'RPP1',
   CarryForward: 'N',
   PostEvent: 'N'
 };
