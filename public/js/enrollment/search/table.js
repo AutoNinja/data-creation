@@ -3,11 +3,7 @@
 
 var searchTable = (function ($) {
 
-  var bindEvents = function () {
-
-  }
-
-  var initTable = function ($selector, tableFields) {
+  var initTable = function ($selector) {
     var previousItem;
     $($selector).jsGrid({
       width: "100%",
@@ -76,7 +72,7 @@ var searchTable = (function ($) {
           previousItem = args.previousItem;
       },
 
-      fields: buildFields.buildSearch(tableFields)
+      fields: buildFields.buildSearch(enrollmentTableFields)
     })
     .jsGrid("fieldOption", "Control", "deleteButton", false)
     .jsGrid("fieldOption", "RequestType", "visible", false)
@@ -84,9 +80,8 @@ var searchTable = (function ($) {
     .jsGrid("fieldOption", "Control", "headerTemplate", null);
   }
 
-  var init = function ($tableSelector, tableFields) {
-    initTable($tableSelector, tableFields);
-    bindEvents();
+  var init = function ($tableSelector) {
+    initTable($tableSelector);
   };
 
   return { init: init };

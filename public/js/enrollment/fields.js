@@ -1,4 +1,4 @@
-var generalFields = [
+var enrollmentTableFields = [
   {
     name: "Control",
     type: "control",
@@ -15,11 +15,7 @@ var generalFields = [
   { name: "UserID"},
   { name: "ID", width: "120px"},
   { name: "SubmissionDate"},
-  { name: "RequestType"}
-];
-
-
-var enrollmentTableFields = [
+  { name: "RequestType"},
   { name: "EnrollStatus", title: "EnrollStatus", type: "select",
     items: [
       {Id: ""},

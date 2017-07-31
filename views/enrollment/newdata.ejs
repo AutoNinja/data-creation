@@ -26,10 +26,10 @@
 
       <div id="newdata-modal" class="newdata-modal">
 
-        <div class="dialog-content newdata-content" id="dialog-textboxes">
+        <form class="dialog-content newdata-content" id="dialog-textboxes">
           <button class='dialog-btn' type='submit' id='insertNewRow'>Add</button>
           <button class='dialog-btn' type='button' id='cancel'>Cancel</button>
-        </div>
+        </form>
 
       </div>
 
@@ -67,7 +67,7 @@
   <script type="text/javascript" src='/js/enrollment/newdata/table.js'></script>
   <script type="text/javascript" src='/js/enrollment/newdata/popup.js'></script>
   <script>
-    newDataTable.init("#jsGrid", generalFields.concat(enrollmentTableFields));
+    newDataTable.init("#jsGrid");
     newDataPopup.init("#newdata-modal","#jsGrid", enrollmentPopupFields);
   </script>
 

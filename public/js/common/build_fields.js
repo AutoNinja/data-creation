@@ -5,7 +5,8 @@ var buildFields = (function () {
       if (item.name === "Control") continue;
       item.type = item.type || "text";
       item.align = item.align || "center";
-      //item.validate = item.validate === "required" ? "required" : "none";
+      if (item.name !== "Comment" && item.name !== "Description")
+        item.validate = "required";
       item.title = item.title || trimItemName (item);
       item.width = item.width || calcColWidth (item);
     }

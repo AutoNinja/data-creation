@@ -1,3 +1,10 @@
+var searchTableFields = [
+  { name: "ClientID", default: "1234"},
+  { name: "UserID"},
+  { name: "ID", width: "120px"},
+  { name: "SubmissionDate"}
+];
+
 
 var enrollmentTableFields = [
   {
@@ -17,6 +24,7 @@ var enrollmentTableFields = [
       {Id: "data issue"}],
     valueField: "Id",
     textField: "Id"},
+  { name: "UserID"},
   { name: "Comment"},
   { name: "Description"},
   { name: "Env"},

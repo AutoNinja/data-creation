@@ -47,7 +47,7 @@ var newDataTable = (function ($) {
     return Math.round(Math.random() * (1000000000000 - 100000000000) + 100000000000);
   }
 
-  var initTable = function ($selector, tableFields) {
+  var initTable = function ($selector) {
     $( $selector ).jsGrid({
         width: "100%",
         height: "auto",
@@ -71,7 +71,7 @@ var newDataTable = (function ($) {
             item.ID = guid();
           }
         },
-        fields: buildFields.buildNewData(tableFields)
+        fields: buildFields.buildNewData(enrollmentTableFields)
       })
       .jsGrid("fieldOption", "ID", "visible", false)
       .jsGrid("fieldOption", "EnrollStatus", "visible", false)
@@ -82,8 +82,8 @@ var newDataTable = (function ($) {
 
   }
 
-  var init = function ($tableSelector, tableFields) {
-    initTable($tableSelector, tableFields);
+  var init = function ($tableSelector) {
+    initTable($tableSelector);
     bindEvents();
   };
 
