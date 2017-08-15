@@ -10,7 +10,6 @@
                     <li class="pushy-link"><a class="env">TST</a></li>
                     <li class="pushy-link"><a class="env">OAT</a></li>
                     <li class="pushy-link"><a class="env">SIT2</a></li>
-                    <li class="pushy-link"><a class="env">TDEV</a></li>
                 </ul>
             </li>
             <li class="pushy-submenu">
