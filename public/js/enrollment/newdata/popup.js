@@ -23,11 +23,12 @@ var newDataPopup = (function ($) {
         $($selector).dialog("open");
     });
 
-    $($selector+' #insertNewRow').click(function() {
-      var newData = {};
-      for (var name in popupFields) {newData[name] =  $("#"+name).val();}
-      $($tableSelector).jsGrid("insertItem", newData);
-      resetModal($selector, popupFields);
+    $($selector+' #dialog-textboxes').submit(function(e) {
+        e.preventDefault();
+        var newData = {};
+        for (var name in popupFields) {newData[name] =  $("#"+name).val();}
+        $($tableSelector).jsGrid("insertItem", newData);
+        resetModal($selector, popupFields);
     });
 
 
@@ -53,12 +54,15 @@ var newDataPopup = (function ($) {
         text: name+":"
       }).appendTo(".r-"+name+" .c-1");
 
-      $('<input>', {
+      var $input = $('<input>', {
         type: "text",
         name: name,
         id: name,
         value: popupFields[name]
       }).appendTo(".r-"+name+" .c-2");
+
+      if (name !== "Comment" && name !== "Description")
+        $input.prop("required", true);
 
       $("#UserID").val(Cookies.get("UserID") || "");
 

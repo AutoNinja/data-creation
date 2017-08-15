@@ -73,6 +73,8 @@ var page = (function ($) {
 
   var submitToDB = function () {
 
+
+
     $(".table-buttons-wrapper").hide();
 
     var finalItem = {};
@@ -130,7 +132,6 @@ var page = (function ($) {
       alert("Internal Server Error, Please Resubmit Data");
       location.reload();
     });
-
   }
 
   var buildInsertQueryString = function (item) {

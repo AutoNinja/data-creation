@@ -25,29 +25,26 @@
 
     <section class="main-content">
 
-      <div id="jsGrid"></div>
+      <div id="menu-table"></div>
 
       <div class='table-container' hidden>
         <p>Enrollment</p>
-        <div id="step0-table" class='table' ></div>
-
+        <div id="enrollment-table" class='table' ></div>
 
         <p>Source Data</p>
-        <div id="step1-table" class='table'></div>
-
+        <div id="sd-table" class='table'></div>
 
         <p>Event Reporting</p>
-        <div id="step2-table" class='table'></div>
+        <div id="reporting-table" class='table'></div>
 
         <p>Event Election</p>
-        <div id="step3-table" class='table'></div>
+        <div id="election-table" class='table'></div>
       </div>
 
       <div class="table-buttons-wrapper">
         <div class="row">
           <div class="col-sm-12 col-md-12 col-xs-12 text-center">
-            <input type="button" class="home table-btn" id="home" value="Home" onclick = "window.location.href = './'">
-            <input type="button" class="home table-btn" id="back" value="Back" onclick = "window.location.href = '/event/search'" hidden>
+            <input type="button" class="home table-btn" id="back" value="Back" onclick = "window.location.href = '/event/search'">
           </div>
         </div>
       </div>
@@ -69,7 +66,12 @@
   <script type="text/javascript" src="/js/vendor/nav.js"></script>
 
   <!-- page Javascript -->
-  <script type="text/javascript" src='/js/eventSearch.js'></script>
+  <script type="text/javascript" src='/js/event/fields.js'></script>
+  <script type="text/javascript" src='/js/common/build_fields.js'></script>
+  <script type="text/javascript" src='/js/event/search/table.js'></script>
+  <script>
+    searchTable.init("#menu-table", "#enrollment-table", "#sd-table", "#reporting-table", "#election-table");
+  </script>
 
 </body>
 </html>
