@@ -14,7 +14,7 @@ var searchTable = (function ($) {
       filtering: true,
       editing: true,
       sorting: true,
-      pageSize: 15,
+      pageSize: 10,
       pageButtonCount: 5,
       noDataContent: "No Data Found",
       loadIndicationDelay: 0,
@@ -25,7 +25,7 @@ var searchTable = (function ($) {
             type: "POST",
             url: "/db/query",
             cache: false,
-            data: {data: buildQueryString("loadAllData", {})},
+            data: {data: "SELECT * FROM EnrollmentData Where RequestType = 'R' AND Env = '"+Cookies.get('env')+"';"},
             dataType: "json"
           })
           .done(function(result) {
@@ -88,7 +88,6 @@ var searchTable = (function ($) {
 
 $(document).ready(function() {
   var previousItem;
-  initcookies();
 
 });
 

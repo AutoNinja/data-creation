@@ -11,7 +11,7 @@ var searchTable = (function($) {
         paging: true,
         autoload: true,
         autowidth: false,
-        pageSize: 15,
+        pageSize: 10,
         pageButtonCount: 5,
         deleteConfirm: "Confirm Delete Data?",
         noDataContent: "Using Existing Client",
@@ -31,14 +31,16 @@ var searchTable = (function($) {
               d.resolve(result);
             })
             .fail(function() {
-              alert("An Unexpected Error Has Occured");
+              $($enrollmentSelector).jsGrid("option","noDataContent","Error Retriving Data, Please Refresh Page");
               d.resolve();
             });
             return d.promise();
           }
         },
         fields: buildFields.buildNewData(enrollmentTableFields)
-      });
+      })
+      .jsGrid("fieldOption", "EnrollStatus", "visible", true);
+
     $($sourcedataSelector).jsGrid({
         width: "100%",
         paging: true,
@@ -46,7 +48,7 @@ var searchTable = (function($) {
         autowidth: false,
         sorting: true,
 
-        pageSize: 15,
+        pageSize: 10,
         pageButtonCount: 5,
         deleteConfirm: "Confirm Delete Data?",
         noDataContent: "Not Selected",
@@ -84,7 +86,7 @@ var searchTable = (function($) {
               d.resolve(splitResult);
             })
             .fail(function() {
-              alert("An Unexpected Error Has Occured");
+              $($sourcedataSelector).jsGrid("option","noDataContent","Error Retriving Data, Please Refresh Page");
               d.resolve();
             });
             return d.promise();
@@ -92,14 +94,15 @@ var searchTable = (function($) {
         },
 
         fields: buildFields.buildNewData(sourcedataTableFields)
-    });
+    })
+    .jsGrid("fieldOption", "SDStatus", "visible", true);
     $($reportingSelector).jsGrid({
       width: "100%",
       paging: true,
       autoload: true,
       autowidth: false,
 
-      pageSize: 15,
+      pageSize: 10,
       pageButtonCount: 5,
       deleteConfirm: "Confirm Delete Data?",
       noDataContent: "Not Selected",
@@ -121,7 +124,7 @@ var searchTable = (function($) {
             d.resolve(result);
           })
           .fail(function() {
-            alert("An Unexpected Error Has Occured");
+            $($reportingSelector).jsGrid("option","noDataContent","Error Retriving Data, Please Refresh Page");
             d.resolve();
           });
           return d.promise();
@@ -129,14 +132,15 @@ var searchTable = (function($) {
       },
 
       fields: buildFields.buildNewData(reportingTableFields)
-    });
+    })
+    .jsGrid("fieldOption", "ReportingStatus", "visible", true);
     $($electionSelector).jsGrid({
         width: "100%",
         paging: true,
         autoload: true,
         autowidth: false,
 
-        pageSize: 15,
+        pageSize: 10,
         pageButtonCount: 5,
         deleteConfirm: "Confirm Delete Data?",
         noDataContent: "Not Selected",
@@ -158,7 +162,7 @@ var searchTable = (function($) {
               d.resolve(result);
             })
             .fail(function() {
-              alert("An Unexpected Error Has Occured");
+              $($electionSelector).jsGrid("option","noDataContent","Error Retriving Data, Please Refresh Page");
               d.resolve();
             });
             return d.promise();
@@ -166,7 +170,8 @@ var searchTable = (function($) {
         },
 
         fields: buildFields.buildNewData(electionTableFields)
-    });
+    })
+    .jsGrid("fieldOption", "ElectionStatus", "visible", true);
     $('.table').jsGrid("fieldOption", "Control", "visible", false);
   };
 
@@ -180,7 +185,7 @@ var searchTable = (function($) {
       filtering: true,
       editing: false,
       sorting: true,
-      pageSize: 15,
+      pageSize: 10,
       pageButtonCount: 5,
       noDataContent: "No Data In Database",
       loadIndicationDelay: 0,
@@ -196,7 +201,7 @@ var searchTable = (function($) {
             type: "POST",
             url: "/db/query",
             cache: false,
-            data: {data: "SELECT * FROM EventData"},
+            data: {data: "SELECT * FROM EventData WHERE RequestType = 'R' AND Env ='"+Cookies.get('env')+"';"},
             dataType: "json"
           })
           .done(function(result) {
@@ -218,7 +223,8 @@ var searchTable = (function($) {
       },
 
       fields: buildFields.buildSearch(searchTableFields)
-    });
+    })
+    .jsGrid("fieldOption", "OverallStatus", "visible", true);
   }
 
   var init = function ($summary, $enrollment, $sourcedata, $reporting, $election) {

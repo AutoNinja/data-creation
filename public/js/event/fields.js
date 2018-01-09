@@ -1,5 +1,6 @@
 var searchTableFields = [
-  { name: "ClientID", default: "1234"},
+  { name: "OverallStatus"},
+  { name: "ClientID"},
   { name: "UserID"},
   { name: "ID", width: "120px"},
   { name: "SubmissionDate"}
@@ -194,9 +195,9 @@ var sourcedataPopupFieldsOne = {
   StartDate: '',
   EndDate: '',
   ServiceAmt: '12',
-  EarningsAmt: '120683.6',
+  EarningsAmt: '55000',
   ServiceEarningsType: 'CR1',
-  ContributionAmt: '15530.43',
+  ContributionAmt: '4500',
   ContributionType: 'RPP1',
   CarryForward: 'N',
   PostEvent: 'N'
@@ -206,7 +207,7 @@ var sourcedataPopupFieldsTwo = {
   StartDate: '',
   EndDate: '',
   ServiceAmt: '0',
-  EarningsAmt: '17867',
+  EarningsAmt: '6400',
   ServiceEarningsType: 'PA1',
   ContributionAmt: '0',
   ContributionType: '',

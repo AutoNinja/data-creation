@@ -5,20 +5,34 @@ var buildFields = (function () {
       if (item.name === "Control") continue;
       item.type = item.type || "text";
       item.align = item.align || "center";
-      if (item.name !== "Comment" && item.name !== "Description")
-        item.validate = "required";
       item.title = item.title || trimItemName (item);
       item.width = item.width || calcColWidth (item);
     }
   }
 
+  var addValidation = function (fields) {
+    for (var i = 0; i < fields.length; i++) {
+      var item = fields[i];
+      if (item.name === "Control") continue;
+      if (item.name !== "Comment" && item.name !== "Description")
+        item.validate = "required";
+    }
+  }
+
+  var buildNoValidation = function (fields) {
+    init(fields);
+    return fields;
+  }
+
   var buildNewData = function (fields)  {
     init(fields);
+    //addValidation(fields);
     return fields;
   }
 
   var buildSearch = function (fields) {
     init(fields);
+    //addValidation(fields);
     for (var i = 0; i < fields.length; i++) {
       var item = fields[i];
       if (item.name === "Control") continue;
@@ -40,17 +54,17 @@ var buildFields = (function () {
     var $select = this.__proto__.editTemplate.call(this);
     $select.val(value);
     $select.find("option[value='']").remove();
-    if (item.EnrollStatus==="submitted") {
+    if (item.Status==="submitted") {
       $select.find("option[value='data issue'],option[value='new'],option[value='used'],option[value='failed']").remove();
-    } else if (item.EnrollStatus==="failed") {
+    } else if (item.Status==="failed") {
       $select.find("option[value='new'],option[value='used'],option[value='data issue']").remove();
-    } else if (item.EnrollStatus==="new") {
+    } else if (item.Status==="new") {
       $select.find("option[value='data issue'],option[value='failed'],option[value='terminated'],option[value='submitted']").remove();
-    } else if (item.EnrollStatus==="data issue") {
+    } else if (item.Status==="data issue") {
       $select.find("option[value='failed'],option[value='new'],option[value='used']").remove();
-    } else if (item.EnrollStatus==="terminated") {
+    } else if (item.Status==="terminated") {
       $select.find("option").remove();
-    } else if (item.EnrollStatus==="used") {
+    } else if (item.Status==="used") {
       $select.find("option[value='data issue'],option[value='failed'],option[value='submitted']").remove();
     }
     return $select;

@@ -2,7 +2,7 @@ var util = require("./library/table-util.js");
 var initcookies = require('./library/usecookies.js');
 var fields = require('./library/table_fields').defaults;
 var columns = require("./library/table_fields").fields;
-var buildQueryString = require('./library/buildQueryString.js');
+var buildQueryString = require('./library/build_Query_String.js');
 
 var step = -1;
 var ClientID;

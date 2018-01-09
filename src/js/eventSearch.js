@@ -1,7 +1,7 @@
 var columns = require('./library/table_fields').fields;
 var initcookies = require('./library/usecookies.js');
 var util = require("./library/table-util.js");
-var buildQueryString = require('./library/buildQueryString.js');
+var buildQueryString = require('./library/build_Query_String.js');
 
 
 

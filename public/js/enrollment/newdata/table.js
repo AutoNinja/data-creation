@@ -34,7 +34,6 @@ var newDataTable = (function ($) {
     })
     .fail(function() {
       alert("Internal Server Error, Please Resubmit Data");
-      location.reload();
     });
 
   }
@@ -63,7 +62,7 @@ var newDataTable = (function ($) {
         controller: {
           insertItem: function (item) {
             item.RequestType = "R";
-            item.EnrollStatus = "submitted";
+            item.Status = "submitted";
             item.Env = Cookies.get("env");
             item.ClientID = "";
             item.DepartmentCode = item.TypeDepartmentId;
@@ -74,7 +73,7 @@ var newDataTable = (function ($) {
         fields: buildFields.buildNewData(enrollmentTableFields)
       })
       .jsGrid("fieldOption", "ID", "visible", false)
-      .jsGrid("fieldOption", "EnrollStatus", "visible", false)
+      .jsGrid("fieldOption", "Status", "visible", false)
       .jsGrid("fieldOption", "SubmissionDate", "visible", false)
       .jsGrid("fieldOption", "RequestType", "visible", false)
       .jsGrid("fieldOption", "Env", "visible", false)

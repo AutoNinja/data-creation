@@ -1,6 +1,6 @@
 var util = require('./table-util.js');
 var fields = require("./table_fields.js").fields;
-var buildQueryString = require("./buildQueryString.js");
+var buildQueryString = require("./build_Query_String.js");
 
 /******************************************************************************
 Table API
