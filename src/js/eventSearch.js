@@ -29,7 +29,7 @@ function showRowDeatils (item) {
         insertItem: function (item) {
           item.RequestType = "R";
           item.Status = "submitted";
-          item.Env = Cookies.get("env");
+          item.Env = Cookies.get("env_enroll");
           item.ClientID = "";
           item.DepartmentCode = item.TypeDepartmentId;
           item.SubmissionDate = util.date();

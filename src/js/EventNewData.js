@@ -234,7 +234,7 @@ $(document).ready(function() {
         insertItem: function (item) {
           item.RequestType = "R";
           item.EnrollStatus = "submitted";
-          item.Env = Cookies.get("env");
+          item.Env = Cookies.get("env_enroll");
           item.ClientID = "";
           item.DepartmentCode = item.TypeDepartmentId;
           item.SubmissionDate = util.date();
@@ -335,7 +335,7 @@ function submitToDB () {
   finalItem.UserID = UserID;
   finalItem.SubmissionDate = util.date();
   finalItem.RequestType = 'R';
-  finalItem.Env = Cookies.get('env');
+  finalItem.Env = Cookies.get('env_enroll');
   finalItem.OverallStatus = "submitted";
   finalItem.TypeDepartmentId = Employer || finalItem.TypeDepartmentId;
 

@@ -41,6 +41,6 @@ app.use((err, req, res, next) => {
 	res.status(500).send(err)
 })
 
-app.listen(process.env.PORT, () => {
+app.listen(3000, () => {
 	console.log('Magic Happens on Port ' + PORT)
 })

@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/', function(req, res) {
-    res.render('index', {user: 'manual', page: "Data Creation"});
+    res.redirect('/event')
 });
 
 module.exports = router;

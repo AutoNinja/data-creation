@@ -31,7 +31,7 @@ function buildOptions (type) {
         insertItem: function (item) {
           item.RequestType = "R";
           item.Status = "submitted";
-          item.Env = Cookies.get("env");
+          item.Env = Cookies.get("env_enroll");
           item.ClientID = "";
           item.DepartmentCode = item.TypeDepartmentId;
           item.SubmissionDate = util.date();
@@ -332,7 +332,7 @@ function buildOptions (type) {
             })
             .done(function(result) {
               result = $.grep(result, function(item) {
-                if (item.Env !== Cookies.get("env") || item.Progress !== '3' || item.RequestType !== "R") {
+                if (item.Env !== Cookies.get("env_enroll") || item.Progress !== '3' || item.RequestType !== "R") {
                   return false;
                 }
                 for (var property in filter) {
@@ -443,7 +443,7 @@ function buildOptions (type) {
             })
             .done(function(result) {
               result = $.grep(result, function(item) {
-                if (item.Env !== Cookies.get("env") || item.Progress !== '4' || item.RequestType !== "R") {
+                if (item.Env !== Cookies.get("env_enroll") || item.Progress !== '4' || item.RequestType !== "R") {
                   return false;
                 }
                 for (var property in filter) {

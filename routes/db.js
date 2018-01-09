@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var dbConnection = require ('node-adodb').open('Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../Access/database.mdb;');
+var dbConnection = require ('node-adodb')
+      .open('Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../Access/database.mdb;');
 var async = require('async');
 
 router.use(function(req,res,next){
